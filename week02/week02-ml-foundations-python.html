@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 2: ML Foundations and Python</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Custom styles matching custom-theme.scss -->
+    <style>
+        /* Custom theme colors */
+        :root {
+            --primary-color: #1e3a5f;
+            --secondary-color: #4a90e2;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+        }
+        
+        /* Background */
+        .reveal {
+            background: linear-gradient(135deg, #f7f9fc 0%, #e8eef5 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-size: 28px;
+        }
+        
+        /* Apply border styling only to horizontal slides (direct children) */
+        .reveal .slides > section {
+            text-align: left;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            padding-top: 45px;
+            background: white;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        
+        /* Vertical slides within stacks should also have the border but positioned differently */
+        .reveal .slides > section > section {
+            text-align: left;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            padding-top: 45px;
+            background: white;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        
+        /* Headers */
+        .reveal h1 {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 15px;
+            margin: -45px -30px 15px -30px;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-bottom: 3px solid var(--accent-color);
+            border-radius: 6px 6px 0 0;
+            font-size: 1.3em;
+        }
+        
+        .reveal h2 {
+            background: linear-gradient(90deg, var(--secondary-color) 0%, #6fa3e8 100%);
+            color: white;
+            padding: 12px 20px;
+            margin: -45px -30px 15px -30px;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 6px 6px 0 0;
+            font-size: 1.1em;
+        }
+        
+        .reveal h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .reveal h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 0.75em;
+        }
+        
+        /* Lists */
+        .reveal ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 0.75em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .reveal ul li {
+            padding-left: 25px;
+            margin: 8px 0;
+            position: relative;
+            line-height: 1.3;
+            display: block;
+        }
+        
+        .reveal ul li:before {
+            content: "▸";
+            position: absolute;
+            left: 5px;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        .warning-box {
+            background: rgba(243, 156, 18, 0.08);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        .success-box {
+            background: rgba(39, 174, 96, 0.08);
+            border-left: 4px solid var(--success-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        .danger-box {
+            background: rgba(231, 76, 60, 0.08);
+            border-left: 4px solid var(--danger-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        /* Columns */
+        .columns {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .column {
+            flex: 1;
+            padding: 5px;
+            min-width: 0;
+        }
+        
+        .column-50 {
+            flex: 0 0 48%;
+        }
+        
+        .column-33 {
+            flex: 0 0 31%;
+        }
+        
+        .column-60 {
+            flex: 0 0 58%;
+        }
+        
+        .column-40 {
+            flex: 0 0 38%;
+        }
+        
+        /* Code blocks */
+        .reveal pre {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-radius: 6px;
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.48em;
+            border-left: 3px solid var(--accent-color);
+            border: 1px solid #dee2e6;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 250px;
+        }
+        
+        .reveal pre code {
+            background: transparent;
+            color: #212529;
+            padding: 0;
+            max-height: 230px;
+            line-height: 1.25;
+            font-weight: 500;
+            white-space: pre;
+        }
+        
+        /* Tables */
+        .reveal table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 10px auto;
+            background: white;
+            font-size: 0.6em;
+            max-width: 100%;
+        }
+        
+        .reveal table thead {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+        
+        .reveal table th {
+            padding: 8px;
+            font-weight: 600;
+            text-align: left;
+            letter-spacing: 0.3px;
+        }
+        
+        .reveal table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        /* Navigation arrows */
+        .reveal .controls {
+            color: var(--secondary-color);
+        }
+        
+        /* Progress bar */
+        .reveal .progress {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .reveal .progress span {
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        /* Slide numbers */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            right: 110px !important;
+            bottom: 10px !important;
+        }
+        
+        /* Math equations */
+        .math-equation {
+            text-align: center;
+            font-size: 1em;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        /* Paragraphs and general text */
+        .reveal p {
+            font-size: 0.75em;
+            line-height: 1.35;
+            margin: 8px 0;
+        }
+        
+        .reveal strong {
+            color: var(--primary-color);
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .reveal em {
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+        
+        /* Ordered lists */
+        .reveal ol {
+            font-size: 0.75em;
+            padding-left: 20px;
+        }
+        
+        .reveal ol li {
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+        
+        /* Special output styling */
+        .output-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.65em;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section>
+                <h1>ML Foundations and Python</h1>
+                <h3 style="border: none; text-align: center; color: #666;">Data Manipulation, Visualization, and Your First Model</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">Mastering the Essential Tools for Machine Learning</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251: Week 2</strong><br>
+                    Dr. Tim Smith | Fall 2025
+                </p>
+            </section>
+
+            <!-- Section 1: Pandas Deep Dive -->
+            <section>
+                <!-- Overview -->
+                <section>
+                    <h2>Pandas: The Foundation of Data Science</h2>
+                    <h3>Section Overview</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>What We'll Cover</h4>
+                            <ul>
+                                <li>DataFrames and Series</li>
+                                <li>Loading and exploring data</li>
+                                <li>Data selection and filtering</li>
+                                <li>Basic data manipulation</li>
+                                <li>Handling missing values</li>
+                                <li>Grouping and aggregation</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Why Pandas?</h4>
+                            <ul>
+                                <li>Industry standard for data analysis</li>
+                                <li>Integrates with sklearn seamlessly</li>
+                                <li>Powerful data structures</li>
+                                <li>Rich functionality</li>
+                                <li>Fast and efficient</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DataFrames Basics -->
+                <section>
+                    <h2>Understanding DataFrames</h2>
+                    <h3>The Core Data Structure</h3>
+                    <pre><code class="python">import pandas as pd
+import numpy as np
+
+# Creating a DataFrame from dictionary
+data = {
+    'customer_id': [101, 102, 103, 104, 105],
+    'age': [25, 32, 28, 45, 38],
+    'income': [45000, 58000, 52000, 75000, 68000],
+    'purchase_amount': [250, 450, 380, 620, 510]
+}
+df = pd.DataFrame(data)
+print(df)</code></pre>
+                    <div class="output-box">
+   customer_id  age  income  purchase_amount
+0          101   25   45000              250
+1          102   32   58000              450
+2          103   28   52000              380
+3          104   45   75000              620
+4          105   38   68000              510</div>
+                    <div class="info-box">
+                        <strong>Key Concept:</strong> A DataFrame is a 2D labeled data structure with columns of potentially different types, 
+                        similar to a spreadsheet or SQL table.
+                    </div>
+                </section>
+
+                <!-- Loading Data -->
+                <section>
+                    <h2>Loading and Exploring Data</h2>
+                    <h3>Essential First Steps</h3>
+                    <pre><code class="python"># Loading data from CSV
+df = pd.read_csv('sales_data.csv')
+
+# Basic exploration commands
+print(df.shape)          # (rows, columns)
+print(df.info())         # Data types and missing values
+print(df.describe())     # Statistical summary
+print(df.head())         # First 5 rows
+print(df.columns)        # Column names
+print(df.dtypes)         # Data types</code></pre>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Common File Formats</h4>
+                            <ul>
+                                <li>CSV: pd.read_csv()</li>
+                                <li>Excel: pd.read_excel()</li>
+                                <li>JSON: pd.read_json()</li>
+                                <li>SQL: pd.read_sql()</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Exploration Methods</h4>
+                            <ul>
+                                <li>.shape - dimensions</li>
+                                <li>.info() - overview</li>
+                                <li>.describe() - statistics</li>
+                                <li>.value_counts() - frequencies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data Selection -->
+                <section>
+                    <h2>Data Selection and Filtering</h2>
+                    <h3>Accessing Your Data</h3>
+                    <pre><code class="python"># Column selection
+ages = df['age']                    # Single column (Series)
+subset = df[['age', 'income']]      # Multiple columns
+
+# Row selection
+first_row = df.iloc[0]              # By position
+customer_102 = df.loc[1]            # By index label
+
+# Conditional filtering
+high_income = df[df['income'] > 60000]
+young_buyers = df[(df['age'] < 30) & (df['purchase_amount'] > 300)]
+
+# Using query method
+result = df.query('age < 35 and income > 50000')</code></pre>
+                    <div class="warning-box">
+                        <strong>Remember:</strong> Use .iloc[] for integer position-based selection, 
+                        .loc[] for label-based selection, and boolean indexing for conditional filtering.
+                    </div>
+                </section>
+
+                <!-- Data Manipulation -->
+                <section>
+                    <h2>Data Manipulation</h2>
+                    <h3>Transforming Your Data</h3>
+                    <pre><code class="python"># Adding new columns
+df['income_per_age'] = df['income'] / df['age']
+df['high_spender'] = df['purchase_amount'] > 400
+
+# Modifying existing columns
+df['income'] = df['income'] * 1.05  # 5% raise for everyone
+
+# Dropping columns
+df = df.drop('customer_id', axis=1)
+# or df.drop(columns=['customer_id'], inplace=True)
+
+# Sorting
+df_sorted = df.sort_values('purchase_amount', ascending=False)
+
+# Renaming columns
+df = df.rename(columns={'purchase_amount': 'total_purchase'})</code></pre>
+                    <div class="success-box">
+                        <strong>Pro Tip:</strong> Use method chaining for cleaner code: 
+                        df.drop(columns=['id']).sort_values('age').reset_index(drop=True)
+                    </div>
+                </section>
+
+                <!-- Missing Values -->
+                <section>
+                    <h2>Handling Missing Values</h2>
+                    <h3>Dealing with Real-World Data</h3>
+                    <pre><code class="python"># Detecting missing values
+print(df.isnull().sum())      # Count per column
+print(df.isnull().any())      # Boolean per column
+
+# Dropping missing values
+df_clean = df.dropna()                    # Drop any row with NaN
+df_clean = df.dropna(subset=['income'])   # Drop if income is NaN
+
+# Filling missing values
+df['age'].fillna(df['age'].mean(), inplace=True)     # Fill with mean
+df['category'].fillna('Unknown', inplace=True)        # Fill with constant
+df.fillna(method='ffill', inplace=True)              # Forward fill
+
+# Interpolation
+df['sales'] = df['sales'].interpolate()</code></pre>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Detection Methods</h4>
+                            <ul>
+                                <li>.isnull() / .isna()</li>
+                                <li>.notnull() / .notna()</li>
+                                <li>.info() shows non-null counts</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Handling Strategies</h4>
+                            <ul>
+                                <li>Drop: when few missing</li>
+                                <li>Fill: with mean/median/mode</li>
+                                <li>Interpolate: for time series</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Grouping and Aggregation -->
+                <section>
+                    <h2>Grouping and Aggregation</h2>
+                    <h3>Summarizing Data by Categories</h3>
+                    <pre><code class="python"># Basic groupby
+age_groups = df.groupby('age_category')['purchase_amount'].mean()
+
+# Multiple aggregations
+summary = df.groupby('region').agg({
+    'sales': ['mean', 'sum', 'count'],
+    'profit': ['mean', 'max'],
+    'customers': 'nunique'
+})
+
+# Multiple grouping columns
+multi_group = df.groupby(['region', 'product_type'])['sales'].sum()
+
+# Custom aggregation
+def revenue_range(x):
+    return x.max() - x.min()
+
+custom_agg = df.groupby('store')['revenue'].agg([
+    'mean', 
+    'std', 
+    ('range', revenue_range)
+])</code></pre>
+                    <div class="info-box">
+                        <strong>Common Aggregations:</strong> mean(), sum(), count(), std(), min(), max(), median(), nunique()
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 2: Matplotlib & Visualization -->
+            <section>
+                <!-- Matplotlib Overview -->
+                <section>
+                    <h2>Data Visualization with Matplotlib</h2>
+                    <h3>Making Data Come Alive</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Why Visualize?</h4>
+                            <ul>
+                                <li>Identify patterns and trends</li>
+                                <li>Spot outliers and anomalies</li>
+                                <li>Communicate insights</li>
+                                <li>Validate assumptions</li>
+                                <li>Guide feature engineering</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Common Plot Types</h4>
+                            <ul>
+                                <li>Line plots: trends over time</li>
+                                <li>Scatter plots: relationships</li>
+                                <li>Histograms: distributions</li>
+                                <li>Bar plots: comparisons</li>
+                                <li>Box plots: statistics</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Basic Plotting -->
+                <section>
+                    <h2>Basic Plotting with Matplotlib</h2>
+                    <h3>Creating Your First Visualizations</h3>
+                    <pre><code class="python">import matplotlib.pyplot as plt
+
+# Basic line plot
+plt.figure(figsize=(10, 6))
+plt.plot(df['date'], df['sales'], linewidth=2, color='blue')
+plt.title('Sales Over Time', fontsize=16)
+plt.xlabel('Date', fontsize=12)
+plt.ylabel('Sales ($)', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Scatter plot
+plt.figure(figsize=(8, 6))
+plt.scatter(df['advertising_spend'], df['sales'], alpha=0.6)
+plt.xlabel('Advertising Spend ($)')
+plt.ylabel('Sales ($)')
+plt.title('Sales vs Advertising Spend')
+plt.show()</code></pre>
+                    <div class="success-box">
+                        <strong>Best Practice:</strong> Always label your axes and include a title. 
+                        Use figsize to control plot dimensions for better readability.
+                    </div>
+                </section>
+
+                <!-- Multiple Visualizations -->
+                <section>
+                    <h2>Creating Multiple Visualizations</h2>
+                    <h3>Subplots and Comparisons</h3>
+                    <pre><code class="python"># Creating subplots
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# Histogram
+axes[0, 0].hist(df['age'], bins=20, edgecolor='black')
+axes[0, 0].set_title('Age Distribution')
+axes[0, 0].set_xlabel('Age')
+
+# Bar plot
+categories = df['category'].value_counts()
+axes[0, 1].bar(categories.index, categories.values)
+axes[0, 1].set_title('Sales by Category')
+axes[0, 1].set_xlabel('Category')
+
+# Box plot
+axes[1, 0].boxplot([df[df['region']=='North']['sales'],
+                     df[df['region']=='South']['sales']])
+axes[1, 0].set_xticklabels(['North', 'South'])
+axes[1, 0].set_title('Sales by Region')
+
+# Correlation heatmap (preview)
+axes[1, 1].imshow(df.corr(), cmap='coolwarm', aspect='auto')
+axes[1, 1].set_title('Feature Correlations')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </section>
+            </section>
+
+            <!-- Section 3: Introduction to scikit-learn -->
+            <section>
+                <!-- sklearn Overview -->
+                <section>
+                    <h2>Introduction to scikit-learn</h2>
+                    <h3>Your Machine Learning Toolkit</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>What is scikit-learn?</h4>
+                            <ul>
+                                <li>Most popular ML library in Python</li>
+                                <li>Consistent API design</li>
+                                <li>Comprehensive algorithms</li>
+                                <li>Excellent documentation</li>
+                                <li>Production ready</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Core Components</h4>
+                            <ul>
+                                <li>Estimators: fit() and predict()</li>
+                                <li>Transformers: fit() and transform()</li>
+                                <li>Pipelines: chain operations</li>
+                                <li>Model selection tools</li>
+                                <li>Metrics for evaluation</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>The sklearn Pattern:</strong> Every algorithm follows the same pattern - 
+                        create model, fit to data, make predictions. This consistency makes it easy to try different algorithms.
+                    </div>
+                </section>
+
+                <!-- Train/Test Split -->
+                <section>
+                    <h2>Train/Test Split</h2>
+                    <h3>The Foundation of Model Evaluation</h3>
+                    <pre><code class="python">from sklearn.model_selection import train_test_split
+
+# Prepare features (X) and target (y)
+X = df[['age', 'income', 'credit_score']]  # Features
+y = df['purchase_amount']                   # Target
+
+# Split the data (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print(f"Training set size: {len(X_train)}")
+print(f"Test set size: {len(X_test)}")</code></pre>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Why Split Data?</h4>
+                            <ul>
+                                <li>Evaluate on unseen data</li>
+                                <li>Detect overfitting</li>
+                                <li>Estimate real performance</li>
+                                <li>Validate model generalizes</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Common splits: 80/20, 70/30</li>
+                                <li>Use random_state for reproducibility</li>
+                                <li>Never train on test data</li>
+                                <li>Keep test set untouched until final evaluation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 4: Understanding Models -->
+            <section>
+                <!-- What are Models? -->
+                <section>
+                    <h2>What Are Models?</h2>
+                    <h3>Mathematical Representations of Patterns</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>A Model Is...</h4>
+                            <ul>
+                                <li>A mathematical function</li>
+                                <li>Learned from data</li>
+                                <li>Maps inputs to outputs</li>
+                                <li>Captures patterns/relationships</li>
+                                <li>Makes predictions</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Model Components</h4>
+                            <ul>
+                                <li><strong>Parameters:</strong> Learned from data</li>
+                                <li><strong>Hyperparameters:</strong> Set before training</li>
+                                <li><strong>Structure:</strong> Algorithm type</li>
+                                <li><strong>Objective:</strong> What to optimize</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Simple Example:</strong> Linear regression finds the best line y = mx + b where m (slope) and b (intercept) 
+                        are parameters learned from data to minimize prediction errors.
+                    </div>
+                </section>
+
+                <!-- Model Complexity -->
+                <section>
+                    <h2>Model Complexity</h2>
+                    <h3>Finding the Right Balance</h3>
+                    <div class="columns">
+                        <div class="column-33">
+                            <h4>Simple Models</h4>
+                            <ul>
+                                <li>Few parameters</li>
+                                <li>Linear relationships</li>
+                                <li>Easy to interpret</li>
+                                <li>Less flexible</li>
+                                <li>May underfit</li>
+                            </ul>
+                        </div>
+                        <div class="column-33">
+                            <h4>Complex Models</h4>
+                            <ul>
+                                <li>Many parameters</li>
+                                <li>Non-linear patterns</li>
+                                <li>Hard to interpret</li>
+                                <li>Very flexible</li>
+                                <li>May overfit</li>
+                            </ul>
+                        </div>
+                        <div class="column-33">
+                            <h4>Just Right</h4>
+                            <ul>
+                                <li>Appropriate complexity</li>
+                                <li>Captures true patterns</li>
+                                <li>Generalizes well</li>
+                                <li>Good performance</li>
+                                <li>Balanced trade-off</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Key Insight:</strong> Model complexity should match data complexity. 
+                        Start simple and increase complexity only if needed.
+                    </div>
+                </section>
+
+                <!-- Overfitting vs Underfitting -->
+                <section>
+                    <h2>Overfitting vs Underfitting</h2>
+                    <h3>The Fundamental Challenge in ML</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Underfitting</h4>
+                            <ul>
+                                <li>Model too simple</li>
+                                <li>High training error</li>
+                                <li>High test error</li>
+                                <li>Misses important patterns</li>
+                                <li>High bias</li>
+                            </ul>
+                            <div class="danger-box">
+                                <strong>Example:</strong> Using a straight line to fit clearly curved data
+                            </div>
+                        </div>
+                        <div class="column">
+                            <h4>Overfitting</h4>
+                            <ul>
+                                <li>Model too complex</li>
+                                <li>Low training error</li>
+                                <li>High test error</li>
+                                <li>Memorizes noise</li>
+                                <li>High variance</li>
+                            </ul>
+                            <div class="danger-box">
+                                <strong>Example:</strong> Fitting every single training point perfectly, including outliers
+                            </div>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Goal:</strong> Find the sweet spot where the model captures real patterns without memorizing noise
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 5: Linear Regression -->
+            <section>
+                <!-- Introduction to Linear Regression -->
+                <section>
+                    <h2>Linear Regression</h2>
+                    <h3>Your First Machine Learning Model</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>What It Does</h4>
+                            <ul>
+                                <li>Predicts continuous values</li>
+                                <li>Finds best-fit line/plane</li>
+                                <li>Models linear relationships</li>
+                                <li>Minimizes squared errors</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>When to Use</h4>
+                            <ul>
+                                <li>Predicting prices</li>
+                                <li>Forecasting sales</li>
+                                <li>Estimating quantities</li>
+                                <li>Understanding relationships</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="math-equation">
+                        <strong>Simple Linear Regression:</strong> y = β₀ + β₁x + ε<br>
+                        <strong>Multiple Linear Regression:</strong> y = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ + ε
+                    </div>
+                </section>
+
+                <!-- Building First Model -->
+                <section>
+                    <h2>Building Your First Model</h2>
+                    <h3>Step-by-Step Linear Regression</h3>
+                    <pre><code class="python">from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+
+# 1. Create the model
+model = LinearRegression()
+
+# 2. Train the model
+model.fit(X_train, y_train)
+
+# 3. Make predictions
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
+
+# 4. Evaluate performance
+train_rmse = np.sqrt(mean_squared_error(y_train, y_pred_train))
+test_rmse = np.sqrt(mean_squared_error(y_test, y_pred_test))
+train_r2 = r2_score(y_train, y_pred_train)
+test_r2 = r2_score(y_test, y_pred_test)
+
+print(f"Training RMSE: {train_rmse:.2f}")
+print(f"Test RMSE: {test_rmse:.2f}")
+print(f"Training R²: {train_r2:.3f}")
+print(f"Test R²: {test_r2:.3f}")</code></pre>
+                </section>
+
+                <!-- Understanding Metrics -->
+                <section>
+                    <h2>Understanding Evaluation Metrics</h2>
+                    <h3>RMSE and R²</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>RMSE (Root Mean Squared Error)</h4>
+                            <ul>
+                                <li>Average prediction error</li>
+                                <li>Same units as target</li>
+                                <li>Lower is better</li>
+                                <li>Penalizes large errors more</li>
+                            </ul>
+                            <div class="math-equation">
+                                RMSE = √(Σ(yᵢ - ŷᵢ)² / n)
+                            </div>
+                        </div>
+                        <div class="column">
+                            <h4>R² (Coefficient of Determination)</h4>
+                            <ul>
+                                <li>Proportion of variance explained</li>
+                                <li>Range: -∞ to 1</li>
+                                <li>1 = perfect fit</li>
+                                <li>0 = baseline (mean) model</li>
+                            </ul>
+                            <div class="math-equation">
+                                R² = 1 - (SS_res / SS_tot)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Interpretation:</strong> RMSE of 100 means predictions are off by ~$100 on average. 
+                        R² of 0.8 means model explains 80% of variance in the data.
+                    </div>
+                </section>
+
+                <!-- Demonstrating Overfitting -->
+                <section>
+                    <h2>Demonstrating Overfitting</h2>
+                    <h3>When Models Learn Too Much</h3>
+                    <pre><code class="python"># Creating polynomial features for complexity
+from sklearn.preprocessing import PolynomialFeatures
+
+results = []
+degrees = [1, 2, 3, 5, 10, 15]
+
+for degree in degrees:
+    # Create polynomial features
+    poly = PolynomialFeatures(degree=degree)
+    X_train_poly = poly.fit_transform(X_train)
+    X_test_poly = poly.transform(X_test)
+    
+    # Train model
+    model = LinearRegression()
+    model.fit(X_train_poly, y_train)
+    
+    # Evaluate
+    train_score = model.score(X_train_poly, y_train)
+    test_score = model.score(X_test_poly, y_test)
+    
+    results.append({
+        'degree': degree,
+        'train_r2': train_score,
+        'test_r2': test_score
+    })
+    
+    print(f"Degree {degree}: Train R²={train_score:.3f}, Test R²={test_score:.3f}")</code></pre>
+                    <div class="warning-box">
+                        <strong>Watch for:</strong> When training performance keeps improving but test performance gets worse, 
+                        you're overfitting!
+                    </div>
+                </section>
+
+                <!-- Visualizing Over/Underfitting -->
+                <section>
+                    <h2>Visualizing Model Fit</h2>
+                    <h3>Seeing Overfitting and Underfitting</h3>
+                    <pre><code class="python"># Generate sample data
+np.random.seed(42)
+X_vis = np.sort(np.random.rand(100, 1) * 10, axis=0)
+y_vis = 2 * X_vis.squeeze() + 1 + np.random.randn(100) * 2
+
+# Plot different polynomial degrees
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+degrees = [1, 3, 15]
+titles = ['Underfitting (Degree 1)', 'Good Fit (Degree 3)', 'Overfitting (Degree 15)']
+
+for ax, degree, title in zip(axes, degrees, titles):
+    poly = PolynomialFeatures(degree=degree)
+    X_poly = poly.fit_transform(X_vis)
+    
+    model = LinearRegression()
+    model.fit(X_poly, y_vis)
+    y_pred = model.predict(X_poly)
+    
+    ax.scatter(X_vis, y_vis, alpha=0.5, label='Data')
+    ax.plot(X_vis, y_pred, 'r-', linewidth=2, label=f'Degree {degree}')
+    ax.set_title(title)
+    ax.set_xlabel('X')
+    ax.set_ylabel('y')
+    ax.legend()
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </section>
+            </section>
+
+            <!-- Section 6: Practical Example -->
+            <section>
+                <!-- Complete Example -->
+                <section>
+                    <h2>Complete Practical Example</h2>
+                    <h3>Predicting House Prices</h3>
+                    <pre><code class="python"># Complete workflow example
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+
+# 1. Load and explore data
+df = pd.read_csv('house_prices.csv')
+print(f"Dataset shape: {df.shape}")
+print(df.info())
+print(df.describe())
+
+# 2. Handle missing values
+df['garage_size'].fillna(0, inplace=True)  # No garage = 0 size
+df['year_built'].fillna(df['year_built'].median(), inplace=True)
+
+# 3. Select features and target
+features = ['sqft', 'bedrooms', 'bathrooms', 'garage_size', 'year_built']
+X = df[features]
+y = df['price']
+
+# 4. Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)</code></pre>
+                </section>
+
+                <!-- Complete Example Continued -->
+                <section>
+                    <h2>Complete Example (Continued)</h2>
+                    <h3>Training and Evaluation</h3>
+                    <pre><code class="python"># 5. Train the model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# 6. Make predictions
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
+
+# 7. Evaluate the model
+train_rmse = np.sqrt(mean_squared_error(y_train, y_pred_train))
+test_rmse = np.sqrt(mean_squared_error(y_test, y_pred_test))
+train_r2 = r2_score(y_train, y_pred_train)
+test_r2 = r2_score(y_test, y_pred_test)
+
+print(f"\nModel Performance:")
+print(f"Training RMSE: ${train_rmse:,.0f}")
+print(f"Test RMSE: ${test_rmse:,.0f}")
+print(f"Training R²: {train_r2:.3f}")
+print(f"Test R²: {test_r2:.3f}")
+
+# 8. Feature importance
+feature_importance = pd.DataFrame({
+    'feature': features,
+    'coefficient': model.coef_
+}).sort_values('coefficient', key=abs, ascending=False)
+print(f"\nFeature Importance:\n{feature_importance}")</code></pre>
+                </section>
+
+                <!-- Visualization of Results -->
+                <section>
+                    <h2>Visualizing Model Performance</h2>
+                    <h3>Understanding Your Results</h3>
+                    <pre><code class="python"># Create visualization dashboard
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# 1. Actual vs Predicted
+axes[0, 0].scatter(y_test, y_pred_test, alpha=0.5)
+axes[0, 0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+axes[0, 0].set_xlabel('Actual Price')
+axes[0, 0].set_ylabel('Predicted Price')
+axes[0, 0].set_title(f'Actual vs Predicted (R² = {test_r2:.3f})')
+
+# 2. Residuals
+residuals = y_test - y_pred_test
+axes[0, 1].scatter(y_pred_test, residuals, alpha=0.5)
+axes[0, 1].axhline(y=0, color='r', linestyle='--')
+axes[0, 1].set_xlabel('Predicted Price')
+axes[0, 1].set_ylabel('Residuals')
+axes[0, 1].set_title('Residual Plot')
+
+# 3. Feature Coefficients
+axes[1, 0].barh(feature_importance['feature'], feature_importance['coefficient'])
+axes[1, 0].set_xlabel('Coefficient Value')
+axes[1, 0].set_title('Feature Importance')
+
+# 4. Learning Curves
+train_sizes = np.linspace(0.1, 1.0, 10)
+train_scores = []
+test_scores = []
+
+for size in train_sizes:
+    X_partial, _, y_partial, _ = train_test_split(
+        X_train, y_train, train_size=size, random_state=42
+    )
+    model_partial = LinearRegression()
+    model_partial.fit(X_partial, y_partial)
+    train_scores.append(model_partial.score(X_partial, y_partial))
+    test_scores.append(model_partial.score(X_test, y_test))
+
+axes[1, 1].plot(train_sizes * len(X_train), train_scores, 'o-', label='Training')
+axes[1, 1].plot(train_sizes * len(X_train), test_scores, 'o-', label='Test')
+axes[1, 1].set_xlabel('Training Set Size')
+axes[1, 1].set_ylabel('R² Score')
+axes[1, 1].set_title('Learning Curves')
+axes[1, 1].legend()
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </section>
+            </section>
+
+            <!-- Section 7: Key Takeaways -->
+            <section>
+                <!-- Summary -->
+                <section>
+                    <h2>Key Takeaways</h2>
+                    <h3>What You've Learned Today</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Technical Skills</h4>
+                            <ul>
+                                <li>Pandas for data manipulation</li>
+                                <li>Matplotlib for visualization</li>
+                                <li>sklearn for machine learning</li>
+                                <li>Train/test splitting</li>
+                                <li>Linear regression implementation</li>
+                                <li>RMSE and R² metrics</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Conceptual Understanding</h4>
+                            <ul>
+                                <li>What models are</li>
+                                <li>Overfitting vs underfitting</li>
+                                <li>Importance of test data</li>
+                                <li>Model complexity trade-offs</li>
+                                <li>Evaluation metrics meaning</li>
+                                <li>Feature importance</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Remember:</strong> Start simple, evaluate carefully, and increase complexity only when needed. 
+                        Always validate on unseen data!
+                    </div>
+                </section>
+
+                <!-- Next Steps -->
+                <section>
+                    <h2>Practice Exercises</h2>
+                    <h3>Reinforce Your Learning</h3>
+                    <ol>
+                        <li><strong>Pandas Practice:</strong> Load a CSV file, explore it, handle missing values, and create 3 new features</li>
+                        <li><strong>Visualization:</strong> Create a 2x2 subplot showing different aspects of your data</li>
+                        <li><strong>Model Building:</strong> Build a linear regression model predicting a continuous target</li>
+                        <li><strong>Overfitting Demo:</strong> Create polynomial features and show overfitting occurring</li>
+                        <li><strong>Evaluation:</strong> Calculate and interpret RMSE and R² for your model</li>
+                    </ol>
+                    <div class="info-box">
+                        <strong>Next Week:</strong> We'll dive deep into data preparation, including advanced handling of missing data, 
+                        feature engineering, and data transformation techniques.
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/search/search.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom,
+                RevealSearch,
+                RevealMath.KaTeX
+            ]
+        });
+    </script>
+</body>
+</html>

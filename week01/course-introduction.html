@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 1: Course Introduction - ISM6251</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Custom styles matching custom-theme.scss -->
+    <style>
+        /* Custom theme colors */
+        :root {
+            --primary-color: #1e3a5f;
+            --secondary-color: #4a90e2;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+        }
+        
+        /* Background */
+        .reveal {
+            background: linear-gradient(135deg, #f7f9fc 0%, #e8eef5 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-size: 28px;
+        }
+        
+        /* Apply border styling only to horizontal slides (direct children) */
+        .reveal .slides > section {
+            text-align: left;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            padding-top: 45px;
+            background: white;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        
+        /* Vertical slides within stacks should also have the border but positioned differently */
+        .reveal .slides > section > section {
+            text-align: left;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            padding-top: 45px;
+            background: white;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        
+        /* Headers */
+        .reveal h1 {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 15px;
+            margin: -45px -30px 15px -30px;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-bottom: 3px solid var(--accent-color);
+            border-radius: 6px 6px 0 0;
+            font-size: 1.3em;
+        }
+        
+        .reveal h2 {
+            background: linear-gradient(90deg, var(--secondary-color) 0%, #6fa3e8 100%);
+            color: white;
+            padding: 12px 20px;
+            margin: -45px -30px 15px -30px;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 6px 6px 0 0;
+            font-size: 1.1em;
+        }
+        
+        .reveal h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .reveal h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 0.75em;
+        }
+        
+        /* Lists */
+        .reveal ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 0.75em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .reveal ul li {
+            padding-left: 25px;
+            margin: 8px 0;
+            position: relative;
+            line-height: 1.3;
+            display: block;
+        }
+        
+        .reveal ul li:before {
+            content: "▸";
+            position: absolute;
+            left: 5px;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        .warning-box {
+            background: rgba(243, 156, 18, 0.08);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        .success-box {
+            background: rgba(39, 174, 96, 0.08);
+            border-left: 4px solid var(--success-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        /* Columns */
+        .columns {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .column {
+            flex: 1;
+            padding: 5px;
+            min-width: 0;
+        }
+        
+        .column-50 {
+            flex: 0 0 48%;
+        }
+        
+        .column-33 {
+            flex: 0 0 31%;
+        }
+        
+        .column-60 {
+            flex: 0 0 58%;
+        }
+        
+        .column-40 {
+            flex: 0 0 38%;
+        }
+        
+        /* Code blocks */
+        .reveal pre {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-radius: 6px;
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.48em;
+            border-left: 3px solid var(--accent-color);
+            border: 1px solid #dee2e6;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 250px;
+        }
+        
+        .reveal pre code {
+            background: transparent;
+            color: #212529;
+            padding: 0;
+            max-height: 230px;
+            line-height: 1.25;
+            font-weight: 500;
+            white-space: pre;
+        }
+        
+        /* Tables */
+        .reveal table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 10px auto;
+            background: white;
+            font-size: 0.6em;
+            max-width: 100%;
+        }
+        
+        .reveal table thead {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+        
+        .reveal table th {
+            padding: 8px;
+            font-weight: 600;
+            text-align: left;
+            letter-spacing: 0.3px;
+        }
+        
+        .reveal table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        /* Navigation arrows */
+        .reveal .controls {
+            color: var(--secondary-color);
+        }
+        
+        /* Progress bar */
+        .reveal .progress {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .reveal .progress span {
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        /* Slide numbers */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            right: 110px !important;
+            bottom: 10px !important;
+        }
+        
+        /* Paragraphs and general text */
+        .reveal p {
+            font-size: 0.75em;
+            line-height: 1.35;
+            margin: 8px 0;
+        }
+        
+        .reveal strong {
+            color: var(--primary-color);
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .reveal em {
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+        
+        /* Ordered lists */
+        .reveal ol {
+            font-size: 0.75em;
+            padding-left: 20px;
+        }
+        
+        .reveal ol li {
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section>
+                <h1>Course Introduction</h1>
+                <h3 style="border: none; text-align: center; color: #666;">Machine Learning for Business Applications</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">Building Data-Driven Solutions for Tomorrow's Business Challenges</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251 | Fall 2025</strong><br>
+                    Dr. Tim Smith<br>
+                    School of Information Systems and Management
+                </p>
+            </section>
+
+            <!-- Section 1: Welcome & Introductions -->
+            <section>
+                <!-- Welcome -->
+                <section>
+                    <h2>Welcome to ISM6251</h2>
+                    <h3>About Your Instructor</h3>
+                    <div class="columns">
+                        <div class="column-60">
+                            <h4>Dr. Tim Smith</h4>
+                            <ul>
+                                <li>Email: smith515@usf.edu</li>
+                                <li>Office: School of Information Systems and Management (CIS Building)</li>
+                                <li>Office Hours: Wednesdays 4:00-5:30 PM (or by appointment)</li>
+                                <li>Research Interests: Machine Learning, Data Analytics, Business Intelligence</li>
+                            </ul>
+                        </div>
+                        <div class="column-40">
+                            <h4>Teaching Assistant</h4>
+                            <ul>
+                                <li>Santhoshini Bojanapally</li>
+                                <li>Email: bs441@usf.edu</li>
+                                <li>Office Hours: Saturdays 1:00-4:00 PM</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Communication:</strong> Email is the best way to contact us. Include course number (ISM6251) in subject line. 
+                        Response time: 24 business hours.
+                    </div>
+                </section>
+
+                <!-- Course Overview -->
+                <section>
+                    <h2>Course Overview</h2>
+                    <h3>What is This Course About?</h3>
+                    <p><strong>Course Description:</strong> A hands-on introduction to machine learning techniques with a focus on practical business applications. 
+                    Students will learn to frame problems, prepare data, build and evaluate models, and communicate results to business stakeholders.</p>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Core Technologies</h4>
+                            <ul>
+                                <li>Python programming language</li>
+                                <li>Jupyter Notebooks</li>
+                                <li>scikit-learn library</li>
+                                <li>pandas for data manipulation</li>
+                                <li>matplotlib/seaborn for visualization</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Business Applications</h4>
+                            <ul>
+                                <li>Customer churn prediction</li>
+                                <li>Revenue forecasting</li>
+                                <li>Fraud detection</li>
+                                <li>Market segmentation</li>
+                                <li>Product recommendations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Learning Outcomes -->
+                <section>
+                    <h2>Course Learning Outcomes</h2>
+                    <h3>By the End of This Course, You Will Be Able To:</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Technical Skills</h4>
+                            <ul>
+                                <li>Apply regression and classification algorithms using Python</li>
+                                <li>Prepare and clean data using statistical techniques</li>
+                                <li>Evaluate models using appropriate performance metrics</li>
+                                <li>Implement unsupervised learning (clustering, dimensionality reduction)</li>
+                                <li>Develop and tune models using hyperparameter optimization</li>
+                                <li>Set up a development environment for ML projects</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Business Skills</h4>
+                            <ul>
+                                <li>Understand ML concepts and their relevance to business</li>
+                                <li>Identify business risks (overfitting, class imbalance, interpretability)</li>
+                                <li>Communicate ML insights to technical and non-technical audiences</li>
+                                <li>Frame business problems as ML problems</li>
+                                <li>Understand MLOps principles (deployment, monitoring, governance)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 2: Course Structure & Schedule -->
+            <section>
+                <!-- Weekly Schedule Overview -->
+                <section>
+                    <h2>Course Schedule</h2>
+                    <h3>12-Week Journey Through Machine Learning</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Topic</th>
+                                <th>Key Concepts</th>
+                                <th>Deliverables</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Course Introduction & ML Overview</td>
+                                <td>Python, Jupyter, ML Basics</td>
+                                <td>Python Course (Part 1), Discussion, Quiz</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>ML Foundations and Python</td>
+                                <td>pandas, sklearn, matplotlib, Overfitting</td>
+                                <td>Python Course (Part 2), Practice Assignment</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Data Preparation Deep Dive</td>
+                                <td>Missing Data, Imputation, Filtering</td>
+                                <td>Data Wrangling Assignment</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Linear Regression</td>
+                                <td>MSE, R², Outlier Detection</td>
+                                <td>Build Linear Models, Revenue Prediction Case</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Logistic Regression</td>
+                                <td>Binary Classification, Confusion Matrix</td>
+                                <td>Customer Churn Classification</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>K-Nearest Neighbors</td>
+                                <td>Multi-class, Feature Scaling</td>
+                                <td>Product Recommendation Assignment</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Schedule Part 2 -->
+                <section>
+                    <h2>Course Schedule (Continued)</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Topic</th>
+                                <th>Key Concepts</th>
+                                <th>Deliverables</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>7</td>
+                                <td>Support Vector Machines</td>
+                                <td>SVC/SVM, Class Imbalance</td>
+                                <td>Fraud Detection Assignment</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Decision Trees & Hyperparameter Tuning</td>
+                                <td>ROC/AUC, Model Interpretability</td>
+                                <td>Credit Scoring Assignment</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>Ensemble Methods</td>
+                                <td>Random Forests, XGBoost</td>
+                                <td>Advanced Prediction Models</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>Neural Networks</td>
+                                <td>ANNs, SHAP, Feature Importance</td>
+                                <td>Customer Behavior Modeling</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>Clustering Techniques</td>
+                                <td>K-Means, DBSCAN, Hierarchical</td>
+                                <td>Customer Segmentation Analysis</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>Recap & Final Exam</td>
+                                <td>Course Review</td>
+                                <td>Final Exam, Final Project Due</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Class Format -->
+                <section>
+                    <h2>Class Format</h2>
+                    <h3>Hybrid Learning Approach</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Face-to-Face (F2F) Classes</h4>
+                            <ul>
+                                <li>Live lectures and discussions</li>
+                                <li>In-class coding exercises</li>
+                                <li>Q&A sessions</li>
+                                <li>Peer collaboration</li>
+                                <li>Quizzes administered with Honorlock</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Asynchronous Online (AO) Classes</h4>
+                            <ul>
+                                <li>Pre-recorded tutorial videos</li>
+                                <li>Complex material at your own pace</li>
+                                <li>Pause, repeat, and review capability</li>
+                                <li>Selected topics better suited for self-paced learning</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Note:</strong> The schedule will indicate whether each week's class is F2F or AO. 
+                        This selective approach enhances learning by matching delivery method to content type.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 3: Grading & Assessment -->
+            <section>
+                <!-- Grading Components -->
+                <section>
+                    <h2>Grading Components</h2>
+                    <h3>How Your Grade is Calculated</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Weight</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Weekly Assignments</td>
+                                <td>15%</td>
+                                <td>Hands-on coding exercises and problem sets</td>
+                            </tr>
+                            <tr>
+                                <td>Discussion Participation</td>
+                                <td>15%</td>
+                                <td>Canvas discussions, peer engagement</td>
+                            </tr>
+                            <tr>
+                                <td>In-Class Quizzes</td>
+                                <td>20%</td>
+                                <td>Closed book, Honorlock proctored</td>
+                            </tr>
+                            <tr>
+                                <td>Final Project</td>
+                                <td>25%</td>
+                                <td>Group project with peer evaluation</td>
+                            </tr>
+                            <tr>
+                                <td>Final Exam</td>
+                                <td>25%</td>
+                                <td>Comprehensive, closed book</td>
+                            </tr>
+                            <tr>
+                                <td>DataCamp Courses</td>
+                                <td>5% (Bonus)</td>
+                                <td>Optional supplementary learning</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="warning-box">
+                        <strong>Important:</strong> Grading scale may be adjusted based on overall class performance at instructor's discretion.
+                    </div>
+                </section>
+
+                <!-- Grading Scale -->
+                <section>
+                    <h2>Grading Scale</h2>
+                    <div class="columns">
+                        <div class="column-33">
+                            <h4>A Range</h4>
+                            <ul>
+                                <li>A+ : ≥97%</li>
+                                <li>A : ≥94%</li>
+                                <li>A- : ≥90%</li>
+                            </ul>
+                        </div>
+                        <div class="column-33">
+                            <h4>B Range</h4>
+                            <ul>
+                                <li>B+ : ≥87%</li>
+                                <li>B : ≥84%</li>
+                                <li>B- : ≥80%</li>
+                            </ul>
+                        </div>
+                        <div class="column-33">
+                            <h4>C Range & Below</h4>
+                            <ul>
+                                <li>C+ : ≥77%</li>
+                                <li>C : ≥74%</li>
+                                <li>C- : ≥70%</li>
+                                <li>D+ : ≥67%</li>
+                                <li>D : ≥64%</li>
+                                <li>D- : ≥60%</li>
+                                <li>F : <60%</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Assessment Policies -->
+                <section>
+                    <h2>Assessment Policies</h2>
+                    <div class="columns">
+                        <div class="column">
+                            <h3>Quizzes</h3>
+                            <ul>
+                                <li>In-class using Honorlock</li>
+                                <li>Multiple choice, fill-in-blank, short answer</li>
+                                <li>Closed book and closed internet</li>
+                                <li>One lowest quiz score dropped</li>
+                                <li>Ensure Honorlock works before quiz</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h3>Final Exam</h3>
+                            <ul>
+                                <li>Administered in-class</li>
+                                <li>Closed book, closed internet</li>
+                                <li>No external assistance allowed</li>
+                                <li>Comprehensive coverage of course</li>
+                                <li>No AI tools permitted</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Late Work Policy:</strong> No credit given for late submissions. Plan to complete work at least one day before deadline. 
+                        Technical issues are not acceptable excuses.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 4: Projects & Assignments -->
+            <section>
+                <!-- Projects Overview -->
+                <section>
+                    <h2>Course Projects</h2>
+                    <h3>Group Projects with Real-World Applications</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Mid-Term Analytics Project</h4>
+                            <ul>
+                                <li>Groups of 4-5 students</li>
+                                <li>Build a complete ML model</li>
+                                <li>Business problem solving focus</li>
+                                <li>Peer evaluation component</li>
+                                <li>Individual grade = Team grade × Peer evaluation %</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Final Big Data Analytics Project</h4>
+                            <ul>
+                                <li>Groups of 4-5 students</li>
+                                <li>Identify public dataset</li>
+                                <li>Complete analysis, visualization, modeling</li>
+                                <li>Use Python ecosystem</li>
+                                <li>Peer evaluation affects final grade</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Peer Evaluation:</strong> Your actual project grade = Team's grade × Your peer evaluation percentage. 
+                        Example: Team gets 100%, your peer eval is 9/10 = Your grade is 90%.
+                    </div>
+                </section>
+
+                <!-- Weekly Assignments -->
+                <section>
+                    <h2>Weekly Assignments</h2>
+                    <h3>Hands-On Learning Through Practice</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Assignment Types</h4>
+                            <ul>
+                                <li>Coding exercises in Python</li>
+                                <li>Data preparation tasks</li>
+                                <li>Model building and evaluation</li>
+                                <li>Business case analyses</li>
+                                <li>Visualization creation</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Submission Guidelines</h4>
+                            <ul>
+                                <li>Submit through Canvas</li>
+                                <li>Jupyter Notebook format preferred</li>
+                                <li>Include code, outputs, and explanations</li>
+                                <li>Document your thought process</li>
+                                <li>Follow naming conventions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Academic Integrity:</strong> All work must be original. Turnitin.com may be used to check for plagiarism. 
+                        Cite all sources and collaborations.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 5: Course Policies -->
+            <section>
+                <!-- AI Policy -->
+                <section>
+                    <h2>Artificial Intelligence Policy</h2>
+                    <h3>Using AI Tools Responsibly</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Encouraged Uses</h4>
+                            <ul>
+                                <li>As tutors or learning aids</li>
+                                <li>Exploring concepts and alternatives</li>
+                                <li>Brainstorming ideas</li>
+                                <li>Clarifying assignment directions</li>
+                                <li>Understanding error messages</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Restrictions</h4>
+                            <ul>
+                                <li>Must submit original work</li>
+                                <li>Must demonstrate understanding</li>
+                                <li>NO AI during quizzes</li>
+                                <li>NO AI during final exam</li>
+                                <li>Document any AI assistance used</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Remember:</strong> AI is a tool to enhance learning, not replace it. 
+                        You must be able to explain and defend any work you submit.
+                    </div>
+                </section>
+
+                <!-- Technology Requirements -->
+                <section>
+                    <h2>Technology Requirements</h2>
+                    <h3>What You Need to Succeed</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Hardware Requirements</h4>
+                            <ul>
+                                <li>Laptop (Windows or MacOS)</li>
+                                <li>Minimum 8 GB RAM</li>
+                                <li>Fully charged battery for class</li>
+                                <li>Webcam for proctored exams</li>
+                                <li>Microphone for online sessions</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Software Requirements</h4>
+                            <ul>
+                                <li>Python 3.x (latest stable version)</li>
+                                <li>Jupyter Notebooks</li>
+                                <li>Git for version control</li>
+                                <li>Canvas access</li>
+                                <li>Honorlock for quizzes</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Important:</strong> Power outlets are limited in classroom. 
+                        You are responsible for ensuring your laptop can last the entire session.
+                    </div>
+                </section>
+
+                <!-- Academic Integrity -->
+                <section>
+                    <h2>Academic Integrity</h2>
+                    <h3>Maintaining High Standards</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Expected Behaviors</h4>
+                            <ul>
+                                <li>Complete your own work</li>
+                                <li>Cite all sources properly</li>
+                                <li>Document collaborations</li>
+                                <li>Ask when uncertain</li>
+                                <li>Report violations</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Prohibited Actions</h4>
+                            <ul>
+                                <li>Using CourseHero or Chegg</li>
+                                <li>Copying code without attribution</li>
+                                <li>Sharing quiz/exam content</li>
+                                <li>Submitting others' work</li>
+                                <li>Unauthorized collaboration</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Consequences:</strong> Academic integrity violations will be reported and may result in course failure. 
+                        When in doubt, ask for clarification.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 6: Support & Resources -->
+            <section>
+                <!-- Getting Help -->
+                <section>
+                    <h2>Getting Help</h2>
+                    <h3>Resources for Success</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Course Support</h4>
+                            <ul>
+                                <li>Instructor office hours: Wed 4:00-5:30 PM</li>
+                                <li>TA office hours: Sat 1:00-4:00 PM</li>
+                                <li>Email response within 24 business hours</li>
+                                <li>Canvas discussion boards</li>
+                                <li>Peer study groups</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>University Resources</h4>
+                            <ul>
+                                <li>USF IT Support: (813) 974-1222</li>
+                                <li>Student Accessibility Services</li>
+                                <li>Library research assistance</li>
+                                <li>Academic Success Center</li>
+                                <li>Canvas help guides</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Tips for Success:</strong> Access course regularly, watch all videos, read materials, 
+                        practice examples, work effectively in teams, ask questions early.
+                    </div>
+                </section>
+
+                <!-- Communication Guidelines -->
+                <section>
+                    <h2>Communication Guidelines</h2>
+                    <h3>Professional Communication</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Email Best Practices</h4>
+                            <ul>
+                                <li>Include "ISM6251" in subject line</li>
+                                <li>Be specific about your question</li>
+                                <li>Check syllabus/Canvas first</li>
+                                <li>Use professional language</li>
+                                <li>Allow 24 hours for response</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Discussion Board Etiquette</h4>
+                            <ul>
+                                <li>Stay on topic</li>
+                                <li>Be respectful and constructive</li>
+                                <li>Proofread before posting</li>
+                                <li>Avoid ALL CAPS</li>
+                                <li>Keep posts course-related</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>WhatsApp/GroupMe:</strong> Student communication tools are allowed but academic integrity still applies. 
+                        Sharing test content is prohibited.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 7: First Week Activities -->
+            <section>
+                <!-- Getting Started -->
+                <section>
+                    <h2>Getting Started This Week</h2>
+                    <h3>Week 1 Action Items</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Immediate Tasks</h4>
+                            <ol>
+                                <li>Access Canvas course site</li>
+                                <li>Read complete syllabus</li>
+                                <li>Install Python and Jupyter</li>
+                                <li>Start Python Course Part 1</li>
+                                <li>Introduce yourself in discussion</li>
+                            </ol>
+                        </div>
+                        <div class="column">
+                            <h4>By End of Week</h4>
+                            <ol>
+                                <li>Complete intro quiz</li>
+                                <li>Form study groups</li>
+                                <li>Test Honorlock setup</li>
+                                <li>Review ML concepts</li>
+                                <li>Prepare questions for next class</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Pro Tip:</strong> Start assignments early! Technical issues close to deadlines won't be accepted as excuses.
+                    </div>
+                </section>
+
+                <!-- Python Setup -->
+                <section>
+                    <h2>Python Environment Setup</h2>
+                    <h3>Getting Your Development Environment Ready</h3>
+                    <pre><code class="python"># Step 1: Install Anaconda (recommended)
+# Download from: https://www.anaconda.com/products/individual
+
+# Step 2: Create a new environment
+conda create -n ism6251 python=3.9
+
+# Step 3: Activate the environment
+conda activate ism6251
+
+# Step 4: Install required packages
+pip install numpy pandas scikit-learn matplotlib seaborn jupyter
+
+# Step 5: Launch Jupyter Notebook
+jupyter notebook
+
+# Step 6: Test your setup
+import pandas as pd
+import numpy as np
+import sklearn
+print("Setup successful!")</code></pre>
+                    <div class="info-box">
+                        <strong>Alternative:</strong> Google Colab can be used if you have installation issues, 
+                        but local setup is recommended for better performance.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 8: Wrap-up -->
+            <section>
+                <!-- Key Takeaways -->
+                <section>
+                    <h2>Key Takeaways</h2>
+                    <h3>Remember These Important Points</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Course Essentials</h4>
+                            <ul>
+                                <li>Hands-on learning with Python</li>
+                                <li>Business-focused applications</li>
+                                <li>Mix of F2F and online classes</li>
+                                <li>Group projects with peer evaluation</li>
+                                <li>No late work accepted</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Success Factors</h4>
+                            <ul>
+                                <li>Start assignments early</li>
+                                <li>Participate actively</li>
+                                <li>Ask questions</li>
+                                <li>Practice coding regularly</li>
+                                <li>Collaborate ethically</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>First Day Attendance:</strong> Per university policy, students absent on the first day will be automatically dropped.
+                    </div>
+                </section>
+
+                <!-- Questions & Next Steps -->
+                <section>
+                    <h2>Questions & Next Steps</h2>
+                    <h3>Let's Get Started!</h3>
+                    <div class="info-box">
+                        <strong>Questions?</strong> Now is a great time to ask about the course, expectations, or clarify any concerns.
+                    </div>
+                    <h4>Before Next Class:</h4>
+                    <ul>
+                        <li>Complete Python setup</li>
+                        <li>Start DataCamp Python course</li>
+                        <li>Post introduction in discussion forum</li>
+                        <li>Review Chapter 1 materials on Canvas</li>
+                        <li>Prepare for Quiz 1 on intro concepts</li>
+                    </ul>
+                    <div class="success-box">
+                        <strong>Looking Forward:</strong> This course will equip you with practical ML skills that are highly valued in today's job market. 
+                        Let's embark on this exciting journey together!
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/search/search.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom,
+                RevealSearch,
+                RevealMath.KaTeX
+            ]
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISM6251: Machine Learning for Business Applications - Fall 2025</title>
+    <style>
+        :root {
+            --primary-color: #1e3a5f;
+            --secondary-color: #4a90e2;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --background: #f7f9fc;
+            --card-bg: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #5a6c7d;
+            --border-color: #e1e8ed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #e8eef5 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            text-align: center;
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .instructor-info {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .instructor-info span {
+            margin: 0 15px;
+            font-size: 0.95em;
+        }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2 .icon {
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+
+        .syllabus-card {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.05) 0%, rgba(30, 58, 95, 0.05) 100%);
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .syllabus-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .syllabus-card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .syllabus-card a:hover {
+            color: var(--secondary-color);
+        }
+
+        .syllabus-card p {
+            color: var(--text-secondary);
+            margin-top: 8px;
+            margin-left: 32px;
+        }
+
+        .week-section {
+            margin-top: 30px;
+        }
+
+        .week-header {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px 8px 0 0;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .week-content {
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+        }
+
+        .week-topic {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .material-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .material-card:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 3px 10px rgba(74, 144, 226, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .material-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .material-card a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .material-card a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        .material-card a .arrow {
+            margin-left: 5px;
+            transition: transform 0.2s;
+        }
+
+        .material-card a:hover .arrow {
+            transform: translateX(3px);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+
+        .badge.new {
+            background: var(--success-color);
+        }
+
+        .coming-soon {
+            color: var(--text-secondary);
+            font-style: italic;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-top: 50px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .quick-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .quick-links a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .instructor-info span {
+                display: block;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>ISM6251: Machine Learning for Business Applications</h1>
+            <p>Building Data-Driven Solutions for Tomorrow's Business Challenges</p>
+            <div class="instructor-info">
+                <span>📧 Dr. Tim Smith</span>
+                <span>🏫 Fall 2025</span>
+                <span>🎓 USF School of Information Systems and Management</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Course Documents Section -->
+        <section class="section">
+            <h2><span class="icon">📚</span> Course Documents</h2>
+            
+            <div class="syllabus-card">
+                <a href="syllabus.html">
+                    <span class="icon">📋</span> Course Syllabus
+                    <span class="badge new">Required</span>
+                </a>
+                <p>Complete course information including schedule, grading policies, and learning objectives</p>
+            </div>
+
+            <div class="quick-links">
+                <a href="syllabus.html#grading">Grading Information</a>
+                <a href="syllabus.html#schedule">Weekly Schedule</a>
+                <a href="syllabus.html#policies">Course Policies</a>
+                <a href="syllabus.html#contact">Contact Information</a>
+            </div>
+        </section>
+
+        <!-- Weekly Materials Section -->
+        <section class="section">
+            <h2><span class="icon">📅</span> Weekly Course Materials</h2>
+            
+            <!-- Week 1 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 1: Course Introduction & ML Overview
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        Introduction to Machine Learning & Predictive Modeling • Python & Jupyter Notebooks Setup
+                    </div>
+                    <div class="materials-grid">
+                        <div class="material-card">
+                            <h4>🎯 Course Introduction</h4>
+                            <p>Course overview, expectations, and logistics</p>
+                            <a href="week01/course-introduction.html">
+                                View Slides <span class="arrow">→</span>
+                            </a>
+                        </div>
+                        <div class="material-card">
+                            <h4>🤖 ML Foundations</h4>
+                            <p>Introduction to machine learning concepts</p>
+                            <a href="week01/ml-foundations.html">
+                                View Slides <span class="arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 2: ML Foundations and Python
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        Exploring pandas, sklearn, matplotlib • Understanding models, overfitting, and train/test splits
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 3 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 3: Data Preparation Deep Dive
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        Handling missing data • Filtering and grouping • Imputation strategies
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 4 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 4: Linear Regression
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        Regression evaluation (MSE, R²) • Outlier detection and treatment
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 5 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 5: Logistic Regression
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        Binary classification • Confusion Matrix, Precision, Recall, F1 • Encoding categorical variables
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 6 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 6: K-Nearest Neighbors (KNN)
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        Multi-class classification • Feature scaling (standardization, normalization)
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 7 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 7: Support Vector Machines
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        SVC/SVM • Precision-Recall Curve • Class imbalance strategies
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 8 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 8: Decision Trees & Hyperparameter Tuning
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        ROC and AUC • Model complexity and interpretability
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 9 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 9: Ensemble Methods
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        Random Forests, Gradient Boosting, XGBoost • Feature importance
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 10 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 10: Artificial Neural Networks
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        ANNs • SHAP and feature importance • Model complexity trade-offs
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 11 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 11: Clustering Techniques
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        K-Means, DBSCAN, Hierarchical • Silhouette Score, Davies-Bouldin
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 12 -->
+            <div class="week-section">
+                <div class="week-header">
+                    Week 12: Course Review & Final Exam
+                </div>
+                <div class="week-content">
+                    <div class="week-topic">
+                        Comprehensive review • Final project presentations
+                    </div>
+                    <div class="coming-soon">
+                        Materials will be available soon
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 ISM6251: Machine Learning for Business Applications | Dr. Tim Smith | University of South Florida</p>
+            <p>Last updated: January 2025</p>
+        </div>
+    </footer>
+</body>
+</html>

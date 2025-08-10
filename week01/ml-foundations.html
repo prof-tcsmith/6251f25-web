@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 1: Machine Learning Foundations</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Custom styles matching custom-theme.scss -->
+    <style>
+        /* Custom theme colors */
+        :root {
+            --primary-color: #1e3a5f;
+            --secondary-color: #4a90e2;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+        }
+        
+        /* Background */
+        .reveal {
+            background: linear-gradient(135deg, #f7f9fc 0%, #e8eef5 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-size: 28px;
+        }
+        
+        /* Apply border styling only to horizontal slides (direct children) */
+        .reveal .slides > section {
+            text-align: left;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            padding-top: 45px;
+            background: white;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        
+        /* Vertical slides within stacks should also have the border but positioned differently */
+        .reveal .slides > section > section {
+            text-align: left;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            padding-top: 45px;
+            background: white;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        
+        /* Headers */
+        .reveal h1 {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 15px;
+            margin: -45px -30px 15px -30px;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-bottom: 3px solid var(--accent-color);
+            border-radius: 6px 6px 0 0;
+            font-size: 1.3em;
+        }
+        
+        .reveal h2 {
+            background: linear-gradient(90deg, var(--secondary-color) 0%, #6fa3e8 100%);
+            color: white;
+            padding: 12px 20px;
+            margin: -45px -30px 15px -30px;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 6px 6px 0 0;
+            font-size: 1.1em;
+        }
+        
+        .reveal h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .reveal h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 0.75em;
+        }
+        
+        /* Lists */
+        .reveal ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 0.75em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .reveal ul li {
+            padding-left: 25px;
+            margin: 8px 0;
+            position: relative;
+            line-height: 1.3;
+            display: block;
+        }
+        
+        .reveal ul li:before {
+            content: "▸";
+            position: absolute;
+            left: 5px;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        /* Ensure headers above lists are properly positioned */
+        .reveal .column h3,
+        .reveal .column h4 {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .reveal .column > *:first-child {
+            margin-top: 0;
+        }
+        
+        /* Ensure proper spacing between elements in columns */
+        .reveal .column > * + * {
+            margin-top: 10px;
+        }
+        
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        .warning-box {
+            background: rgba(243, 156, 18, 0.08);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        /* Columns */
+        .columns {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .column {
+            flex: 1;
+            padding: 5px;
+            min-width: 0;
+        }
+        
+        .column-50 {
+            flex: 0 0 48%;
+        }
+        
+        .column-33 {
+            flex: 0 0 31%;
+        }
+        
+        .column-60 {
+            flex: 0 0 58%;
+        }
+        
+        .column-40 {
+            flex: 0 0 38%;
+        }
+        
+        /* Code blocks */
+        .reveal pre {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-radius: 6px;
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.48em;
+            border-left: 3px solid var(--accent-color);
+            border: 1px solid #dee2e6;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 250px;
+        }
+        
+        .reveal pre code {
+            background: transparent;
+            color: #212529;
+            padding: 0;
+            max-height: 230px;
+            line-height: 1.25;
+            font-weight: 500;
+            white-space: pre;
+        }
+        
+        /* Tables */
+        .reveal table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 10px auto;
+            background: white;
+            font-size: 0.6em;
+            max-width: 100%;
+        }
+        
+        .reveal table thead {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+        
+        .reveal table th {
+            padding: 8px;
+            font-weight: 600;
+            text-align: left;
+            letter-spacing: 0.3px;
+        }
+        
+        .reveal table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        /* Navigation arrows */
+        .reveal .controls {
+            color: var(--secondary-color);
+        }
+        
+        /* Progress bar */
+        .reveal .progress {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .reveal .progress span {
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        /* Slide numbers */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        
+        /* Math equations */
+        .math-equation {
+            text-align: center;
+            font-size: 1em;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        /* Paragraphs and general text */
+        .reveal p {
+            font-size: 0.75em;
+            line-height: 1.35;
+            margin: 8px 0;
+        }
+        
+        .reveal strong {
+            color: var(--primary-color);
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        /* Strong tags that act as headers for lists */
+        .reveal strong + ul,
+        .reveal strong + ol {
+            margin-top: 5px;
+        }
+        
+        .reveal p strong {
+            display: inline;
+        }
+        
+        .reveal em {
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+        
+        /* Prevent content from overflowing */
+        .reveal .columns {
+            max-width: 100%;
+            flex-wrap: nowrap;
+        }
+        
+        .reveal .column {
+            min-width: 0;
+            word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        /* Fix layout issues with headers and lists in columns */
+        .reveal .column > strong:first-child,
+        .reveal .column > h4:first-child,
+        .reveal .column > h3:first-child {
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        
+        .reveal .column ul,
+        .reveal .column ol {
+            width: 100%;
+        }
+        
+        /* Ordered lists */
+        .reveal ol {
+            font-size: 0.75em;
+            padding-left: 20px;
+        }
+        
+        .reveal ol li {
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section>
+                <h1>Machine Learning Foundations</h1>
+                <h3 style="border: none; text-align: center; color: #666;">Building Intelligence from Data</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">A Journey from Theory to Practice</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251: Machine Learning for Business Applications</strong><br>
+                    Dr. Tim Smith | Fall 2025
+                </p>
+            </section>
+
+            <!-- Section 1: Introduction to Machine Learning -->
+            <section>
+                <!-- Overview -->
+                <section>
+                    <h2>Introduction to Machine Learning</h2>
+                    <h3>Section Overview</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Topics to Cover</h4>
+                            <ul>
+                                <li>Definition and History</li>
+                                <li>Core Concepts</li>
+                                <li>Types of Learning</li>
+                                <li>Business Context</li>
+                                <li>The ML Revolution</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Learning Objectives</h4>
+                            <ul>
+                                <li>Define machine learning precisely</li>
+                                <li>Distinguish ML from traditional programming</li>
+                                <li>Identify ML opportunities in business</li>
+                                <li>Understand the learning paradigms</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- What is ML -->
+                <section>
+                    <h2>What is Machine Learning?</h2>
+                    <h3>Historical Definition</h3>
+                    <div class="info-box">
+                        <strong>Arthur Samuel (1959):</strong><br>
+                        <em>"Field of study that gives computers the ability to learn without being explicitly programmed."</em>
+                    </div>
+                    <h3>Modern Definition</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <strong>Tom Mitchell (1997):</strong><br>
+                            A program learns from experience <strong>E</strong> with respect to task <strong>T</strong> 
+                            and performance measure <strong>P</strong> if its performance at <strong>T</strong>, 
+                            as measured by <strong>P</strong>, improves with experience <strong>E</strong>.
+                        </div>
+                        <div class="column">
+                            <strong>Components:</strong>
+                            <ul>
+                                <li><strong>T</strong>ask: What we want to accomplish</li>
+                                <li><strong>E</strong>xperience: Data we learn from</li>
+                                <li><strong>P</strong>erformance: How we measure success</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Traditional vs ML -->
+                <section>
+                    <h2>Traditional Programming vs Machine Learning</h2>
+                    <div class="columns">
+                        <div class="column">
+                            <h3>Traditional Programming</h3>
+                            <pre><code class="python"># Explicit rules example
+def classify_email(email):
+    spam_words = ['viagra', 'lottery', 'winner']
+    for word in spam_words:
+        if word in email.lower():
+            return "spam"
+    return "not spam"</code></pre>
+                            <strong>Characteristics:</strong>
+                            <ul>
+                                <li>Rules defined by programmer</li>
+                                <li>Fixed logic</li>
+                                <li>Doesn't improve with data</li>
+                                <li>Brittle to new patterns</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h3>Machine Learning</h3>
+                            <pre><code class="python"># Learning from data example
+from sklearn.naive_bayes import MultinomialNB
+
+# Train the model on examples
+model = MultinomialNB()
+model.fit(X_train, y_train)
+
+# Make predictions on new emails
+prediction = model.predict(X_new)</code></pre>
+                            <strong>Characteristics:</strong>
+                            <ul>
+                                <li>Rules learned from data</li>
+                                <li>Adaptive logic</li>
+                                <li>Improves with experience</li>
+                                <li>Handles new patterns</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Why Now -->
+                <section>
+                    <h2>Why Machine Learning Now?</h2>
+                    <h3>The Three Pillars of the ML Revolution</h3>
+                    <div class="columns">
+                        <div class="column-33">
+                            <h4>Data Explosion</h4>
+                            <ul>
+                                <li>Volume: 2.5 quintillion bytes/day</li>
+                                <li>Variety: Text, images, sensors</li>
+                                <li>Velocity: Real-time streams</li>
+                                <li>Veracity: Quality improvements</li>
+                            </ul>
+                        </div>
+                        <div class="column-33">
+                            <h4>Computational Power</h4>
+                            <ul>
+                                <li>GPUs: 1000x faster for ML</li>
+                                <li>Cloud: Elastic scaling</li>
+                                <li>Distributed: Parallel processing</li>
+                                <li>Cost: 1000x cheaper than 2000</li>
+                            </ul>
+                        </div>
+                        <div class="column-33">
+                            <h4>Algorithm Advances</h4>
+                            <ul>
+                                <li>Deep Learning: Neural networks</li>
+                                <li>Transfer Learning: Pre-trained models</li>
+                                <li>AutoML: Automated pipelines</li>
+                                <li>Interpretability: Explainable AI</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>The Perfect Storm:</strong> The convergence of big data, cheap compute, and better algorithms has created unprecedented opportunities for ML applications.
+                    </div>
+                </section>
+
+                <!-- End of Section -->
+                <section>
+                    <h2>End of ML Introduction</h2>
+                    <div class="info-box">
+                        <h3 style="border: none;">End of "ML Introduction" Section</h3>
+                        <p>You've completed the Introduction to Machine Learning section.</p>
+                        <p>Press → to continue to Types of Machine Learning.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 2: Types of Machine Learning -->
+            <section>
+                <!-- Overview -->
+                <section>
+                    <h2>Types of Machine Learning</h2>
+                    <h3>Section Overview</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Learning Paradigms</h4>
+                            <ul>
+                                <li>Supervised Learning</li>
+                                <li>Unsupervised Learning</li>
+                                <li>Reinforcement Learning</li>
+                                <li>Semi-supervised Learning</li>
+                                <li>Self-supervised Learning</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Key Questions</h4>
+                            <ul>
+                                <li>When to use each type?</li>
+                                <li>What problems do they solve?</li>
+                                <li>What data is required?</li>
+                                <li>What are the limitations?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Supervised Learning -->
+                <section>
+                    <h2>Supervised Learning</h2>
+                    <h3>Learning from Labeled Examples</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <strong>Definition:</strong><br>
+                            Algorithm learns a mapping function from input to output using labeled training data.
+                            <p class="math-equation">f: X → Y</p>
+                            <strong>Requirements:</strong>
+                            <ul>
+                                <li>Input features (X)</li>
+                                <li>Target labels (Y)</li>
+                                <li>Training examples: {(x₁,y₁), (x₂,y₂), ..., (xₙ,yₙ)}</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <strong>Example: House Price Prediction</strong>
+                            <pre><code class="python"># Features (X)
+features = ['size', 'bedrooms', 'location']
+
+# Target (Y)
+target = 'price'
+
+# Training
+model.fit(X_train, y_train)
+
+# Prediction
+price = model.predict(new_house)</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Supervised Learning Categories -->
+                <section>
+                    <h2>Supervised Learning Categories</h2>
+                    <div class="columns">
+                        <div class="column">
+                            <h3>Regression</h3>
+                            <strong>Predicting continuous values</strong>
+                            <p class="math-equation">y ∈ ℝ</p>
+                            <strong>Business Applications:</strong>
+                            <ul>
+                                <li>Sales forecasting</li>
+                                <li>Stock price prediction</li>
+                                <li>Customer lifetime value</li>
+                                <li>Demand estimation</li>
+                                <li>Risk scoring</li>
+                            </ul>
+                            <strong>Algorithms:</strong>
+                            <ul>
+                                <li>Linear Regression</li>
+                                <li>Polynomial Regression</li>
+                                <li>Random Forest Regressor</li>
+                                <li>Neural Networks</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h3>Classification</h3>
+                            <strong>Predicting discrete categories</strong>
+                            <p class="math-equation">y ∈ {c₁, c₂, ..., cₖ}</p>
+                            <strong>Business Applications:</strong>
+                            <ul>
+                                <li>Spam detection</li>
+                                <li>Customer churn</li>
+                                <li>Fraud detection</li>
+                                <li>Disease diagnosis</li>
+                                <li>Sentiment analysis</li>
+                            </ul>
+                            <strong>Algorithms:</strong>
+                            <ul>
+                                <li>Logistic Regression</li>
+                                <li>Decision Trees</li>
+                                <li>Support Vector Machines</li>
+                                <li>Neural Networks</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Unsupervised Learning -->
+                <section>
+                    <h2>Unsupervised Learning</h2>
+                    <h3>Finding Hidden Patterns</h3>
+                    <div class="info-box">
+                        <strong>No Labels Required:</strong> Discover structure in unlabeled data
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Clustering</h4>
+                            <strong>Group similar items</strong>
+                            <pre><code class="python">from sklearn.cluster import KMeans
+
+# No labels needed
+kmeans = KMeans(n_clusters=3)
+clusters = kmeans.fit_predict(X)</code></pre>
+                            <strong>Applications:</strong>
+                            <ul>
+                                <li>Customer segmentation</li>
+                                <li>Document organization</li>
+                                <li>Anomaly detection</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Dimensionality Reduction</h4>
+                            <strong>Compress information</strong>
+                            <pre><code class="python">from sklearn.decomposition import PCA
+
+# Reduce dimensions
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X)</code></pre>
+                            <strong>Applications:</strong>
+                            <ul>
+                                <li>Data visualization</li>
+                                <li>Feature extraction</li>
+                                <li>Noise reduction</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reinforcement Learning -->
+                <section>
+                    <h2>Reinforcement Learning</h2>
+                    <h3>Learning Through Interaction</h3>
+                    <div class="columns">
+                        <div class="column-60">
+                            <h4>Agent-Environment Loop:</h4>
+                            <div style="text-align: center; padding: 20px;">
+                                <strong>[Agent] ←→ [Environment]</strong><br>
+                                <em>Action → State & Reward</em>
+                            </div>
+                            <strong>Key Concepts:</strong>
+                            <ul>
+                                <li><strong>Agent:</strong> The learner/decision maker</li>
+                                <li><strong>Environment:</strong> What the agent interacts with</li>
+                                <li><strong>State:</strong> Current situation</li>
+                                <li><strong>Action:</strong> What the agent can do</li>
+                                <li><strong>Reward:</strong> Feedback signal</li>
+                            </ul>
+                        </div>
+                        <div class="column-40">
+                            <strong>Applications:</strong>
+                            <ul>
+                                <li>Game playing (AlphaGo)</li>
+                                <li>Robotics control</li>
+                                <li>Autonomous vehicles</li>
+                                <li>Trading strategies</li>
+                                <li>Resource allocation</li>
+                                <li>Recommendation systems</li>
+                            </ul>
+                            <strong>Characteristics:</strong>
+                            <ul>
+                                <li>Sequential decisions</li>
+                                <li>Delayed rewards</li>
+                                <li>Exploration vs exploitation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Semi-Supervised Learning -->
+                <section>
+                    <h2>Semi-Supervised Learning</h2>
+                    <h3>Best of Both Worlds</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <strong>Combines labeled and unlabeled data</strong>
+                            <pre><code class="python"># Small labeled dataset
+X_labeled, y_labeled = load_labeled_data()
+
+# Large unlabeled dataset  
+X_unlabeled = load_unlabeled_data()
+
+# Semi-supervised approach
+model = SemiSupervisedModel()
+model.fit(X_labeled, y_labeled, X_unlabeled)</code></pre>
+                        </div>
+                        <div class="column">
+                            <strong>Why Use It?</strong>
+                            <ul>
+                                <li>Labels are expensive</li>
+                                <li>Unlabeled data is abundant</li>
+                                <li>Improves performance</li>
+                                <li>Reduces annotation cost</li>
+                            </ul>
+                            <strong>Applications:</strong>
+                            <ul>
+                                <li>Medical image analysis</li>
+                                <li>Speech recognition</li>
+                                <li>Web page classification</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- End of Section -->
+                <section>
+                    <h2>End of Learning Types</h2>
+                    <div class="info-box">
+                        <h3 style="border: none;">End of "Learning Types" Section</h3>
+                        <p>You've completed the Types of Machine Learning section.</p>
+                        <p>Press → to continue to The Machine Learning Pipeline.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 3: The Machine Learning Pipeline -->
+            <section>
+                <!-- Overview -->
+                <section>
+                    <h2>The Machine Learning Pipeline</h2>
+                    <h3>Pipeline Overview</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Pipeline Stages</h4>
+                            <ul>
+                                <li>Problem Definition</li>
+                                <li>Data Collection</li>
+                                <li>Data Preparation</li>
+                                <li>Model Development</li>
+                                <li>Evaluation & Validation</li>
+                                <li>Deployment & Monitoring</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Critical Success Factors</h4>
+                            <ul>
+                                <li>Clear objectives</li>
+                                <li>Quality data</li>
+                                <li>Appropriate metrics</li>
+                                <li>Robust validation</li>
+                                <li>Continuous monitoring</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Problem Definition -->
+                <section>
+                    <h2>Problem Definition</h2>
+                    <h3>From Business to ML</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <strong>Business Problem:</strong>
+                            "We're losing customers"
+                            <br><br>
+                            <strong>ML Problem Formulation:</strong>
+                            <ul>
+                                <li><strong>Task:</strong> Predict customer churn</li>
+                                <li><strong>Input:</strong> Customer behavior data</li>
+                                <li><strong>Output:</strong> Probability of churn</li>
+                                <li><strong>Success Metric:</strong> Precision @ 80% recall</li>
+                                <li><strong>Constraints:</strong> Real-time predictions</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <strong>Key Questions:</strong>
+                            <ol style="list-style-type: decimal; padding-left: 20px;">
+                                <li>Is ML the right solution?</li>
+                                <li>What type of ML problem is it?</li>
+                                <li>What data do we need?</li>
+                                <li>How will we measure success?</li>
+                                <li>What are the constraints?</li>
+                                <li>What's the baseline performance?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data Collection & Quality -->
+                <section>
+                    <h2>Data Collection & Quality</h2>
+                    <h3>The Foundation of ML</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Data Sources</h4>
+                            <pre><code class="python"># Internal data
+sales_data = pd.read_sql(query, connection)
+web_logs = pd.read_json('logs.json')
+
+# External data
+market_data = api.get_market_data()
+social_data = scrape_social_media()
+
+# Combine sources
+df = pd.merge(sales_data, web_logs, 
+              on='user_id')</code></pre>
+                        </div>
+                        <div class="column">
+                            <h4>Quality Checklist</h4>
+                            <ul>
+                                <li>✓ Sufficient quantity</li>
+                                <li>✓ Representative sample</li>
+                                <li>✓ Relevant features</li>
+                                <li>✓ Accurate labels</li>
+                                <li>✓ Temporal consistency</li>
+                                <li>✓ No data leakage</li>
+                                <li>✓ Privacy compliant</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <h4 style="border: none;">The 80/20 Rule</h4>
+                        Data scientists spend 80% of their time preparing data and 20% modeling
+                    </div>
+                </section>
+
+                <!-- Data Preparation -->
+                <section>
+                    <h2>Data Preparation</h2>
+                    <h3>Cleaning and Transformation</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Common Tasks</h4>
+                            <pre><code class="python"># Handle missing values
+df['age'].fillna(df['age'].median(), 
+                 inplace=True)
+
+# Remove outliers
+Q1 = df['income'].quantile(0.25)
+Q3 = df['income'].quantile(0.75)
+IQR = Q3 - Q1
+df = df[~((df['income'] < Q1 - 1.5*IQR) | 
+          (df['income'] > Q3 + 1.5*IQR))]
+
+# Encode categories
+df = pd.get_dummies(df, columns=['category'])
+
+# Scale features
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+df_scaled = scaler.fit_transform(df)</code></pre>
+                        </div>
+                        <div class="column">
+                            <h4>Data Quality Issues</h4>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Issue</th>
+                                        <th>Impact</th>
+                                        <th>Solution</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Missing values</td>
+                                        <td>Biased models</td>
+                                        <td>Imputation</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Outliers</td>
+                                        <td>Poor generalization</td>
+                                        <td>Robust methods</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Imbalanced classes</td>
+                                        <td>Poor minority class</td>
+                                        <td>Resampling</td>
+                                    </tr>
+                                    <tr>
+                                        <td>High cardinality</td>
+                                        <td>Overfitting</td>
+                                        <td>Encoding</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Different scales</td>
+                                        <td>Convergence issues</td>
+                                        <td>Normalization</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Feature Engineering -->
+                <section>
+                    <h2>Feature Engineering</h2>
+                    <h3>Creating Predictive Signal</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Feature Types</h4>
+                            <pre><code class="python"># Numerical features
+df['age_squared'] = df['age'] ** 2
+df['income_per_person'] = (df['income'] / 
+                           df['family_size'])
+
+# Temporal features
+df['day_of_week'] = df['date'].dt.dayofweek
+df['is_weekend'] = df['day_of_week'].isin([5,6])
+
+# Text features
+from sklearn.feature_extraction.text import TfidfVectorizer
+tfidf = TfidfVectorizer(max_features=100)
+text_features = tfidf.fit_transform(df['description'])
+
+# Interaction features
+df['age_income'] = df['age'] * df['income']</code></pre>
+                        </div>
+                        <div class="column">
+                            <h4>Feature Selection</h4>
+                            <pre><code class="python"># Statistical tests
+from sklearn.feature_selection import SelectKBest
+selector = SelectKBest(f_classif, k=10)
+X_selected = selector.fit_transform(X, y)
+
+# Model-based
+from sklearn.ensemble import RandomForestClassifier
+rf = RandomForestClassifier()
+rf.fit(X, y)
+importance = pd.DataFrame({
+    'feature': X.columns,
+    'importance': rf.feature_importances_
+}).sort_values('importance', ascending=False)
+
+# Recursive elimination
+from sklearn.feature_selection import RFE
+rfe = RFE(estimator=rf, n_features_to_select=10)
+X_rfe = rfe.fit_transform(X, y)</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Model Training -->
+                <section>
+                    <h2>Model Training</h2>
+                    <h3>Algorithm Selection and Training</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Choosing an Algorithm</h4>
+                            <strong>Start Simple:</strong>
+                            <ol style="list-style-type: decimal; padding-left: 20px;">
+                                <li>Linear/Logistic Regression (baseline)</li>
+                                <li>Decision Trees (interpretability)</li>
+                                <li>Random Forest (performance)</li>
+                                <li>Gradient Boosting (competition)</li>
+                                <li>Neural Networks (complex patterns)</li>
+                            </ol>
+                            <strong>Considerations:</strong>
+                            <ul>
+                                <li>Data size and dimensionality</li>
+                                <li>Interpretability requirements</li>
+                                <li>Training time constraints</li>
+                                <li>Prediction speed needs</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Training Process</h4>
+                            <pre><code class="python">from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train model
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train, y_train)
+
+# Validate
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.3f}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Model Evaluation -->
+                <section>
+                    <h2>Model Evaluation</h2>
+                    <h3>Beyond Accuracy</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Classification Metrics</h4>
+                            <pre><code class="python">from sklearn.metrics import classification_report
+
+print(classification_report(y_test, y_pred))</code></pre>
+                            <pre><code>              precision  recall  f1-score
+class 0       0.89      0.91    0.90
+class 1       0.85      0.82    0.83
+accuracy                         0.87</code></pre>
+                            <strong>Key Metrics:</strong>
+                            <ul>
+                                <li><strong>Precision:</strong> Of predicted positives, how many are correct?</li>
+                                <li><strong>Recall:</strong> Of actual positives, how many did we find?</li>
+                                <li><strong>F1-Score:</strong> Harmonic mean of precision and recall</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Regression Metrics</h4>
+                            <pre><code class="python">from sklearn.metrics import mean_squared_error, r2_score
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"R²: {r2:.3f}")</code></pre>
+                            <strong>Interpretation:</strong>
+                            <ul>
+                                <li><strong>MSE/RMSE:</strong> Average prediction error</li>
+                                <li><strong>R²:</strong> Proportion of variance explained</li>
+                                <li><strong>MAE:</strong> Average absolute error</li>
+                                <li><strong>MAPE:</strong> Percentage error</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- End of Section -->
+                <section>
+                    <h2>End of ML Pipeline</h2>
+                    <div class="info-box">
+                        <h3 style="border: none;">End of "ML Pipeline" Section</h3>
+                        <p>You've completed The Machine Learning Pipeline section.</p>
+                        <p>Press → to continue to the next section.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Section 4: Overfitting and Underfitting -->
+            <section>
+                <!-- Overview -->
+                <section>
+                    <h2>Overfitting and Underfitting</h2>
+                    <h3>Complexity Overview</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Core Concepts</h4>
+                            <ul>
+                                <li>Bias-Variance Tradeoff</li>
+                                <li>Model Complexity</li>
+                                <li>Generalization</li>
+                                <li>Regularization</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Learning Objectives</h4>
+                            <ul>
+                                <li>Recognize overfitting/underfitting</li>
+                                <li>Apply prevention techniques</li>
+                                <li>Select appropriate complexity</li>
+                                <li>Validate properly</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- The Fundamental Challenge -->
+                <section>
+                    <h2>The Fundamental Challenge</h2>
+                    <h3>Memorization vs Generalization</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Three Scenarios</h4>
+                            <strong>Underfitting (High Bias):</strong>
+                            <ul>
+                                <li>Model too simple</li>
+                                <li>Misses underlying patterns</li>
+                                <li>Poor training performance</li>
+                                <li>Poor test performance</li>
+                            </ul>
+                            <strong>Good Fit:</strong>
+                            <ul>
+                                <li>Appropriate complexity</li>
+                                <li>Captures true patterns</li>
+                                <li>Good training performance</li>
+                                <li>Good test performance</li>
+                            </ul>
+                            <strong>Overfitting (High Variance):</strong>
+                            <ul>
+                                <li>Model too complex</li>
+                                <li>Memorizes noise</li>
+                                <li>Perfect training performance</li>
+                                <li>Poor test performance</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Visual Example</h4>
+                            <pre style="max-height: 500px; height: 400px; overflow-y: auto;"><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+
+# Generate data
+np.random.seed(42)
+X = np.sort(5 * np.random.rand(80, 1), axis=0)
+y = np.sin(X).ravel() + np.random.normal(0, 0.1, X.shape[0])
+
+# Fit models of different complexity
+degrees = [1, 4, 15]
+titles = ['Underfitting', 'Good Fit', 'Overfitting']
+plt.figure(figsize=(14, 4))
+
+for i, degree in enumerate(degrees):
+    ax = plt.subplot(1, 3, i + 1)
+    poly = PolynomialFeatures(degree=degree)
+    X_poly = poly.fit_transform(X)
+    
+    model = LinearRegression()
+    model.fit(X_poly, y)
+    
+    # Create smooth line for plotting
+    X_plot = np.linspace(0, 5, 300)[:, np.newaxis]
+    X_plot_poly = poly.transform(X_plot)
+    y_plot = model.predict(X_plot_poly)
+    
+    # Plot data and predictions
+    plt.scatter(X, y, color='gray', s=30, alpha=0.5)
+    plt.plot(X_plot, y_plot, color='red', linewidth=2)
+    plt.ylim([-2, 2])
+    plt.xlabel('X')
+    plt.ylabel('y')
+    plt.title(f'{titles[i]} (Degree {degree})')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                        </div>
+                    </div>
+                    <!-- Visual representation of the three scenarios -->
+                    <div style="margin-top: 20px;">
+                        <!-- Use the combined SVG image showing all three plots -->
+                        <div style="text-align: center; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                            <img src="images/ml-fit-combined.svg" alt="Bias-Variance Tradeoff Visualization" style="width: 100%; max-width: 1000px; height: auto;">
+                        </div>
+                        <p style="font-size: 0.7em; color: #666; text-align: center; margin-top: 10px;">
+                            <strong>Key Insight:</strong> The same data points (gray) are fitted with three different polynomial degrees. 
+                            The linear model (red) underfits, degree 4 (green) captures the sine pattern well, and degree 15 (orange) overfits by following noise.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Bias-Variance Tradeoff -->
+                <section>
+                    <h2>Bias-Variance Tradeoff</h2>
+                    <h3>Mathematical Decomposition</h3>
+                    <div class="info-box">
+                        <strong>Expected Prediction Error:</strong>
+                        <p class="math-equation">E[(y - ŷ)²] = Bias² + Variance + Irreducible Error</p>
+                    </div>
+                    <div class="columns">
+                        <div class="column-33">
+                            <h4>Bias</h4>
+                            <strong>Simplifying assumptions</strong>
+                            <ul>
+                                <li>Linear when data is non-linear</li>
+                                <li>Missing important features</li>
+                                <li>Oversimplified model</li>
+                            </ul>
+                            <strong>Result:</strong> Systematic errors
+                        </div>
+                        <div class="column-33">
+                            <h4>Variance</h4>
+                            <strong>Sensitivity to training data</strong>
+                            <ul>
+                                <li>Complex models</li>
+                                <li>Too many parameters</li>
+                                <li>Insufficient regularization</li>
+                            </ul>
+                            <strong>Result:</strong> Unstable predictions
+                        </div>
+                        <div class="column-33">
+                            <h4>Optimal Balance</h4>
+                            <strong>Sweet spot</strong>
+                            <ul>
+                                <li>Right model complexity</li>
+                                <li>Good generalization</li>
+                                <li>Stable predictions</li>
+                            </ul>
+                            <strong>Goal:</strong> Minimize total error
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Detecting Overfitting -->
+                <section>
+                    <h2>Detecting Overfitting</h2>
+                    <h3>Learning Curves</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <pre><code class="python">from sklearn.model_selection import learning_curve
+
+train_sizes, train_scores, val_scores = learning_curve(
+    model, X, y, cv=5, 
+    train_sizes=np.linspace(0.1, 1.0, 10)
+)
+
+plt.figure(figsize=(10, 6))
+plt.plot(train_sizes, np.mean(train_scores, axis=1), 
+         'o-', label='Training score')
+plt.plot(train_sizes, np.mean(val_scores, axis=1), 
+         'o-', label='Validation score')
+plt.xlabel('Training Set Size')
+plt.ylabel('Score')
+plt.legend()
+plt.title('Learning Curves')</code></pre>
+                        </div>
+                        <div class="column">
+                            <h4>Interpretation</h4>
+                            <strong>Signs of Overfitting:</strong>
+                            <ul>
+                                <li>Large gap between train/validation scores</li>
+                                <li>Training score near perfect</li>
+                                <li>Validation score much lower</li>
+                                <li>Gap doesn't close with more data</li>
+                            </ul>
+                            <strong>Signs of Underfitting:</strong>
+                            <ul>
+                                <li>Both scores are low</li>
+                                <li>Small gap between scores</li>
+                                <li>Scores plateau quickly</li>
+                                <li>More data doesn't help</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Preventing Overfitting -->
+                <section>
+                    <h2>Preventing Overfitting</h2>
+                    <h3>Regularization Techniques</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>L1 and L2 Regularization</h4>
+                            <pre><code class="python">from sklearn.linear_model import Ridge, Lasso
+
+# L2 Regularization (Ridge)
+ridge = Ridge(alpha=1.0)
+ridge.fit(X_train, y_train)
+
+# L1 Regularization (Lasso)
+lasso = Lasso(alpha=0.1)
+lasso.fit(X_train, y_train)
+
+# Elastic Net (L1 + L2)
+from sklearn.linear_model import ElasticNet
+elastic = ElasticNet(alpha=0.1, l1_ratio=0.5)
+elastic.fit(X_train, y_train)</code></pre>
+                            <strong>Effects:</strong>
+                            <ul>
+                                <li>L1: Feature selection (sparse)</li>
+                                <li>L2: Weight decay (small weights)</li>
+                                <li>Elastic: Best of both</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Other Techniques</h4>
+                            <pre><code class="python"># Dropout (Neural Networks)
+from tensorflow.keras import layers
+model.add(layers.Dropout(0.5))
+
+# Early Stopping
+from sklearn.neural_network import MLPClassifier
+mlp = MLPClassifier(early_stopping=True, 
+                    validation_fraction=0.1)
+
+# Ensemble Methods
+from sklearn.ensemble import RandomForestClassifier
+rf = RandomForestClassifier(
+    max_depth=5,  # Limit tree depth
+    min_samples_split=10,  # Min samples to split
+    min_samples_leaf=5  # Min samples in leaf
+)</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cross-Validation -->
+                <section>
+                    <h2>Cross-Validation</h2>
+                    <h3>Robust Model Evaluation</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>K-Fold Cross-Validation</h4>
+                            <pre><code class="python">from sklearn.model_selection import cross_val_score
+
+# 5-fold cross-validation
+scores = cross_val_score(model, X, y, cv=5, 
+                        scoring='accuracy')
+
+print(f"CV Scores: {scores}")
+print(f"Mean: {scores.mean():.3f}")
+print(f"Std: {scores.std():.3f}")</code></pre>
+                            <strong>Process:</strong>
+                            <ol style="list-style-type: decimal; padding-left: 20px;">
+                                <li>Split data into k folds</li>
+                                <li>Train on k-1 folds</li>
+                                <li>Validate on remaining fold</li>
+                                <li>Repeat k times</li>
+                                <li>Average results</li>
+                            </ol>
+                        </div>
+                        <div class="column">
+                            <h4>Advanced Strategies</h4>
+                            <pre><code class="python">from sklearn.model_selection import (
+    StratifiedKFold,  # For imbalanced classes
+    TimeSeriesSplit,  # For temporal data
+    LeaveOneOut      # For small datasets
+)
+
+# Stratified for classification
+skf = StratifiedKFold(n_splits=5, shuffle=True)
+
+# Time series split
+tscv = TimeSeriesSplit(n_splits=5)
+
+# Grid search with CV
+from sklearn.model_selection import GridSearchCV
+param_grid = {'C': [0.1, 1, 10]}
+grid = GridSearchCV(model, param_grid, cv=5)
+grid.fit(X, y)</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- End of Section -->
+                <section>
+                    <h2>End of Model Complexity</h2>
+                    <div class="info-box">
+                        <h3 style="border: none;">End of "Model Complexity" Section</h3>
+                        <p>You've completed the Overfitting and Underfitting section.</p>
+                        <p>Press → to continue to the next section.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Final Summary Slide -->
+            <section>
+                <h1>Summary & Next Steps</h1>
+                <h3 style="border: none; text-align: center;">Your Machine Learning Journey Begins!</h3>
+                <div style="margin-top: 40px;">
+                    <h4>Week 1 Checklist</h4>
+                    <ul>
+                        <li>✅ Install Python and Jupyter</li>
+                        <li>✅ Complete environment setup</li>
+                        <li>✅ Review course syllabus</li>
+                        <li>✅ Join discussion forum</li>
+                        <li>✅ Start DataCamp courses</li>
+                        <li>✅ Form study groups</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 40px; text-align: center;">
+                    <em>"The best way to learn machine learning is by doing machine learning"</em>
+                </div>
+                <div style="margin-top: 40px; text-align: center; color: #666;">
+                    <strong>Questions? Contact:</strong><br>
+                    📧 smith515@usf.edu | 🏢 Office Hours: Wed 4-5:30 PM
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Reveal.js JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    
+    <!-- Initialize Reveal.js -->
+    <script>
+        Reveal.initialize({
+            // Presentation size
+            width: 1260,
+            height: 700,
+            margin: 0.05,
+            minScale: 0.2,
+            maxScale: 2.0,
+            
+            // Display controls
+            controls: true,
+            controlsTutorial: true,
+            controlsLayout: 'bottom-right',
+            controlsBackArrows: 'faded',
+            
+            // Progress and numbering
+            progress: true,
+            slideNumber: true,
+            hash: true,
+            history: true,
+            
+            // Navigation
+            keyboard: true,
+            overview: true,
+            center: false,
+            touch: true,
+            loop: false,
+            rtl: false,
+            navigationMode: 'default', // Can change to 'linear' or 'grid'
+            
+            // Fragments
+            fragments: true,
+            fragmentInURL: false,
+            
+            // Presentation settings
+            embedded: false,
+            help: true,
+            showNotes: false,
+            autoPlayMedia: null,
+            preloadIframes: null,
+            
+            // Timing
+            autoSlide: 0,
+            autoSlideStoppable: true,
+            autoSlideMethod: Reveal.navigateNext,
+            defaultTiming: null,
+            
+            // Input
+            mouseWheel: false,
+            hideAddressBar: true,
+            previewLinks: false,
+            
+            // Transitions
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            
+            // View settings
+            viewDistance: 3,
+            display: 'block',
+            
+            // Plugins
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ]
+        });
+        
+        // Test vertical navigation
+        console.log('Reveal.js initialized. Testing vertical navigation...');
+        
+        // Add event listener for slide changes
+        Reveal.on('slidechanged', event => {
+            console.log('Slide changed to:', event.indexh, event.indexv);
+        });
+    </script>
+</body>
+</html>

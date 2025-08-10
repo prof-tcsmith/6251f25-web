@@ -166,13 +166,17 @@
         
         /* Code blocks */
         .reveal pre {
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            font-size: 0.52em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-radius: 6px;
+            background: #f8f9fa;
             padding: 10px;
             margin: 10px 0;
+            font-size: 0.48em;
+            border-left: 3px solid var(--accent-color);
+            border: 1px solid #dee2e6;
+            overflow-x: auto;
+            overflow-y: auto;
             width: 100%;
-            border-radius: 4px;
-            background: #2d2d2d;
         }
         
         .reveal code {
@@ -184,12 +188,15 @@
         }
         
         .reveal pre code {
-            background: none;
+            background: transparent;
+            color: #212529;
             padding: 0;
             max-height: 540px;
+            line-height: 1.25;
+            font-weight: 500;
+            white-space: pre;
             overflow-y: auto;
             overflow-x: auto;
-            white-space: pre;
         }
         
         /* Two column layout */

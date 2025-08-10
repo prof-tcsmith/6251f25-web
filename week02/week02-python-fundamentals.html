@@ -10,133 +10,286 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
     
+    <!-- Custom styles matching custom-theme.scss -->
     <style>
+        /* Custom theme colors */
+        :root {
+            --primary-color: #1e3a5f;
+            --secondary-color: #4a90e2;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+        }
+        
+        /* Background */
         .reveal {
-            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            background: linear-gradient(135deg, #f7f9fc 0%, #e8eef5 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-size: 28px;
         }
-        .reveal h1, .reveal h2, .reveal h3 {
-            color: #2c3e50;
-            text-transform: none;
-            line-height: 1.2;
-        }
-        .reveal h1 {
-            font-size: 2.5em;
-        }
-        .reveal h2 {
-            font-size: 1.8em;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .reveal h3 {
-            font-size: 1.3em;
-            color: #34495e;
-        }
-        .reveal .slides section {
+        
+        /* Apply border styling only to horizontal slides (direct children) */
+        .reveal .slides > section {
             text-align: left;
-        }
-        .reveal .slides section h1,
-        .reveal .slides section h2,
-        .reveal .slides section h3 {
-            text-align: center;
-        }
-        .reveal pre {
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            font-size: 0.75em;
-            padding: 10px;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            padding-top: 45px;
+            background: white;
             width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
         }
+        
+        /* Vertical slides within stacks should also have the border but positioned differently */
+        .reveal .slides > section > section {
+            text-align: left;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            padding-top: 45px;
+            background: white;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        
+        /* Headers */
+        .reveal h1 {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 15px;
+            margin: -45px -30px 15px -30px;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-bottom: 3px solid var(--accent-color);
+            border-radius: 6px 6px 0 0;
+            font-size: 1.3em;
+        }
+        
+        .reveal h2 {
+            background: linear-gradient(90deg, var(--secondary-color) 0%, #6fa3e8 100%);
+            color: white;
+            padding: 12px 20px;
+            margin: -45px -30px 15px -30px;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 6px 6px 0 0;
+            font-size: 1.1em;
+        }
+        
+        .reveal h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .reveal h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 0.75em;
+        }
+        
+        /* Lists */
+        .reveal ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 0.75em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .reveal ul li {
+            padding-left: 25px;
+            margin: 8px 0;
+            position: relative;
+            line-height: 1.3;
+            display: block;
+        }
+        
+        .reveal ul li:before {
+            content: "▸";
+            position: absolute;
+            left: 5px;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        .warning-box {
+            background: rgba(243, 156, 18, 0.08);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        .success-box {
+            background: rgba(39, 174, 96, 0.08);
+            border-left: 4px solid var(--success-color);
+            padding: 10px 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.75em;
+        }
+        
+        /* Code blocks */
+        .reveal pre {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 0.52em;
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 4px;
+            background: #2d2d2d;
+        }
+        
         .reveal code {
-            font-family: 'Courier New', monospace;
-            background: #f4f4f4;
-            padding: 2px 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            background: rgba(0,0,0,0.05);
+            padding: 2px 5px;
             border-radius: 3px;
+            font-size: 0.9em;
         }
+        
         .reveal pre code {
             background: none;
             padding: 0;
-            border-radius: 0;
-            max-height: 500px;
+            max-height: 540px;
+            overflow-y: auto;
+            overflow-x: auto;
+            white-space: pre;
         }
+        
+        /* Two column layout */
         .columns {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: flex-start;
+            margin-top: 10px;
         }
+        
         .column-50 {
             flex: 1;
             width: 50%;
         }
+        
         .column-50 pre {
             margin: 0;
             width: 100%;
         }
-        .center {
-            text-align: center !important;
-        }
-        .info-box, .warning-box, .success-box {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-        .info-box {
-            background-color: #e3f2fd;
-            border-left: 4px solid #2196f3;
-        }
-        .warning-box {
-            background-color: #fff3e0;
-            border-left: 4px solid #ff9800;
-        }
-        .success-box {
-            background-color: #e8f5e9;
-            border-left: 4px solid #4caf50;
-        }
-        .reveal ul {
-            display: block;
-            margin-left: 1em;
-        }
-        .reveal ol {
-            display: block;
-            margin-left: 1em;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 0.8em;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #3498db;
-            color: white;
-        }
-        .small-text {
-            font-size: 0.8em;
-        }
-        .highlight {
-            background-color: #ffeb3b;
-            padding: 2px 4px;
-        }
+        
+        /* Key points styling */
         .key-points {
-            font-size: 0.85em;
+            font-size: 0.75em;
         }
+        
         .key-points h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 0.9em;
         }
+        
         .key-points ul {
-            list-style-position: outside;
-            padding-left: 20px;
+            list-style-type: none;
+            padding-left: 0;
         }
+        
+        /* Code column specific styling */
         .code-column pre {
             max-height: 567px;
-            font-size: 0.52em;
+            font-size: 0.6em;
         }
+        
         .code-column pre code {
             max-height: 540px;
             overflow-y: auto;
+        }
+        
+        /* Tables */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.7em;
+            margin: 10px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: left;
+        }
+        
+        th {
+            background: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(0,0,0,0.02);
+        }
+        
+        /* Center alignment helper */
+        .center {
+            text-align: center !important;
+        }
+        
+        /* Small text helper */
+        .small-text {
+            font-size: 0.7em;
+        }
+        
+        /* Highlight helper */
+        .highlight {
+            background-color: rgba(243, 156, 18, 0.3);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        /* Fix for nested lists in info boxes */
+        .info-box ul, .warning-box ul, .success-box ul {
+            margin-top: 5px;
+        }
+        
+        /* Ensure slide numbers are visible */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.6em;
         }
     </style>
 </head>
@@ -147,12 +300,12 @@
             <!-- Title Slide -->
             <section>
                 <h1>Python Fundamentals</h1>
-                <h3 style="border: none; text-align: center; color: #666;">Essential Programming Skills for Machine Learning</h3>
-                <p style="text-align: center; font-style: italic; color: #888;">Building Your Data Science Foundation</p>
-                <p style="text-align: center; margin-top: 50px;">
-                    <strong>ISM6251 - Week 2</strong><br>
-                    Python • NumPy • Pandas • Matplotlib
-                </p>
+                <h3 class="center">Essential Programming Skills for Machine Learning</h3>
+                <p class="center">Building Your Data Science Foundation</p>
+                <div class="info-box" style="margin-top: 30px;">
+                    <p class="center"><strong>ISM6251 - Week 2</strong></p>
+                    <p class="center">Python • NumPy • Pandas • Matplotlib</p>
+                </div>
             </section>
 
             <!-- Overview -->
@@ -176,8 +329,8 @@
             <section>
                 <section>
                     <h1>Part 1: Python Basics</h1>
-                    <div style="text-align: center; margin-top: 50px;">
-                        <p>Variables, Data Types, Control Flow, and Functions</p>
+                    <div class="info-box" style="margin-top: 30px;">
+                        <p class="center">Variables, Data Types, Control Flow, and Functions</p>
                     </div>
                 </section>
 
@@ -555,8 +708,8 @@ print(f"Accuracy: {result:.2%}")</code></pre>
             <section>
                 <section>
                     <h1>Part 2: Data Structures</h1>
-                    <div style="text-align: center; margin-top: 50px;">
-                        <p>Lists, Tuples, Dictionaries, and Comprehensions</p>
+                    <div class="info-box" style="margin-top: 30px;">
+                        <p class="center">Lists, Tuples, Dictionaries, and Comprehensions</p>
                     </div>
                 </section>
 

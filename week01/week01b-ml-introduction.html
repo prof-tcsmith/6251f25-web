@@ -766,139 +766,270 @@ prediction = model.predict(X_new)</code></pre>
                     </div>
                 </section>
 
-                <!-- Problem Definition & Data -->
+                <!-- Step 1: Problem Definition -->
                 <section>
-                    <h2>Problem Definition & Data Collection</h2>
-                    <h3>Starting Your ML Journey</h3>
+                    <h2>Step 1: Problem Definition</h2>
+                    <h3>Framing the Business Challenge</h3>
                     <div class="columns">
                         <div class="column">
-                            <h4>1. Problem Definition</h4>
+                            <h4>Key Questions to Answer</h4>
                             <ul>
-                                <li>Identify business objective</li>
-                                <li>Define success metrics</li>
-                                <li>Determine if ML is appropriate</li>
-                                <li>Set performance targets</li>
+                                <li>What is the business problem?</li>
+                                <li>Is ML the right solution?</li>
+                                <li>What does success look like?</li>
+                                <li>What are the constraints?</li>
+                                <li>Who are the stakeholders?</li>
                             </ul>
-                            <div class="danger-box">
-                                <strong>Common Mistake:</strong> Jumping to ML without clear business goals
-                            </div>
                         </div>
                         <div class="column">
-                            <h4>2. Data Collection</h4>
+                            <h4>Define Clear Objectives</h4>
                             <ul>
-                                <li>Identify data sources</li>
-                                <li>Assess data quality</li>
-                                <li>Consider privacy/ethics</li>
-                                <li>Plan for data pipeline</li>
+                                <li><strong>Business Goal:</strong> Increase revenue, reduce costs</li>
+                                <li><strong>ML Task:</strong> Classification, regression, clustering</li>
+                                <li><strong>Success Metrics:</strong> Accuracy, ROI, user satisfaction</li>
+                                <li><strong>Constraints:</strong> Time, budget, resources</li>
+                                <li><strong>Deliverables:</strong> Model, API, dashboard</li>
                             </ul>
-                            <div class="warning-box">
-                                <strong>Remember:</strong> "Garbage in, garbage out" - data quality determines model success
-                            </div>
+                        </div>
+                    </div>
+                    <div class="danger-box">
+                        <strong>Common Mistake:</strong> Starting with a solution in mind rather than understanding the problem. 
+                        "We need deep learning!" vs "We need to reduce customer churn by 20%"
+                    </div>
+                </section>
+
+                <!-- Step 2: Data Collection -->
+                <section>
+                    <h2>Step 2: Data Collection</h2>
+                    <h3>Gathering Your Raw Materials</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Data Sources</h4>
+                            <ul>
+                                <li><strong>Internal:</strong> Databases, logs, CRM systems</li>
+                                <li><strong>External:</strong> APIs, public datasets, purchases</li>
+                                <li><strong>Generated:</strong> Surveys, experiments, sensors</li>
+                                <li><strong>Third-party:</strong> Data vendors, partnerships</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Quality Considerations</h4>
+                            <ul>
+                                <li><strong>Relevance:</strong> Does it help solve the problem?</li>
+                                <li><strong>Accuracy:</strong> How reliable is the source?</li>
+                                <li><strong>Completeness:</strong> Are there gaps?</li>
+                                <li><strong>Timeliness:</strong> Is it current enough?</li>
+                                <li><strong>Volume:</strong> Do we have enough data?</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Legal & Ethical:</strong> Always verify data usage rights, privacy compliance (GDPR, CCPA), 
+                        and consider ethical implications of data collection.
+                    </div>
+                </section>
+
+                <!-- Step 3: Data Preparation -->
+                <section>
+                    <h2>Step 3: Data Preparation</h2>
+                    <h3>Transforming Raw Data into ML-Ready Format</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Data Cleaning</h4>
+                            <ul>
+                                <li>Handle missing values (drop, impute, flag)</li>
+                                <li>Remove duplicates</li>
+                                <li>Fix inconsistencies</li>
+                                <li>Detect and handle outliers</li>
+                                <li>Correct data types</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Feature Engineering</h4>
+                            <ul>
+                                <li>Create new features from existing ones</li>
+                                <li>Encode categorical variables</li>
+                                <li>Scale/normalize numerical features</li>
+                                <li>Extract temporal features</li>
+                                <li>Combine features (interactions, polynomials)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <pre><code class="python"># Example: Data preparation
+df['age_group'] = pd.cut(df['age'], bins=[0, 25, 40, 60, 100])
+df['log_income'] = np.log1p(df['income'])
+df = pd.get_dummies(df, columns=['category'])
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)</code></pre>
+                    <div class="info-box">
+                        <strong>Time Investment:</strong> Expect to spend 60-80% of your project time on data preparation. 
+                        Quality data preparation is the foundation of successful ML models.
+                    </div>
+                </section>
+
+                <!-- Step 4: Model Selection -->
+                <section>
+                    <h2>Step 4: Model Selection</h2>
+                    <h3>Choosing the Right Algorithm</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Selection Criteria</h4>
+                            <ul>
+                                <li><strong>Problem Type:</strong> Classification vs regression</li>
+                                <li><strong>Data Size:</strong> Small vs big data</li>
+                                <li><strong>Interpretability:</strong> Black box vs explainable</li>
+                                <li><strong>Training Time:</strong> Real-time vs batch</li>
+                                <li><strong>Accuracy Requirements:</strong> Good enough vs state-of-art</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Common Starting Points</h4>
+                            <ul>
+                                <li><strong>Linear Models:</strong> Simple, fast, interpretable</li>
+                                <li><strong>Tree-Based:</strong> Handle non-linearity well</li>
+                                <li><strong>Ensemble Methods:</strong> Often best accuracy</li>
+                                <li><strong>Neural Networks:</strong> Complex patterns, lots of data</li>
+                                <li><strong>SVM:</strong> High-dimensional data</li>
+                            </ul>
                         </div>
                     </div>
                     <div class="success-box">
-                        <strong>Best Practice:</strong> Spend 60-80% of project time on problem definition and data preparation. 
-                        This investment pays off in model performance.
+                        <strong>Best Practice:</strong> Start simple! Begin with logistic/linear regression as a baseline, 
+                        then try more complex models only if needed. Simple models are easier to deploy and maintain.
                     </div>
                 </section>
 
-                <!-- Data Preparation -->
+                <!-- Step 5: Model Training -->
                 <section>
-                    <h2>Data Preparation</h2>
-                    <h3>The Most Critical Step</h3>
-                    <div class="columns">
-                        <div class="column-25">
-                            <h4>Cleaning</h4>
-                            <ul>
-                                <li>Missing values</li>
-                                <li>Outliers</li>
-                                <li>Duplicates</li>
-                                <li>Inconsistencies</li>
-                            </ul>
-                        </div>
-                        <div class="column-25">
-                            <h4>Transformation</h4>
-                            <ul>
-                                <li>Normalization</li>
-                                <li>Encoding</li>
-                                <li>Scaling</li>
-                                <li>Aggregation</li>
-                            </ul>
-                        </div>
-                        <div class="column-25">
-                            <h4>Feature Engineering</h4>
-                            <ul>
-                                <li>Create features</li>
-                                <li>Select features</li>
-                                <li>Combine features</li>
-                                <li>Domain knowledge</li>
-                            </ul>
-                        </div>
-                        <div class="column-25">
-                            <h4>Splitting</h4>
-                            <ul>
-                                <li>Training set</li>
-                                <li>Validation set</li>
-                                <li>Test set</li>
-                                <li>Time-based splits</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <pre><code class="python"># Example data preparation pipeline
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-
-# Load and clean
-df = pd.read_csv('data.csv')
-df = df.dropna()
-df = df[df['value'] > 0]
-
-# Feature engineering
-df['ratio'] = df['numerator'] / df['denominator']
-df['is_weekend'] = df['day'].isin(['Sat', 'Sun'])
-
-# Split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Scale features
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)</code></pre>
-                </section>
-
-                <!-- Model Training & Evaluation -->
-                <section>
-                    <h2>Model Training & Evaluation</h2>
-                    <h3>Building and Testing Your Model</h3>
+                    <h2>Step 5: Model Training</h2>
+                    <h3>Teaching the Algorithm to Learn</h3>
                     <div class="columns">
                         <div class="column">
                             <h4>Training Process</h4>
-                            <ol>
-                                <li>Select algorithm</li>
-                                <li>Initialize model</li>
-                                <li>Fit to training data</li>
-                                <li>Tune hyperparameters</li>
-                                <li>Validate performance</li>
-                            </ol>
+                            <ul>
+                                <li>Initialize model with default parameters</li>
+                                <li>Feed training data to algorithm</li>
+                                <li>Algorithm learns patterns</li>
+                                <li>Adjust hyperparameters</li>
+                                <li>Use validation set for tuning</li>
+                            </ul>
                         </div>
                         <div class="column">
-                            <h4>Evaluation Metrics</h4>
+                            <h4>Hyperparameter Tuning</h4>
+                            <ul>
+                                <li><strong>Grid Search:</strong> Try all combinations</li>
+                                <li><strong>Random Search:</strong> Sample randomly</li>
+                                <li><strong>Bayesian Optimization:</strong> Smart search</li>
+                                <li><strong>Cross-Validation:</strong> Robust evaluation</li>
+                                <li><strong>Early Stopping:</strong> Prevent overfitting</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <pre><code class="python"># Example: Model training with hyperparameter tuning
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {'max_depth': [3, 5, 7], 'min_samples_split': [2, 5, 10]}
+grid_search = GridSearchCV(DecisionTreeClassifier(), param_grid, cv=5)
+grid_search.fit(X_train, y_train)
+best_model = grid_search.best_estimator_</code></pre>
+                </section>
+
+                <!-- Step 6: Model Evaluation -->
+                <section>
+                    <h2>Step 6: Model Evaluation</h2>
+                    <h3>Measuring Performance and Validity</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Evaluation Strategy</h4>
+                            <ul>
+                                <li>Use test set (never seen during training)</li>
+                                <li>Calculate relevant metrics</li>
+                                <li>Compare to baseline/benchmark</li>
+                                <li>Check for overfitting/underfitting</li>
+                                <li>Validate business assumptions</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Key Metrics by Type</h4>
                             <strong>Regression:</strong>
                             <ul>
-                                <li>RMSE, MAE</li>
+                                <li>RMSE, MAE, MAPE</li>
                                 <li>R², Adjusted R²</li>
                             </ul>
                             <strong>Classification:</strong>
                             <ul>
                                 <li>Accuracy, Precision, Recall</li>
                                 <li>F1-Score, ROC-AUC</li>
+                                <li>Confusion Matrix</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Business Context:</strong> A 95% accurate model isn't useful if the 5% errors are your most valuable customers. 
+                        Always evaluate in business context, not just statistical metrics.
+                    </div>
+                </section>
+
+                <!-- Step 7: Deployment -->
+                <section>
+                    <h2>Step 7: Deployment</h2>
+                    <h3>Putting Models into Production</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Deployment Options</h4>
+                            <ul>
+                                <li><strong>Batch:</strong> Periodic predictions</li>
+                                <li><strong>Real-time:</strong> API endpoints</li>
+                                <li><strong>Edge:</strong> On-device deployment</li>
+                                <li><strong>Embedded:</strong> Within applications</li>
+                                <li><strong>Cloud:</strong> Scalable services</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Production Considerations</h4>
+                            <ul>
+                                <li><strong>Scalability:</strong> Handle production load</li>
+                                <li><strong>Latency:</strong> Response time requirements</li>
+                                <li><strong>Integration:</strong> Fit into existing systems</li>
+                                <li><strong>Versioning:</strong> Track model versions</li>
+                                <li><strong>Rollback:</strong> Plan for failures</li>
                             </ul>
                         </div>
                     </div>
                     <div class="info-box">
-                        <strong>Cross-Validation:</strong> Use k-fold cross-validation to ensure your model generalizes well 
-                        and isn't just memorizing the training data.
+                        <strong>MLOps:</strong> Modern deployment uses MLOps practices - automated pipelines, containerization (Docker), 
+                        orchestration (Kubernetes), and model serving platforms (TensorFlow Serving, MLflow).
+                    </div>
+                </section>
+
+                <!-- Step 8: Monitoring & Maintenance -->
+                <section>
+                    <h2>Step 8: Monitoring & Maintenance</h2>
+                    <h3>Keeping Models Healthy in Production</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>What to Monitor</h4>
+                            <ul>
+                                <li><strong>Performance Metrics:</strong> Accuracy over time</li>
+                                <li><strong>Data Drift:</strong> Input distribution changes</li>
+                                <li><strong>Concept Drift:</strong> Relationship changes</li>
+                                <li><strong>System Health:</strong> Latency, errors, uptime</li>
+                                <li><strong>Business Impact:</strong> ROI, user satisfaction</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Maintenance Actions</h4>
+                            <ul>
+                                <li><strong>Retraining:</strong> Update with new data</li>
+                                <li><strong>Recalibration:</strong> Adjust thresholds</li>
+                                <li><strong>A/B Testing:</strong> Compare versions</li>
+                                <li><strong>Feature Updates:</strong> Add/remove features</li>
+                                <li><strong>Model Replacement:</strong> Switch algorithms</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="danger-box">
+                        <strong>Model Decay:</strong> All models degrade over time as patterns change. 
+                        Without monitoring and maintenance, a great model can become harmful to business.
                     </div>
                 </section>
             </section>
@@ -990,39 +1121,49 @@ X_test_scaled = scaler.transform(X_test)</code></pre>
                             <ul>
                                 <li><strong>Problem:</strong> Content discovery</li>
                                 <li><strong>Solution:</strong> Collaborative filtering + deep learning</li>
-                                <li><strong>Impact:</strong> 80% of views from recommendations</li>
-                                <li><strong>Value:</strong> $1B+ annual savings in retention</li>
+                                <li><strong>Impact:</strong> 80% of views from recommendations<sup>1</sup></li>
+                                <li><strong>Value:</strong> $1B+ annual savings in retention<sup>2</sup></li>
                             </ul>
                         </div>
                         <div class="column">
                             <h4>Amazon: Demand Forecasting</h4>
                             <ul>
                                 <li><strong>Problem:</strong> Inventory optimization</li>
-                                <li><strong>Solution:</strong> Time series + neural networks</li>
-                                <li><strong>Impact:</strong> 20% reduction in inventory costs</li>
-                                <li><strong>Value:</strong> Billions in working capital freed</li>
+                                <li><strong>Solution:</strong> Time series + ML with Amazon Forecast</li>
+                                <li><strong>Impact:</strong> 20-50% reduction in inventory costs<sup>3</sup></li>
+                                <li><strong>Value:</strong> 30-50% reduction in forecast errors<sup>4</sup></li>
                             </ul>
                         </div>
                     </div>
                     <div class="columns">
                         <div class="column">
-                            <h4>JPMorgan: Document Analysis</h4>
+                            <h4>JPMorgan: COiN System</h4>
                             <ul>
                                 <li><strong>Problem:</strong> Manual contract review</li>
-                                <li><strong>Solution:</strong> NLP + machine learning</li>
-                                <li><strong>Impact:</strong> 360,000 hours → seconds</li>
-                                <li><strong>Value:</strong> Massive efficiency gains</li>
+                                <li><strong>Solution:</strong> NLP + machine learning (COiN)</li>
+                                <li><strong>Impact:</strong> 360,000 hours → seconds<sup>5</sup></li>
+                                <li><strong>Value:</strong> 80% reduction in compliance errors<sup>6</sup></li>
                             </ul>
                         </div>
                         <div class="column">
-                            <h4>UPS: Route Optimization</h4>
+                            <h4>UPS: ORION Route Optimization</h4>
                             <ul>
                                 <li><strong>Problem:</strong> Delivery efficiency</li>
                                 <li><strong>Solution:</strong> ML-powered ORION system</li>
-                                <li><strong>Impact:</strong> 100M fewer miles/year</li>
-                                <li><strong>Value:</strong> $400M annual savings</li>
+                                <li><strong>Impact:</strong> 100M fewer miles/year<sup>7</sup></li>
+                                <li><strong>Value:</strong> $300-400M annual savings<sup>8</sup></li>
                             </ul>
                         </div>
+                    </div>
+                    <div style="font-size: 0.5em; margin-top: 20px; text-align: left; color: #666;">
+                        <strong>References:</strong><br>
+                        <sup>1</sup> <a href="https://www.rebuyengine.com/blog/netflix" target="_blank">Netflix's 80% recommendation-driven viewing (RebuyEngine, 2024)</a><br>
+                        <sup>2</sup> <a href="https://d3.harvard.edu/platform-rctom/submission/running-on-netflix-how-machine-learning-is-fueling-your-netflix-binge-watching-problem/" target="_blank">Netflix $1B+ savings from ML (Harvard Business School, 2017)</a><br>
+                        <sup>3,4</sup> <a href="https://aws.amazon.com/blogs/machine-learning/from-forecasting-demand-to-ordering-an-automated-machine-learning-approach-with-amazon-forecast-to-decrease-stock-outs-excess-inventory-and-costs/" target="_blank">Amazon Forecast: 20-50% cost reduction (AWS ML Blog, 2024)</a><br>
+                        <sup>5</sup> <a href="https://www.bloomberg.com/news/articles/2017-02-28/jpmorgan-marshals-an-army-of-developers-to-automate-high-finance" target="_blank">JPMorgan COiN: 360,000 hours to seconds (Bloomberg, 2017)</a><br>
+                        <sup>6</sup> <a href="https://headofai.ai/jpmorgan-chases-ai-slashes-360000-hours-of-contract-review-saving-millions/" target="_blank">COiN 80% error reduction (Head of AI, 2024)</a><br>
+                        <sup>7</sup> <a href="https://www.informs.org/Impact/O.R.-Analytics-Success-Stories/Optimizing-Delivery-Routes" target="_blank">UPS ORION: 100M miles saved (INFORMS, 2016)</a><br>
+                        <sup>8</sup> <a href="https://www.bestpractice.ai/ai-case-study-best-practice/ups_saves_over_10_million_gallons_of_fuel_and_up_to_$400m_in_costs_annually_with_advanced_telematics_and_analysis" target="_blank">UPS $400M annual savings (Best Practice AI, 2024)</a>
                     </div>
                 </section>
             </section>
@@ -1320,21 +1461,21 @@ X_test_scaled = scaler.transform(X_test)</code></pre>
                 <!-- Next Steps -->
                 <section>
                     <h2>Your Next Steps</h2>
-                    <h3>Continuing Your ML Journey</h3>
+                    <h3>Preparing for Next Week</h3>
                     <ol>
-                        <li><strong>This Week:</strong> Complete Python setup and basic exercises</li>
-                        <li><strong>Practice:</strong> Work through pandas tutorials</li>
-                        <li><strong>Explore:</strong> Find a dataset that interests you</li>
-                        <li><strong>Think:</strong> Identify a problem ML could solve in your field</li>
+                        <li><strong>DataCamp:</strong> Create account with USF email & complete "Introduction to Python" course</li>
+                        <li><strong>Honorlock:</strong> Install and validate with "honorlock-test" quiz</li>
+                        <li><strong>Quiz Prep:</strong> Review Week 1 lecture content for in-class quiz next week</li>
+                        <li><strong>Equipment:</strong> Ensure laptop is fully charged for next class</li>
                         <li><strong>Connect:</strong> Join the course discussion forum</li>
                     </ol>
                     <div class="info-box">
                         <strong>Next Class:</strong> We'll dive into hands-on ML with Python, pandas, and scikit-learn. 
-                        Make sure your environment is set up!
+                        Quiz 1 will be administered during class time.
                     </div>
                     <div class="warning-box">
-                        <strong>Homework:</strong> Read Chapter 1 of "Introduction to Statistical Learning" 
-                        and complete the Python basics assignment on Canvas.
+                        <strong>Support:</strong> Contact class TA for DataCamp issues. 
+                        Honorlock support: 24/7 at <a href="https://www.usf.edu/innovative-education/digital-learning/digital-learning-resources/honor_lock.aspx" target="_blank">USF Support Site</a>
                     </div>
                 </section>
             </section>

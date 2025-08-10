@@ -20,7 +20,7 @@ This repository hosts the public course materials for ISM6251: Machine Learning 
 
 ## Accessing the Course Website
 
-Visit the live website at: https://[username].github.io/6251f25-web/
+Visit the live website at: https://prof-tcsmith.github.io/6251f25-web/
 
 ## License
 

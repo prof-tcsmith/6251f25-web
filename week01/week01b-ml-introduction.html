@@ -691,6 +691,61 @@ prediction = model.predict(X_new)</code></pre>
                         Success often measured by business outcomes rather than accuracy metrics.
                     </div>
                 </section>
+
+                <!-- Reinforcement Learning Deep Dive -->
+                <section>
+                    <h2>Reinforcement Learning</h2>
+                    <h3>Learning Through Interaction</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Key Components</h4>
+                            <ul>
+                                <li><strong>Agent:</strong> The learner/decision maker</li>
+                                <li><strong>Environment:</strong> What the agent interacts with</li>
+                                <li><strong>State:</strong> Current situation</li>
+                                <li><strong>Action:</strong> What the agent can do</li>
+                                <li><strong>Reward:</strong> Feedback signal</li>
+                                <li><strong>Policy:</strong> Strategy for choosing actions</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>How It Works</h4>
+                            <ol>
+                                <li>Agent observes current state</li>
+                                <li>Selects action based on policy</li>
+                                <li>Environment responds with new state</li>
+                                <li>Agent receives reward/penalty</li>
+                                <li>Updates policy to maximize future rewards</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Common Algorithms</h4>
+                            <ul>
+                                <li><strong>Q-Learning:</strong> Learn action values</li>
+                                <li><strong>SARSA:</strong> On-policy learning</li>
+                                <li><strong>Deep Q-Networks:</strong> Neural network approach</li>
+                                <li><strong>Policy Gradient:</strong> Direct policy optimization</li>
+                                <li><strong>Actor-Critic:</strong> Combines value and policy</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Business Applications</h4>
+                            <ul>
+                                <li><strong>Dynamic Pricing:</strong> Optimize prices in real-time</li>
+                                <li><strong>Recommendation Systems:</strong> Sequential recommendations</li>
+                                <li><strong>Resource Allocation:</strong> Optimize resource usage</li>
+                                <li><strong>Trading Strategies:</strong> Automated trading decisions</li>
+                                <li><strong>Supply Chain:</strong> Inventory management</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Key Difference:</strong> Unlike supervised learning with fixed datasets, RL learns from experience through trial and error, 
+                        balancing exploration of new strategies with exploitation of known good strategies.
+                    </div>
+                </section>
             </section>
 
             <!-- Section 3: ML Workflow -->

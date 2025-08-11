@@ -10,326 +10,37 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
     
-    <!-- Custom styles EXACTLY matching week01b -->
+    <!-- Common slide styles -->
+    <link rel="stylesheet" href="common-slides.css">
+    
+    <!-- Page-specific styles if needed -->
     <style>
-        /* Custom theme colors */
-        :root {
-            --primary-color: #1e3a5f;
-            --secondary-color: #4a90e2;
-            --accent-color: #f39c12;
-            --success-color: #27ae60;
-            --danger-color: #e74c3c;
-        }
+        /* Page-specific styles for Week 2 Python Fundamentals */
         
-        /* Background */
-        .reveal {
-            background: linear-gradient(135deg, #f7f9fc 0%, #e8eef5 100%);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            font-size: 28px;
-        }
-        
-        /* Apply border styling only to horizontal slides (direct children) */
-        .reveal .slides > section {
-            text-align: left;
-            border: 2px solid #333333;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 30px;
-            padding-top: 45px;
-            background: white;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            box-sizing: border-box;
-        }
-        
-        /* Vertical slides within stacks should also have the border but positioned differently */
-        .reveal .slides > section > section {
-            text-align: left;
-            border: 2px solid #333333;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 30px;
-            padding-top: 45px;
-            background: white;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            box-sizing: border-box;
-        }
-        
-        /* Headers */
-        .reveal h1 {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 15px;
-            margin: -45px -30px 15px -30px;
-            text-align: center;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            border-bottom: 3px solid var(--accent-color);
-            border-radius: 6px 6px 0 0;
-            font-size: 1.3em;
-        }
-        
-        .reveal h2 {
-            background: linear-gradient(90deg, var(--secondary-color) 0%, #6fa3e8 100%);
-            color: white;
-            padding: 12px 20px;
-            margin: -45px -30px 15px -30px;
-            font-weight: 600;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-            border-left: 4px solid var(--accent-color);
-            border-radius: 6px 6px 0 0;
-            font-size: 1.1em;
-        }
-        
-        .reveal h3 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 6px;
-            margin-bottom: 12px;
-            font-weight: 600;
-            font-size: 0.85em;
-        }
-        
-        .reveal h4 {
-            color: var(--primary-color);
-            margin-top: 0;
-            margin-bottom: 8px;
-            font-size: 0.75em;
-        }
-        
-        /* Lists */
-        .reveal ul {
-            list-style-type: none;
-            padding-left: 0;
-            font-size: 0.75em;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .reveal ul li {
-            padding-left: 25px;
-            margin: 8px 0;
-            position: relative;
-            line-height: 1.3;
-            display: block;
-        }
-        
-        .reveal ul li:before {
-            content: "▸";
-            position: absolute;
-            left: 5px;
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 1em;
-        }
-        
-        /* Info boxes */
-        .info-box {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-            border-left: 4px solid var(--secondary-color);
-            padding: 10px 12px;
-            margin: 12px 0;
-            border-radius: 4px;
-            font-size: 0.75em;
-        }
-        
-        .warning-box {
-            background: rgba(243, 156, 18, 0.08);
-            border-left: 4px solid var(--accent-color);
-            padding: 10px 12px;
-            margin: 12px 0;
-            border-radius: 4px;
-            font-size: 0.75em;
-        }
-        
-        .success-box {
-            background: rgba(39, 174, 96, 0.08);
-            border-left: 4px solid var(--success-color);
-            padding: 10px 12px;
-            margin: 12px 0;
-            border-radius: 4px;
-            font-size: 0.75em;
-        }
-        
-        /* Columns */
-        .columns {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            width: 100%;
-        }
-        
-        .column {
-            flex: 1;
-            padding: 5px;
-            min-width: 0;
-        }
-        
-        .column-50 {
-            flex: 0 0 48%;
-        }
-        
-        .column-60 {
-            flex: 0 0 58%;
-        }
-        
-        .column-40 {
-            flex: 0 0 38%;
-        }
-        
-        /* Code blocks - SINGLE CONSISTENT STYLE */
-        .reveal pre {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            border-radius: 6px;
-            background: #f8f9fa;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 0.48em;
-            border-left: 3px solid var(--accent-color);
-            border: 1px solid #dee2e6;
-            overflow-x: auto;
-            overflow-y: auto;
-            max-height: 400px; /* Slightly taller than week01 for code-heavy slides */
-        }
-        
-        .reveal pre code {
-            background: transparent;
-            color: #212529;
-            padding: 0;
-            max-height: 380px;
-            line-height: 1.25;
-            font-weight: 500;
-            white-space: pre;
-        }
-        
-        /* Tables */
-        .reveal table {
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            margin: 10px auto;
-            background: white;
-            font-size: 0.6em;
-            max-width: 100%;
-        }
-        
-        .reveal table thead {
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-        }
-        
-        .reveal table th {
-            padding: 8px;
-            font-weight: 600;
-            text-align: left;
-            letter-spacing: 0.3px;
-        }
-        
-        .reveal table td {
-            padding: 6px 8px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        /* Paragraphs and general text */
-        .reveal p {
-            font-size: 0.75em;
-            line-height: 1.35;
-            margin: 8px 0;
-        }
-        
-        .reveal strong {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-        
-        .reveal em {
-            font-style: italic;
-            color: var(--secondary-color);
-        }
-        
-        /* Ordered lists */
-        .reveal ol {
-            font-size: 0.75em;
-            padding-left: 20px;
-        }
-        
-        .reveal ol li {
-            margin: 8px 0;
-            line-height: 1.3;
-        }
-        
-        /* Navigation and UI elements */
-        .reveal .controls {
-            color: var(--secondary-color);
-        }
-        
-        .reveal .progress {
-            height: 5px;
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .reveal .progress span {
-            background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-color) 100%);
-        }
-        
-        .reveal .slide-number {
-            background: var(--primary-color);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            right: 110px !important;
-            bottom: 10px !important;
-        }
-        
-        /* Helper classes */
+        /* Center alignment helper */
         .center {
             text-align: center !important;
         }
         
+        /* Small text helper */
         .small-text {
             font-size: 0.7em;
         }
         
+        /* Highlight helper */
         .highlight {
             background-color: rgba(243, 156, 18, 0.3);
             padding: 2px 4px;
             border-radius: 2px;
         }
         
-        /* Key points styling for left column */
-        .key-points {
-            font-size: 0.9em; /* Slightly smaller than default but not tiny */
-        }
-        
-        .key-points h4 {
-            color: var(--primary-color);
-            margin-bottom: 8px;
-            font-size: 0.85em;
-        }
-        
-        .key-points ul {
-            font-size: 0.85em; /* Reasonable size for readability */
-        }
-        
-        /* Fix for nested lists in info boxes */
-        .info-box ul, .warning-box ul, .success-box ul {
-            margin-top: 5px;
+        /* Ensure slide numbers are visible */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.6em;
         }
     </style>
 </head>
@@ -340,12 +51,12 @@
             <!-- Title Slide -->
             <section>
                 <h1>Python Fundamentals</h1>
-                <h3 class="center">Essential Programming Skills for Machine Learning</h3>
-                <p class="center">Building Your Data Science Foundation</p>
-                <div class="info-box" style="margin-top: 30px;">
-                    <p class="center"><strong>ISM6251 - Week 2</strong></p>
-                    <p class="center">Python • NumPy • Pandas • Matplotlib</p>
-                </div>
+                <h3 style="border: none; text-align: center; color: #666;">Essential Programming Skills for Machine Learning</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">Building Your Data Science Foundation</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251 | Week 2</strong><br>
+                    Python • NumPy • Pandas • Matplotlib
+                </p>
             </section>
 
             <!-- Overview -->
@@ -368,9 +79,35 @@
             <!-- Part 1: Python Basics -->
             <section>
                 <section>
-                    <h1>Part 1: Python Basics</h1>
-                    <div class="info-box" style="margin-top: 30px;">
-                        <p class="center">Variables, Data Types, Control Flow, and Functions</p>
+                    <h2>Part 1: Python Basics</h2>
+                    <h3>Variables, Data Types, Control Flow, and Functions</h3>
+                    <div class="info-box">
+                        <strong>Foundation of Programming:</strong><br>
+                        <em>"Python's simplicity lets you become productive quickly, yet it scales to power some of the world's largest applications."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Core Concepts</h4>
+                            <ul>
+                                <li>Dynamic typing system</li>
+                                <li>Variable assignment & naming</li>
+                                <li>Basic data types</li>
+                                <li>Type conversion</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Control Structures</h4>
+                            <ul>
+                                <li>Conditional statements (if/elif/else)</li>
+                                <li>Loop constructs (for/while)</li>
+                                <li>Function definition & calls</li>
+                                <li>Scope and parameters</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Python's readable syntax and powerful features make it ideal for data science,
+                        allowing you to focus on solving problems rather than fighting with the language.
                     </div>
                 </section>
 
@@ -385,16 +122,14 @@
                                 <li><strong>Case Sensitive:</strong> age and Age are different variables</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Common Types:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>int - whole numbers</li>
-                                    <li>float - decimal numbers</li>
-                                    <li>str - text/strings</li>
-                                    <li>bool - True/False</li>
-                                </ul>
+                                <strong>Common Types:</strong><br>
+                                • <strong>int</strong> - whole numbers<br>
+                                • <strong>float</strong> - decimal numbers<br>
+                                • <strong>str</strong> - text/strings<br>
+                                • <strong>bool</strong> - True/False
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Python is dynamically typed
 age = 25              # Integer
 price = 19.99         # Float
@@ -464,16 +199,14 @@ print(x != y)  # True</code></pre>
                                 <li><strong>Slicing:</strong> str[start:end:step]</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Common Methods:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>upper(), lower()</li>
-                                    <li>strip(), split()</li>
-                                    <li>replace(), find()</li>
-                                    <li>format(), f-strings</li>
-                                </ul>
+                                <strong>Common Methods:</strong><br>
+                                • <strong>upper()</strong>, <strong>lower()</strong> - case conversion<br>
+                                • <strong>strip()</strong>, <strong>split()</strong> - whitespace & splitting<br>
+                                • <strong>replace()</strong>, <strong>find()</strong> - search & replace<br>
+                                • <strong>format()</strong>, <strong>f-strings</strong> - formatting
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># String creation
 greeting = "Hello"
 name = 'World'
@@ -517,16 +250,14 @@ print(word[::-1])  # nohtyP (reverse)</code></pre>
                                 <li><strong>while:</strong> Condition-based loop</li>
                             </ul>
                             <div class="warning-box">
-                                <p><strong>Remember:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Indentation matters!</li>
-                                    <li>Use 4 spaces (not tabs)</li>
-                                    <li>break exits loop</li>
-                                    <li>continue skips iteration</li>
-                                </ul>
+                                <strong>Remember:</strong><br>
+                                • Indentation matters! (defines code blocks)<br>
+                                • Use 4 spaces (not tabs)<br>
+                                • <strong>break</strong> exits the entire loop<br>
+                                • <strong>continue</strong> skips to next iteration
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># If-elif-else
 score = 85
 if score >= 90:
@@ -579,16 +310,14 @@ for i in range(10):
                                 <li><strong>Lambda:</strong> Anonymous functions</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Best Practices:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Descriptive names</li>
-                                    <li>Single responsibility</li>
-                                    <li>Document with docstrings</li>
-                                    <li>Type hints (optional)</li>
-                                </ul>
+                                <strong>Best Practices:</strong><br>
+                                • Descriptive function names<br>
+                                • Single responsibility principle<br>
+                                • Document with docstrings<br>
+                                • Type hints (optional but helpful)
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Basic function
 def greet(name):
     """Simple greeting function"""
@@ -638,16 +367,14 @@ print(evens)  # [2, 4]</code></pre>
                                 <li><strong>Flexibility:</strong> Accept any number</li>
                             </ul>
                             <div class="warning-box">
-                                <p><strong>Order Matters:</strong></p>
-                                <ol style="margin-top: 5px; font-size: 0.9em;">
-                                    <li>Regular positional args</li>
-                                    <li>*args</li>
-                                    <li>Keyword args</li>
-                                    <li>**kwargs</li>
-                                </ol>
+                                <strong>Order Matters:</strong><br>
+                                1. Regular positional args<br>
+                                2. *args (variable positional)<br>
+                                3. Keyword args<br>
+                                4. **kwargs (variable keyword)
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># *args: Variable positional arguments
 def print_scores(*args):
     """Accept any number of scores"""
@@ -747,9 +474,35 @@ print(f"Accuracy: {result:.2%}")</code></pre>
             <!-- Part 2: Data Structures -->
             <section>
                 <section>
-                    <h1>Part 2: Data Structures</h1>
-                    <div class="info-box" style="margin-top: 30px;">
-                        <p class="center">Lists, Tuples, Dictionaries, and Comprehensions</p>
+                    <h2>Part 2: Data Structures</h2>
+                    <h3>Lists, Tuples, Dictionaries, and Comprehensions</h3>
+                    <div class="info-box">
+                        <strong>Organizing Your Data:</strong><br>
+                        <em>"The right data structure can be the difference between a solution that works and one that scales."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Sequential Structures</h4>
+                            <ul>
+                                <li><strong>Lists:</strong> Mutable, ordered sequences</li>
+                                <li><strong>Tuples:</strong> Immutable, fixed collections</li>
+                                <li><strong>Strings:</strong> Immutable text sequences</li>
+                                <li><strong>Ranges:</strong> Efficient number sequences</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Mapping & Advanced</h4>
+                            <ul>
+                                <li><strong>Dictionaries:</strong> Key-value mappings</li>
+                                <li><strong>Sets:</strong> Unique element collections</li>
+                                <li><strong>Comprehensions:</strong> Concise creation syntax</li>
+                                <li><strong>Generators:</strong> Memory-efficient iteration</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Mastering Python's built-in data structures enables efficient data manipulation,
+                        a crucial skill for machine learning preprocessing and feature engineering.
                     </div>
                 </section>
 
@@ -765,16 +518,14 @@ print(f"Accuracy: {result:.2%}")</code></pre>
                                 <li><strong>Dynamic:</strong> Can grow/shrink</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Common Methods:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>append(), extend()</li>
-                                    <li>insert(), remove()</li>
-                                    <li>pop(), clear()</li>
-                                    <li>sort(), reverse()</li>
-                                </ul>
+                                <strong>Common Methods:</strong><br>
+                                • <strong>append()</strong>, <strong>extend()</strong> - add items<br>
+                                • <strong>insert()</strong>, <strong>remove()</strong> - modify at position<br>
+                                • <strong>pop()</strong>, <strong>clear()</strong> - remove items<br>
+                                • <strong>sort()</strong>, <strong>reverse()</strong> - reorder list
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Creating lists
 numbers = [1, 2, 3, 4, 5]
 mixed = [1, "hello", 3.14, True]
@@ -820,16 +571,14 @@ print(f"Sum: {sum(scores)}, Avg: {sum(scores)/len(scores)}")</code></pre>
                                 <li><strong>Memory efficient:</strong> Less overhead</li>
                             </ul>
                             <div class="warning-box">
-                                <p><strong>Use Cases:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Fixed collections</li>
-                                    <li>Function returns</li>
-                                    <li>Dictionary keys</li>
-                                    <li>Named tuples for records</li>
-                                </ul>
+                                <strong>Use Cases:</strong><br>
+                                • Fixed collections (coordinates, RGB values)<br>
+                                • Function returns (multiple values)<br>
+                                • Dictionary keys (immutable required)<br>
+                                • Named tuples for structured records
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Creating tuples
 point = (3, 4)
 rgb = (255, 128, 0)
@@ -877,16 +626,14 @@ locations = {
                                 <li><strong>Unique keys:</strong> No duplicates</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Common Methods:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>keys(), values(), items()</li>
-                                    <li>get(), setdefault()</li>
-                                    <li>update(), pop()</li>
-                                    <li>clear(), copy()</li>
-                                </ul>
+                                <strong>Common Methods:</strong><br>
+                                • <strong>keys()</strong>, <strong>values()</strong>, <strong>items()</strong> - access parts<br>
+                                • <strong>get()</strong>, <strong>setdefault()</strong> - safe access<br>
+                                • <strong>update()</strong>, <strong>pop()</strong> - modify dict<br>
+                                • <strong>clear()</strong>, <strong>copy()</strong> - manage dict
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Creating dictionaries
 person = {
     'name': 'Alice',
@@ -936,16 +683,14 @@ print(data['user1']['name'])  # Alice</code></pre>
                                 <li><strong>Modification:</strong> Changes in place</li>
                             </ul>
                             <div class="warning-box">
-                                <p><strong>Important Points:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Immutable = safer for sharing</li>
-                                    <li>Mutable = memory efficient</li>
-                                    <li>Watch for aliasing issues</li>
-                                    <li>Use copy() when needed</li>
-                                </ul>
+                                <strong>Important Points:</strong><br>
+                                • Immutable = safer for sharing data<br>
+                                • Mutable = memory efficient updates<br>
+                                • Watch for aliasing issues with references<br>
+                                • Use copy() when needed to avoid side effects
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Immutable example
 x = 5
 y = x
@@ -996,16 +741,14 @@ print(my_list)  # [1, 2, 3, 100]</code></pre>
                                 <li><strong>Mixed nesting:</strong> Any combination</li>
                             </ul>
                             <div class="success-box">
-                                <p><strong>Real-world Uses:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>JSON data</li>
-                                    <li>Database records</li>
-                                    <li>Configuration files</li>
-                                    <li>API responses</li>
-                                </ul>
+                                <strong>Real-world Uses:</strong><br>
+                                • JSON data representation<br>
+                                • Database records mapping<br>
+                                • Configuration file storage<br>
+                                • API response handling
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># List of dictionaries (like database records)
 students = [
     {'name': 'Alice', 'age': 20, 'grade': 85},
@@ -1034,7 +777,7 @@ print(f"Average grade: {avg_grade:.1f}")</code></pre>
                 <section>
                     <h2>More Nested Structures</h2>
                     <div class="columns">
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <h4>Dictionary of Lists</h4>
                             <pre><code class="python"># Dictionary of lists (grouped data)
 courses = {
@@ -1054,7 +797,7 @@ alice_courses = [course for course, students
 print(f"{student}'s courses: {alice_courses}")
 # Alice's courses: ['Math101', 'Eng301']</code></pre>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <h4>Dictionary of Lists of Dictionaries</h4>
                             <pre><code class="python"># Complex nested structure
 company = {
@@ -1090,16 +833,14 @@ for dept, employees in company.items():
                                 <li><strong>Higher-order:</strong> Functions as arguments</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Common Patterns:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>map() - Transform elements</li>
-                                    <li>filter() - Select elements</li>
-                                    <li>reduce() - Aggregate data</li>
-                                    <li>sorted() - Custom sorting</li>
-                                </ul>
+                                <strong>Common Patterns:</strong><br>
+                                • <strong>map()</strong> - Transform elements<br>
+                                • <strong>filter()</strong> - Select elements<br>
+                                • <strong>reduce()</strong> - Aggregate data<br>
+                                • <strong>sorted()</strong> - Custom sorting
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Regular function for complex processing
 def process_student_data(students):
     """Calculate statistics for student records"""
@@ -1152,16 +893,14 @@ print(student_names)  # ['ALICE', 'BOB', 'CHARLIE', 'DIANA']</code></pre>
                                 <li><strong>Faster:</strong> Than equivalent loops</li>
                             </ul>
                             <div class="success-box">
-                                <p><strong>Benefits:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>More readable</li>
-                                    <li>More Pythonic</li>
-                                    <li>Better performance</li>
-                                    <li>Less code</li>
-                                </ul>
+                                <strong>Benefits:</strong><br>
+                                • More readable and concise<br>
+                                • More Pythonic style<br>
+                                • Better performance than loops<br>
+                                • Less code to maintain
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Basic list comprehension
 squares = [x**2 for x in range(10)]
 print(squares)  
@@ -1209,15 +948,13 @@ flat = [x for sublist in nested for x in sublist]
                                 <li><strong>Built-in functions:</strong> map(), filter()</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>When to Use:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Regular: Complex logic</li>
-                                    <li>Lambda: Simple transforms</li>
-                                    <li>Comprehension: Clean, readable</li>
-                                </ul>
+                                <strong>When to Use:</strong><br>
+                                • <strong>Regular:</strong> Complex logic<br>
+                                • <strong>Lambda:</strong> Simple transforms<br>
+                                • <strong>Comprehension:</strong> Clean, readable
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Regular function in comprehension
 def is_valid_score(score):
     """Check if score is valid (0-100)"""
@@ -1273,16 +1010,14 @@ averages_lambda = [
                                 <li><strong>Transform:</strong> Modify existing dicts</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Common Uses:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Invert dictionaries</li>
-                                    <li>Filter by value</li>
-                                    <li>Transform values</li>
-                                    <li>Merge dictionaries</li>
-                                </ul>
+                                <strong>Common Uses:</strong><br>
+                                • Invert dictionaries (swap keys/values)<br>
+                                • Filter by value conditions<br>
+                                • Transform values systematically<br>
+                                • Merge dictionaries efficiently
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Basic dictionary comprehension
 squares_dict = {x: x**2 for x in range(5)}
 print(squares_dict)  
@@ -1329,15 +1064,13 @@ ages_in_months = {
                                 <li><strong>Filter entries:</strong> Conditional inclusion</li>
                             </ul>
                             <div class="warning-box">
-                                <p><strong>Best Practices:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Keep it readable</li>
-                                    <li>Extract complex logic</li>
-                                    <li>Consider performance</li>
-                                </ul>
+                                <strong>Best Practices:</strong><br>
+                                • Keep comprehensions readable<br>
+                                • Extract complex logic to functions<br>
+                                • Consider performance vs readability
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Regular function for value processing
 def calculate_tax(salary):
     """Calculate tax based on salary"""
@@ -1399,40 +1132,35 @@ high_earners = {
             <!-- Part 3: NumPy -->
             <section>
                 <section>
-                    <h1>Part 3: NumPy Fundamentals</h1>
-                    <div class="info-box" style="margin-top: 30px;">
-                        <p class="center">Numerical Computing with NumPy Arrays</p>
+                    <h2>Part 3: NumPy Fundamentals</h2>
+                    <h3>Numerical Computing with Python</h3>
+                    <div class="info-box">
+                        <strong>The Foundation of Scientific Python:</strong><br>
+                        <em>"NumPy is the fundamental package for scientific computing in Python. It's the foundation on which nearly all higher-level tools are built."</em>
                     </div>
-                    <div class="columns" style="margin-top: 20px;">
-                        <div class="column-50 key-points">
-                            <h4>Why NumPy?</h4>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Core Advantages</h4>
                             <ul>
                                 <li><strong>Performance:</strong> 10-100x faster than lists</li>
                                 <li><strong>Vectorization:</strong> No explicit loops needed</li>
                                 <li><strong>Broadcasting:</strong> Smart array operations</li>
                                 <li><strong>Foundation:</strong> Powers pandas, scikit-learn</li>
                             </ul>
-                            <div class="info-box">
-                                <p><strong>Key Concepts:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>N-dimensional arrays</li>
-                                    <li>Element-wise operations</li>
-                                    <li>Array reshaping</li>
-                                    <li>Mathematical functions</li>
-                                </ul>
-                            </div>
                         </div>
-                        <div class="column-50" style="text-align: center;">
-                            <pre><code class="python">import numpy as np
-
-# NumPy vs Python lists
-python_list = [1, 2, 3, 4, 5]
-numpy_array = np.array([1, 2, 3, 4, 5])
-
-# Vectorized operation (no loop!)
-result = numpy_array * 2
-# array([2, 4, 6, 8, 10])</code></pre>
+                        <div class="column">
+                            <h4>Key Concepts</h4>
+                            <ul>
+                                <li>N-dimensional arrays (ndarray)</li>
+                                <li>Element-wise operations</li>
+                                <li>Array reshaping & indexing</li>
+                                <li>Mathematical functions</li>
+                            </ul>
                         </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> NumPy's vectorized operations eliminate the need for explicit loops,
+                        making your code both faster and more readable - essential for machine learning computations.
                     </div>
                 </section>
 
@@ -1448,16 +1176,14 @@ result = numpy_array * 2
                                 <li><strong>Random:</strong> Various distributions</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Array Properties:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>shape - dimensions</li>
-                                    <li>dtype - data type</li>
-                                    <li>size - total elements</li>
-                                    <li>ndim - number of dimensions</li>
-                                </ul>
+                                <strong>Array Properties:</strong><br>
+                                • <strong>shape</strong> - array dimensions<br>
+                                • <strong>dtype</strong> - data type of elements<br>
+                                • <strong>size</strong> - total number of elements<br>
+                                • <strong>ndim</strong> - number of dimensions
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python">import numpy as np
 
 # From list
@@ -1506,16 +1232,14 @@ print(f"Dimensions: {matrix.ndim}")</code></pre>
                                 <li><strong>Boolean:</strong> Conditional selection</li>
                             </ul>
                             <div class="warning-box">
-                                <p><strong>Important:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Views vs copies</li>
-                                    <li>Negative indexing</li>
-                                    <li>Fancy indexing</li>
-                                    <li>Broadcasting rules</li>
-                                </ul>
+                                <strong>Important:</strong><br>
+                                • Views vs copies (memory implications)<br>
+                                • Negative indexing (from end)<br>
+                                • Fancy indexing (array of indices)<br>
+                                • Broadcasting rules (shape matching)
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># 1D array indexing
 arr = np.array([10, 20, 30, 40, 50])
 print(arr[0])     # 10
@@ -1566,15 +1290,13 @@ matrix[matrix < 5] = 0  # Set all values < 5 to 0</code></pre>
                                 <li><strong>Matrix ops:</strong> dot product, transpose</li>
                             </ul>
                             <div class="success-box">
-                                <p><strong>Broadcasting Rules:</strong></p>
-                                <ol style="margin-top: 5px; font-size: 0.9em;">
-                                    <li>Compare shapes right to left</li>
-                                    <li>Dimensions are compatible if equal or 1</li>
-                                    <li>Arrays are broadcast to match</li>
-                                </ol>
+                                <strong>Broadcasting Rules:</strong><br>
+                                1. Compare shapes right to left<br>
+                                2. Dimensions are compatible if equal or 1<br>
+                                3. Arrays are broadcast to match shapes
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Element-wise operations
 a = np.array([1, 2, 3, 4])
 b = np.array([10, 20, 30, 40])
@@ -1628,15 +1350,13 @@ print(A.T)           # Transpose</code></pre>
                                 <li><strong>Correlation:</strong> corrcoef, cov</li>
                             </ul>
                             <div class="info-box">
-                                <p><strong>Axis Parameter:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>None: Entire array</li>
-                                    <li>0: Along columns</li>
-                                    <li>1: Along rows</li>
-                                </ul>
+                                <strong>Axis Parameter:</strong><br>
+                                • <strong>None:</strong> Entire array (flattened)<br>
+                                • <strong>0:</strong> Along columns (vertically)<br>
+                                • <strong>1:</strong> Along rows (horizontally)
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python"># Generate sample data
 np.random.seed(42)
 data = np.random.randn(1000) * 15 + 100
@@ -1687,16 +1407,14 @@ print(f"Correlation: {correlation:.3f}")</code></pre>
                                 <li><strong>Parallelization:</strong> BLAS/LAPACK</li>
                             </ul>
                             <div class="success-box">
-                                <p><strong>Performance Tips:</strong></p>
-                                <ul style="margin-top: 5px;">
-                                    <li>Avoid Python loops</li>
-                                    <li>Use vectorized operations</li>
-                                    <li>Preallocate arrays</li>
-                                    <li>Use appropriate dtypes</li>
-                                </ul>
+                                <strong>Performance Tips:</strong><br>
+                                • Avoid Python loops - use vectorization<br>
+                                • Use vectorized operations whenever possible<br>
+                                • Preallocate arrays for known sizes<br>
+                                • Use appropriate dtypes (int32 vs int64)
                             </div>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <pre><code class="python">import time
 
 # Python list operation
@@ -1745,10 +1463,576 @@ print(f"NumPy array size: {np_array.nbytes} bytes")</code></pre>
                 </section>
             </section>
 
-            <!-- Continue with Parts 4 and 5... -->
-            <!-- I'll add a summary slide here to keep within reasonable length -->
+            <!-- Part 4: Pandas -->
+            <section>
+                <section>
+                    <h2>Part 4: Pandas Fundamentals</h2>
+                    <h3>Powerful Data Structures for Analysis</h3>
+                    <div class="info-box">
+                        <strong>The Swiss Army Knife of Data Analysis:</strong><br>
+                        <em>"Pandas provides high-performance, easy-to-use data structures and data analysis tools that make working with structured data fast and intuitive."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Core Capabilities</h4>
+                            <ul>
+                                <li><strong>DataFrames:</strong> Tabular data structure</li>
+                                <li><strong>Missing data:</strong> Built-in handling</li>
+                                <li><strong>I/O tools:</strong> Read/write various formats</li>
+                                <li><strong>Time series:</strong> Date/time functionality</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Key Features</h4>
+                            <ul>
+                                <li>Label-based indexing</li>
+                                <li>Group by operations</li>
+                                <li>Merge, join, and concatenate</li>
+                                <li>Pivot tables and reshaping</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Pandas bridges the gap between Python and data analysis,
+                        providing Excel-like functionality with the power of programming - essential for data preprocessing in ML.
+                    </div>
+                </section>
 
-            <!-- Summary -->
+                <section>
+                    <h2>Creating DataFrames</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>DataFrame Creation</h4>
+                            <ul>
+                                <li><strong>From dict:</strong> Column-oriented</li>
+                                <li><strong>From list:</strong> Row-oriented</li>
+                                <li><strong>From CSV:</strong> pd.read_csv()</li>
+                                <li><strong>From Excel:</strong> pd.read_excel()</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>DataFrame Structure:</strong><br>
+                                • <strong>Rows:</strong> Index (0, 1, 2...)<br>
+                                • <strong>Columns:</strong> Named fields<br>
+                                • <strong>Values:</strong> Any data type
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import pandas as pd
+
+# From dictionary
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie', 'Diana'],
+    'Age': [25, 30, 35, 28],
+    'City': ['NYC', 'Paris', 'London', 'Tokyo'],
+    'Salary': [70000, 80000, 75000, 90000]
+}
+df = pd.DataFrame(data)
+
+print(df)
+# Output:
+#       Name  Age    City  Salary
+# 0    Alice   25     NYC   70000
+# 1      Bob   30   Paris   80000
+# 2  Charlie   35  London   75000
+# 3    Diana   28   Tokyo   90000
+
+# DataFrame info
+print(df.shape)  
+# Output: (4, 4)
+
+print(df.columns.tolist())
+# Output: ['Name', 'Age', 'City', 'Salary']
+
+print(df.dtypes)
+# Output:
+# Name      object
+# Age        int64
+# City      object
+# Salary     int64</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Data Selection</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Accessing DataFrame Data</h4>
+                            <ul>
+                                <li><strong>Columns:</strong> df['col'] or df[['col1', 'col2']]</li>
+                                <li><strong>Rows by position:</strong> df.iloc[index]</li>
+                                <li><strong>Rows by label:</strong> df.loc[label]</li>
+                                <li><strong>Boolean indexing:</strong> df[condition]</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Selection Methods:</strong><br>
+                                • <strong>[ ]</strong> - Column or boolean indexing<br>
+                                • <strong>iloc[ ]</strong> - Integer position based<br>
+                                • <strong>loc[ ]</strong> - Label-based access<br>
+                                • <strong>query()</strong> - String expression filtering
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Column selection
+print(df['Name'])        
+# Output: Series with names
+# 0      Alice
+# 1        Bob
+# 2    Charlie
+# 3      Diana
+
+print(df[['Name', 'Salary']])  
+# Output: DataFrame with 2 columns
+
+# Row selection
+print(df.iloc[0])        
+# Output: First row as Series
+# Name      Alice
+# Age          25
+# City        NYC
+# Salary    70000
+
+print(df.loc[0:2])       
+# Output: DataFrame with rows 0-2
+
+# Conditional selection
+print(df[df['Age'] > 30])
+# Output: Rows where Age > 30
+
+print(df[(df['Age'] > 25) & 
+         (df['Salary'] > 75000)])
+# Output: Multiple conditions
+
+# Using query
+print(df.query('Age > 30 and Salary < 80000'))
+# Output: String-based filtering</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Data Manipulation</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Modifying DataFrames</h4>
+                            <ul>
+                                <li><strong>Add columns:</strong> Direct assignment</li>
+                                <li><strong>Modify:</strong> Update in place</li>
+                                <li><strong>Sort:</strong> By values or index</li>
+                                <li><strong>Group:</strong> Split-apply-combine</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Missing Data:</strong><br>
+                                • <strong>dropna()</strong> - Remove NaN values<br>
+                                • <strong>fillna()</strong> - Replace NaN with value<br>
+                                • <strong>interpolate()</strong> - Fill gaps smartly
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Add new column
+df['Bonus'] = df['Salary'] * 0.1
+print(df['Bonus'].head(2))
+# Output: 
+# 0    7000.0
+# 1    8000.0
+
+# Modify existing column
+df['Salary'] = df['Salary'] * 1.05
+
+# Sort data
+df_sorted = df.sort_values('Salary', 
+                           ascending=False)
+print(df_sorted[['Name', 'Salary']].head(2))
+# Output:
+#     Name    Salary
+# 3  Diana  94500.00
+# 1    Bob  84000.00
+
+# Group by operations
+df_grouped = df.groupby('City')['Salary'].mean()
+print(df_grouped)
+# Output:
+# City
+# London    78750.0
+# NYC       73500.0
+# Paris     84000.0
+# Tokyo     94500.0
+
+# Handling missing data
+df_clean = df.dropna()        # Drop NaN rows
+df_filled = df.fillna(0)      # Fill with 0
+df.fillna(method='ffill')     # Forward fill</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Aggregation and Statistics</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Statistical Analysis</h4>
+                            <ul>
+                                <li><strong>describe():</strong> Summary statistics</li>
+                                <li><strong>Aggregations:</strong> mean, sum, count</li>
+                                <li><strong>Group by:</strong> Split-apply-combine</li>
+                                <li><strong>Pivot tables:</strong> Reshape data</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Aggregate Functions:</strong><br>
+                                • <strong>sum, mean, median</strong> - Basic stats<br>
+                                • <strong>min, max, std</strong> - Range & spread<br>
+                                • <strong>count, nunique</strong> - Counting<br>
+                                • Custom functions with apply()
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Basic statistics
+print(df.describe())
+# Output:
+#             Age        Salary
+# count   4.0000       4.000000
+# mean   29.5000   78750.000000
+# std     4.1231   8539.125638
+# min    25.0000   70000.000000
+# 25%    27.2500   73750.000000
+# 50%    29.0000   77500.000000
+# 75%    31.2500   82500.000000
+# max    35.0000   90000.000000
+
+# Single column stats
+print(f"Mean: {df['Salary'].mean():.2f}")
+# Output: Mean: 78750.00
+
+# Group by aggregation
+grouped = df.groupby('City').agg({
+    'Salary': ['mean', 'max', 'min'],
+    'Age': 'mean'
+})
+print(grouped)
+# Output: Multi-level column DataFrame
+
+# Value counts
+print(df['City'].value_counts())
+# Output:
+# NYC      1
+# Paris    1
+# London   1
+# Tokyo    1</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 5: Matplotlib -->
+            <section>
+                <section>
+                    <h2>Part 5: Matplotlib Basics</h2>
+                    <h3>Creating Meaningful Visual Insights</h3>
+                    <div class="info-box">
+                        <strong>A Picture is Worth a Thousand Data Points:</strong><br>
+                        <em>"Visualization gives you answers to questions you didn't know you had. It's not just about making pretty pictures, but about understanding."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Why Visualization?</h4>
+                            <ul>
+                                <li><strong>Explore:</strong> Understand your data</li>
+                                <li><strong>Communicate:</strong> Share insights</li>
+                                <li><strong>Validate:</strong> Check assumptions</li>
+                                <li><strong>Present:</strong> Publication-quality figures</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Essential Plot Types</h4>
+                            <ul>
+                                <li><strong>Scatter:</strong> Relationships & correlations</li>
+                                <li><strong>Histogram:</strong> Data distributions</li>
+                                <li><strong>Bar/Column:</strong> Category comparisons</li>
+                                <li><strong>Line:</strong> Trends over time</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Effective visualization is crucial for exploratory data analysis and communicating
+                        machine learning results - it helps you spot patterns, outliers, and validate model assumptions.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Scatter Plots</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Visualizing Relationships</h4>
+                            <ul>
+                                <li><strong>Purpose:</strong> Show correlation between variables</li>
+                                <li><strong>X-axis:</strong> Independent variable</li>
+                                <li><strong>Y-axis:</strong> Dependent variable</li>
+                                <li><strong>Patterns:</strong> Linear, non-linear, clusters</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Customization Options:</strong><br>
+                                • <strong>alpha:</strong> Transparency (0-1)<br>
+                                • <strong>c:</strong> Color (can be array)<br>
+                                • <strong>s:</strong> Size (can be array)<br>
+                                • <strong>marker:</strong> Point style (o, ^, s, etc.)
+                            </div>
+                            <img src="images/week02-matplotlib-scatter-plot.svg" style="width: 100%; margin-top: 20px;">
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import matplotlib.pyplot as plt
+import numpy as np
+
+# Generate data
+np.random.seed(42)
+x = np.random.randn(100)
+y = 2 * x + np.random.randn(100) * 0.5
+
+# Create scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(x, y, alpha=0.6, c=x, 
+            cmap='viridis', s=50)
+
+# Labels and title
+plt.xlabel('X Variable')
+plt.ylabel('Y Variable')
+plt.title('Scatter Plot Example')
+
+# Add grid
+plt.grid(True, alpha=0.3)
+
+# Add colorbar
+plt.colorbar(label='X Value')
+
+# Show plot
+plt.show()
+
+# Correlation coefficient
+corr = np.corrcoef(x, y)[0, 1]
+print(f"Correlation: {corr:.3f}")
+# Output: Correlation: 0.964</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Histograms</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Distribution Analysis</h4>
+                            <ul>
+                                <li><strong>Purpose:</strong> Show data distribution</li>
+                                <li><strong>Bins:</strong> Group continuous data</li>
+                                <li><strong>Height:</strong> Frequency or count</li>
+                                <li><strong>Shape:</strong> Normal, skewed, bimodal</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Key Statistics:</strong><br>
+                                • <strong>Mean:</strong> Central tendency<br>
+                                • <strong>Median:</strong> Middle value<br>
+                                • <strong>Std Dev:</strong> Data spread<br>
+                                • <strong>Skewness:</strong> Distribution asymmetry
+                            </div>
+                            <img src="images/week02-matplotlib-histogram.svg" style="width: 100%; margin-top: 20px;">
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Generate data
+data = np.random.normal(100, 15, 1000)
+
+# Create histogram
+plt.figure(figsize=(10, 6))
+counts, bins, patches = plt.hist(
+    data, bins=30, 
+    edgecolor='black', 
+    alpha=0.7,
+    color='steelblue'
+)
+
+# Add vertical line at mean
+mean_val = data.mean()
+plt.axvline(mean_val, color='red', 
+            linestyle='--', linewidth=2,
+            label=f'Mean: {mean_val:.1f}')
+
+# Labels and title
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Distribution of Values')
+
+# Add legend and grid
+plt.legend()
+plt.grid(True, alpha=0.3, axis='y')
+
+plt.show()
+
+# Print statistics
+print(f"Mean: {data.mean():.2f}")
+print(f"Std Dev: {data.std():.2f}")
+print(f"Min: {data.min():.2f}")
+print(f"Max: {data.max():.2f}")
+# Output:
+# Mean: 100.12
+# Std Dev: 14.87
+# Min: 52.84
+# Max: 143.56</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Bar Charts</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Categorical Comparisons</h4>
+                            <ul>
+                                <li><strong>Purpose:</strong> Compare discrete categories</li>
+                                <li><strong>Vertical:</strong> Standard comparison</li>
+                                <li><strong>Horizontal:</strong> Long category names</li>
+                                <li><strong>Grouped:</strong> Multiple series</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Best Practices:</strong><br>
+                                • Sort by value for clarity<br>
+                                • Add value labels on bars<br>
+                                • Use consistent colors<br>
+                                • Start y-axis at zero
+                            </div>
+                            <img src="images/week02-matplotlib-bar-chart.svg" style="width: 100%; margin-top: 20px;">
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Create data
+categories = ['Product A', 'Product B', 
+              'Product C', 'Product D']
+values = [23, 45, 56, 78]
+
+# Vertical bar chart
+plt.figure(figsize=(10, 6))
+bars = plt.bar(categories, values, 
+               color='coral',
+               edgecolor='black',
+               alpha=0.7)
+
+# Add value labels on bars
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2.,
+             height, f'{height}',
+             ha='center', va='bottom')
+
+# Labels and title
+plt.xlabel('Products')
+plt.ylabel('Sales (in thousands)')
+plt.title('Bar Chart Example')
+
+# Add grid
+plt.grid(True, alpha=0.3, axis='y')
+
+plt.show()
+
+# Calculate total and average
+total = sum(values)
+avg = total / len(values)
+print(f"Total Sales: {total}k")
+print(f"Average: {avg:.1f}k")
+# Output:
+# Total Sales: 202k
+# Average: 50.5k</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Multiple Subplots</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Subplot Layouts</h4>
+                            <ul>
+                                <li><strong>subplots():</strong> Create grid of axes</li>
+                                <li><strong>Indexing:</strong> axes[row, col]</li>
+                                <li><strong>tight_layout():</strong> Auto-spacing</li>
+                                <li><strong>suptitle():</strong> Overall title</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Common Patterns:</strong><br>
+                                • <strong>2x2:</strong> Four related plots<br>
+                                • <strong>1x3:</strong> Side-by-side comparison<br>
+                                • <strong>3x1:</strong> Vertical stack<br>
+                                • <strong>Custom:</strong> GridSpec for complex layouts
+                            </div>
+                            <img src="images/week02-matplotlib-multiple-subplots.svg" style="width: 100%; margin-top: 10px;">
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">fig, axes = plt.subplots(2, 2, 
+                        figsize=(12, 10))
+
+# Scatter plot (top-left)
+axes[0, 0].scatter(x, y, alpha=0.6)
+axes[0, 0].set_title('Scatter Plot')
+axes[0, 0].set_xlabel('X')
+axes[0, 0].set_ylabel('Y')
+
+# Histogram (top-right)
+axes[0, 1].hist(data, bins=20, 
+                color='green', alpha=0.7)
+axes[0, 1].set_title('Histogram')
+axes[0, 1].set_xlabel('Value')
+axes[0, 1].set_ylabel('Frequency')
+
+# Bar chart (bottom-left)
+axes[1, 0].bar(categories, values, 
+               color='orange')
+axes[1, 0].set_title('Bar Chart')
+axes[1, 0].set_xlabel('Category')
+
+# Line plot (bottom-right)
+x_line = np.linspace(0, 10, 100)
+y_line = np.sin(x_line)
+axes[1, 1].plot(x_line, y_line, 'r-')
+axes[1, 1].set_title('Line Plot')
+
+# Overall title
+plt.suptitle('Dashboard', fontsize=14)
+plt.tight_layout()
+plt.show()</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Practice Exercises -->
+            <section>
+                <h2>Practice Exercises</h2>
+                <div class="warning-box">
+                    <p><strong>Complete the Week 2 Jupyter Notebooks:</strong></p>
+                </div>
+                <ol>
+                    <li><strong>week02a-python-fundamentals.ipynb</strong>
+                        <ul>
+                            <li>Variables, operators, control flow</li>
+                            <li>Functions and comprehensions</li>
+                        </ul>
+                    </li>
+                    <li><strong>week02b-numpy-fundamentals.ipynb</strong>
+                        <ul>
+                            <li>Array creation and manipulation</li>
+                            <li>Broadcasting and vectorization</li>
+                        </ul>
+                    </li>
+                    <li><strong>week02c-pandas-fundamentals.ipynb</strong>
+                        <ul>
+                            <li>DataFrames and Series</li>
+                            <li>Data selection and aggregation</li>
+                        </ul>
+                    </li>
+                    <li><strong>week02d-matplotlib-fundamentals.ipynb</strong>
+                        <ul>
+                            <li>Creating various plot types</li>
+                            <li>Customization and styling</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- Key Takeaways -->
             <section>
                 <h2>Key Takeaways</h2>
                 <div class="success-box">
@@ -1764,6 +2048,24 @@ print(f"NumPy array size: {np_array.nbytes} bytes")</code></pre>
                 </ul>
                 <div class="info-box" style="margin-top: 20px;">
                     <p><strong>Remember:</strong> These tools form the foundation for all machine learning work in Python!</p>
+                </div>
+            </section>
+
+            <!-- Next Week Preview -->
+            <section>
+                <h2>Next Week: Data Preparation</h2>
+                <div class="info-box">
+                    <p><strong>Week 3 Preview:</strong></p>
+                </div>
+                <ul>
+                    <li>Data cleaning techniques</li>
+                    <li>Handling missing values</li>
+                    <li>Feature scaling and normalization</li>
+                    <li>Encoding categorical variables</li>
+                    <li>Feature engineering basics</li>
+                </ul>
+                <div class="center" style="margin-top: 50px;">
+                    <p><strong>Keep practicing with the notebooks!</strong></p>
                 </div>
             </section>
 

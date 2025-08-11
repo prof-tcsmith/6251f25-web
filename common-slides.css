@@ -1,0 +1,419 @@
+/* ============================================
+   ISM6251 Common Slide Styles
+   Base: Week 1 styling (GOLD STANDARD)
+   Enhanced: Two-column code layout
+   ============================================ */
+
+/* Custom theme colors */
+:root {
+    --primary-color: #1e3a5f;
+    --secondary-color: #4a90e2;
+    --accent-color: #f39c12;
+    --success-color: #27ae60;
+    --danger-color: #e74c3c;
+}
+
+/* Background */
+.reveal {
+    background: linear-gradient(135deg, #f7f9fc 0%, #e8eef5 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-size: 28px;
+}
+
+/* Apply border styling only to horizontal slides (direct children) */
+.reveal .slides > section {
+    text-align: left;
+    border: 2px solid #333333;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 30px;
+    padding-top: 45px;
+    background: white;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* Vertical slides within stacks should also have the border but positioned differently */
+.reveal .slides > section > section {
+    text-align: left;
+    border: 2px solid #333333;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 30px;
+    padding-top: 45px;
+    background: white;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* Headers */
+.reveal h1 {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 15px;
+    margin: -45px -30px 15px -30px;
+    text-align: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border-bottom: 3px solid var(--accent-color);
+    border-radius: 6px 6px 0 0;
+    font-size: 1.3em;
+}
+
+.reveal h2 {
+    background: linear-gradient(90deg, var(--secondary-color) 0%, #6fa3e8 100%);
+    color: white;
+    padding: 12px 20px;
+    margin: -45px -30px 15px -30px;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    border-left: 4px solid var(--accent-color);
+    border-radius: 6px 6px 0 0;
+    font-size: 1.1em;
+}
+
+.reveal h3 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 0.85em;
+}
+
+.reveal h4 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 0.75em;
+}
+
+/* Lists */
+.reveal ul {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 0.75em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.reveal ul li {
+    padding-left: 25px;
+    margin: 8px 0;
+    position: relative;
+    line-height: 1.3;
+    display: block;
+}
+
+.reveal ul li:before {
+    content: "▸";
+    position: absolute;
+    left: 5px;
+    color: var(--accent-color);
+    font-weight: bold;
+    font-size: 1em;
+}
+
+/* Info boxes */
+.info-box {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-left: 4px solid var(--secondary-color);
+    padding: 10px 12px;
+    margin: 12px 0;
+    border-radius: 4px;
+    font-size: 0.75em;
+}
+
+.warning-box {
+    background: rgba(243, 156, 18, 0.08);
+    border-left: 4px solid var(--accent-color);
+    padding: 10px 12px;
+    margin: 12px 0;
+    border-radius: 4px;
+    font-size: 0.75em;
+}
+
+.success-box {
+    background: rgba(39, 174, 96, 0.08);
+    border-left: 4px solid var(--success-color);
+    padding: 10px 12px;
+    margin: 12px 0;
+    border-radius: 4px;
+    font-size: 0.75em;
+}
+
+.danger-box {
+    background: rgba(231, 76, 60, 0.08);
+    border-left: 4px solid var(--danger-color);
+    padding: 10px 12px;
+    margin: 12px 0;
+    border-radius: 4px;
+    font-size: 0.75em;
+}
+
+/* ============================================
+   Column Layouts
+   ============================================ */
+
+/* Basic columns */
+.columns {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.column {
+    flex: 1;
+    padding: 5px;
+    min-width: 0;
+}
+
+.column-50 {
+    flex: 0 0 48%;
+}
+
+.column-33 {
+    flex: 0 0 31%;
+}
+
+.column-60 {
+    flex: 0 0 58%;
+}
+
+.column-40 {
+    flex: 0 0 38%;
+}
+
+.column-25 {
+    flex: 0 0 23%;
+}
+
+/* ============================================
+   Two-Column Code Layout
+   For slides with explanations on left, code on right
+   ============================================ */
+
+.two-column-code {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.explanation-column {
+    flex: 0 0 50%;
+    padding-right: 10px;
+}
+
+.explanation-column h4 {
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+.explanation-column ul {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 0.75em;
+}
+
+.explanation-column p {
+    font-size: 0.75em;
+    line-height: 1.35;
+    margin: 8px 0;
+}
+
+.code-column {
+    flex: 0 0 48%;
+}
+
+/* Taller code blocks for two-column layout */
+.code-column pre {
+    max-height: 630px;  /* Increased by 5% from 600px */
+    font-size: 0.55em;
+    margin: 0;
+    width: 100%;
+}
+
+.code-column pre code {
+    max-height: 610px;  /* Increased by 5% from 580px */
+    overflow-y: auto;
+}
+
+/* When column-50 and code-column are used together */
+.column-50.code-column pre {
+    max-height: 578px;  /* Increased by 5% from 550px */
+    font-size: 0.52em;
+}
+
+.column-50.code-column pre code {
+    max-height: 558px;  /* Increased by 5% from 530px */
+}
+
+/* ============================================
+   Code Blocks
+   CRITICAL: Light theme (#f8f9fa), NOT dark!
+   ============================================ */
+
+.reveal pre {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border-radius: 6px;
+    background: #f8f9fa;  /* LIGHT GRAY - NOT DARK! */
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 0.48em;
+    border-left: 3px solid var(--accent-color);
+    border: 1px solid #dee2e6;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 250px;
+}
+
+.reveal code {
+    font-family: 'Monaco', 'Courier New', monospace;
+    background: rgba(0,0,0,0.05);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.reveal pre code {
+    background: transparent;
+    color: #212529;
+    padding: 0;
+    max-height: 230px;
+    line-height: 1.25;
+    font-weight: 500;
+    white-space: pre;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+
+.reveal table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    margin: 10px auto;
+    background: white;
+    font-size: 0.6em;
+    max-width: 100%;
+}
+
+.reveal table thead {
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+}
+
+.reveal table th {
+    padding: 8px;
+    font-weight: 600;
+    text-align: left;
+    letter-spacing: 0.3px;
+}
+
+.reveal table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* ============================================
+   Navigation and UI Elements
+   ============================================ */
+
+/* Navigation arrows */
+.reveal .controls {
+    color: var(--secondary-color);
+}
+
+/* Progress bar */
+.reveal .progress {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.reveal .progress span {
+    background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+}
+
+/* Slide numbers */
+.reveal .slide-number {
+    background: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    right: 110px !important;
+    bottom: 10px !important;
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+
+.reveal p {
+    font-size: 0.75em;
+    line-height: 1.35;
+    margin: 8px 0;
+}
+
+.reveal strong {
+    color: var(--primary-color);
+    font-weight: 600;
+    display: inline-block;
+}
+
+.reveal em {
+    font-style: italic;
+    color: var(--secondary-color);
+}
+
+/* Ordered lists */
+.reveal ol {
+    font-size: 0.75em;
+    padding-left: 20px;
+}
+
+.reveal ol li {
+    margin: 8px 0;
+    line-height: 1.3;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+/* Key points styling for two-column layouts */
+.key-points {
+    font-size: 0.75em;
+}
+
+.key-points h4 {
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+.key-points ul {
+    list-style-type: none;
+    padding-left: 0;
+}

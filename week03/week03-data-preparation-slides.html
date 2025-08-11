@@ -72,35 +72,53 @@
             margin-bottom: 4px !important;
         }
         
-        /* FORCE consistent sizing for ALL code blocks in two-column layouts */
-        .reveal .columns .code-column pre,
-        .reveal .columns .column-50 pre,
-        .reveal .columns pre {
+        /* Consistent two-column layout spacing */
+        /* When both columns have code - narrower with gap */
+        .reveal .columns .column-50.code-column {
+            flex: 0 0 47% !important;
+            max-width: 47% !important;
+        }
+        
+        /* When only column-50 (no code-column) - slightly wider */
+        .reveal .columns .column-50:not(.code-column) {
+            flex: 0 0 48% !important;
+            max-width: 48% !important;
+        }
+        
+        /* Code blocks in code-column - optimized for dense code */
+        .reveal .columns .column-50.code-column pre {
             max-height: 578px !important;
-            font-size: 0.45em !important;
+            font-size: 0.46em !important;
             margin: 0 !important;
             width: 100% !important;
-            max-width: 100% !important;
-            min-width: 0 !important;
             overflow-x: auto !important;
             overflow-y: auto !important;
             white-space: pre !important;
-            flex-shrink: 1 !important;
         }
         
-        .reveal .columns .code-column pre code,
-        .reveal .columns .column-50 pre code,
-        .reveal .columns pre code {
+        .reveal .columns .column-50.code-column pre code {
             max-height: 558px !important;
             overflow-x: visible !important;
             overflow-y: visible !important;
             white-space: pre !important;
         }
         
-        /* Ensure columns themselves maintain proper width */
-        .reveal .columns .column-50 {
-            flex: 0 0 48% !important;
-            max-width: 48% !important;
+        /* Code blocks in standard columns - slightly larger font */
+        .reveal .columns .column-50:not(.code-column) pre {
+            max-height: 550px !important;
+            font-size: 0.48em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+        
+        /* Code blocks inside quality boxes need special handling */
+        .reveal .columns .poor-quality pre,
+        .reveal .columns .good-quality pre {
+            font-size: 0.65em !important;  /* Larger for readability in examples */
+            max-height: 400px !important;
+            margin: 5px 0 !important;
         }
         
         

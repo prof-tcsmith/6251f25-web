@@ -2198,15 +2198,11 @@ vertical-align: -.125em;
   <li><a href="#step-4-test-your-code" id="toc-step-4-test-your-code" class="nav-link" data-scroll-target="#step-4-test-your-code">Step 4: Test Your Code</a></li>
   <li><a href="#step-5-export-and-submit" id="toc-step-5-export-and-submit" class="nav-link" data-scroll-target="#step-5-export-and-submit">Step 5: Export and Submit</a></li>
   </ul></li>
-  <li><a href="#detailed-rubric" id="toc-detailed-rubric" class="nav-link" data-scroll-target="#detailed-rubric">Detailed Rubric</a>
+  <li><a href="#simplified-rubric" id="toc-simplified-rubric" class="nav-link" data-scroll-target="#simplified-rubric">Simplified Rubric</a>
   <ul class="collapse">
-  <li><a href="#part-1-setup-and-data-generation-10-points" id="toc-part-1-setup-and-data-generation-10-points" class="nav-link" data-scroll-target="#part-1-setup-and-data-generation-10-points">Part 1: Setup and Data Generation (10 points)</a></li>
-  <li><a href="#part-2-data-loading-and-exploration-20-points" id="toc-part-2-data-loading-and-exploration-20-points" class="nav-link" data-scroll-target="#part-2-data-loading-and-exploration-20-points">Part 2: Data Loading and Exploration (20 points)</a></li>
-  <li><a href="#part-3-data-manipulation-with-pandas-25-points" id="toc-part-3-data-manipulation-with-pandas-25-points" class="nav-link" data-scroll-target="#part-3-data-manipulation-with-pandas-25-points">Part 3: Data Manipulation with Pandas (25 points)</a></li>
-  <li><a href="#part-4-numerical-analysis-with-numpy-15-points" id="toc-part-4-numerical-analysis-with-numpy-15-points" class="nav-link" data-scroll-target="#part-4-numerical-analysis-with-numpy-15-points">Part 4: Numerical Analysis with NumPy (15 points)</a></li>
-  <li><a href="#part-5-data-visualization-with-matplotlib-25-points" id="toc-part-5-data-visualization-with-matplotlib-25-points" class="nav-link" data-scroll-target="#part-5-data-visualization-with-matplotlib-25-points">Part 5: Data Visualization with Matplotlib (25 points)</a></li>
-  <li><a href="#part-6-business-insights-and-recommendations-15-points" id="toc-part-6-business-insights-and-recommendations-15-points" class="nav-link" data-scroll-target="#part-6-business-insights-and-recommendations-15-points">Part 6: Business Insights and Recommendations (15 points)</a></li>
-  <li><a href="#part-7-technical-reflection-bonus-5-points" id="toc-part-7-technical-reflection-bonus-5-points" class="nav-link" data-scroll-target="#part-7-technical-reflection-bonus-5-points">Part 7: Technical Reflection (Bonus: 5 points)</a></li>
+  <li><a href="#core-requirements-80-points" id="toc-core-requirements-80-points" class="nav-link" data-scroll-target="#core-requirements-80-points">Core Requirements (80 points)</a></li>
+  <li><a href="#bonus-opportunities-15-points" id="toc-bonus-opportunities-15-points" class="nav-link" data-scroll-target="#bonus-opportunities-15-points">Bonus Opportunities (15 points)</a></li>
+  <li><a href="#grading-notes" id="toc-grading-notes" class="nav-link" data-scroll-target="#grading-notes">Grading Notes</a></li>
   </ul></li>
   <li><a href="#grading-scale" id="toc-grading-scale" class="nav-link" data-scroll-target="#grading-scale">Grading Scale</a></li>
   <li><a href="#academic-integrity" id="toc-academic-integrity" class="nav-link" data-scroll-target="#academic-integrity">Academic Integrity</a></li>
@@ -2221,7 +2217,7 @@ vertical-align: -.125em;
   <ul class="collapse">
   <li><a href="#expected-csv-filename-format" id="toc-expected-csv-filename-format" class="nav-link" data-scroll-target="#expected-csv-filename-format">Expected CSV Filename Format</a></li>
   <li><a href="#expected-dataframe-shape" id="toc-expected-dataframe-shape" class="nav-link" data-scroll-target="#expected-dataframe-shape">Expected DataFrame Shape</a></li>
-  <li><a href="#sample-visualization" id="toc-sample-visualization" class="nav-link" data-scroll-target="#sample-visualization">Sample Visualization</a></li>
+  <li><a href="#sample-requirements" id="toc-sample-requirements" class="nav-link" data-scroll-target="#sample-requirements">Sample Requirements</a></li>
   </ul></li>
   <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions?</a></li>
   </ul>
@@ -2275,17 +2271,16 @@ vertical-align: -.125em;
 </section>
 <section id="assignment-structure" class="level3">
 <h3 class="anchored" data-anchor-id="assignment-structure">Assignment Structure</h3>
-<p>The assignment is divided into 7 parts:</p>
+<p>The assignment is divided into 5 main parts:</p>
 <ol type="1">
-<li><strong>Setup and Data Generation</strong> (10 points)</li>
-<li><strong>Data Loading and Exploration</strong> (20 points)</li>
-<li><strong>Data Manipulation with Pandas</strong> (25 points)</li>
-<li><strong>Numerical Analysis with NumPy</strong> (15 points)</li>
-<li><strong>Data Visualization with Matplotlib</strong> (25 points)</li>
-<li><strong>Business Insights and Recommendations</strong> (15 points)</li>
-<li><strong>Technical Reflection</strong> (Bonus: 5 points)</li>
+<li><strong>Setup and Data Generation</strong> (5 points)</li>
+<li><strong>Data Loading and Exploration</strong> (15 points)</li>
+<li><strong>Data Analysis with Pandas</strong> (25 points)</li>
+<li><strong>Visualization with Matplotlib</strong> (20 points)</li>
+<li><strong>Business Insights</strong> (15 points)</li>
 </ol>
-<p><strong>Total: 100 points</strong> (+ 5 bonus points possible)</p>
+<p><strong>Total: 80 points</strong> (+ 15 bonus points available)</p>
+<p><strong>Estimated Time:</strong> 2-3 hours</p>
 <hr>
 </section>
 </section>
@@ -2314,10 +2309,9 @@ vertical-align: -.125em;
 <li><label><input type="checkbox">Your name and student ID are at the top of the notebook</label></li>
 <li><label><input type="checkbox">Your CSV file is properly named with your student ID</label></li>
 <li><label><input type="checkbox">All code cells execute without errors</label></li>
-<li><label><input type="checkbox">All TODO comments are addressed</label></li>
-<li><label><input type="checkbox">Business interpretations are provided for all findings</label></li>
-<li><label><input type="checkbox">At least 4 visualizations are created with proper labels</label></li>
-<li><label><input type="checkbox">Recommendations are data-driven and actionable</label></li>
+<li><label><input type="checkbox">Key business questions are answered</label></li>
+<li><label><input type="checkbox">At least 2 visualizations are created with proper labels</label></li>
+<li><label><input type="checkbox">Recommendations are provided</label></li>
 <li><label><input type="checkbox">Notebook is saved with all outputs visible</label></li>
 <li><label><input type="checkbox">HTML export shows all outputs</label></li>
 </ul>
@@ -2353,270 +2347,91 @@ vertical-align: -.125em;
 <hr>
 </section>
 </section>
-<section id="detailed-rubric" class="level2">
-<h2 class="anchored" data-anchor-id="detailed-rubric">Detailed Rubric</h2>
-<section id="part-1-setup-and-data-generation-10-points" class="level3">
-<h3 class="anchored" data-anchor-id="part-1-setup-and-data-generation-10-points">Part 1: Setup and Data Generation (10 points)</h3>
+<section id="simplified-rubric" class="level2">
+<h2 class="anchored" data-anchor-id="simplified-rubric">Simplified Rubric</h2>
+<section id="core-requirements-80-points" class="level3">
+<h3 class="anchored" data-anchor-id="core-requirements-80-points">Core Requirements (80 points)</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 32%">
 <col style="width: 25%">
-<col style="width: 41%">
+<col style="width: 22%">
+<col style="width: 51%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Criteria</th>
+<th>Section</th>
 <th>Points</th>
-<th>Description</th>
+<th>Key Requirements</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Library Import</strong></td>
-<td>3</td>
-<td>All required libraries imported correctly</td>
+<td><strong>Setup &amp; Data</strong></td>
+<td>5</td>
+<td>• Student ID set correctly<br>• CSV file saved with proper name</td>
 </tr>
 <tr class="even">
-<td><strong>Student ID Setup</strong></td>
-<td>3</td>
-<td>Student ID properly set and used in filename</td>
+<td><strong>Data Exploration</strong></td>
+<td>15</td>
+<td>• Data loaded from CSV<br>• Basic exploration completed<br>• Key patterns identified</td>
 </tr>
 <tr class="odd">
-<td><strong>Data Generation</strong></td>
-<td>2</td>
-<td>Data generated successfully</td>
+<td><strong>Data Analysis</strong></td>
+<td>25</td>
+<td>• Time columns added<br>• 3 business questions answered<br>• Grouping operations performed</td>
 </tr>
 <tr class="even">
-<td><strong>CSV Save</strong></td>
-<td>2</td>
-<td>Data saved to CSV with correct filename</td>
+<td><strong>Visualizations</strong></td>
+<td>20</td>
+<td>• Minimum 2 charts created<br>• Proper labels and formatting<br>• Clear insights provided</td>
+</tr>
+<tr class="odd">
+<td><strong>Business Insights</strong></td>
+<td>15</td>
+<td>• Key findings summarized<br>• Recommendations provided<br>• Professional communication</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="part-2-data-loading-and-exploration-20-points" class="level3">
-<h3 class="anchored" data-anchor-id="part-2-data-loading-and-exploration-20-points">Part 2: Data Loading and Exploration (20 points)</h3>
+<section id="bonus-opportunities-15-points" class="level3">
+<h3 class="anchored" data-anchor-id="bonus-opportunities-15-points">Bonus Opportunities (15 points)</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 32%">
-<col style="width: 25%">
-<col style="width: 41%">
+<col style="width: 36%">
+<col style="width: 24%">
+<col style="width: 39%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Criteria</th>
+<th>Bonus Item</th>
 <th>Points</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>CSV Loading</strong></td>
+<td><strong>Extra Analysis</strong></td>
 <td>5</td>
-<td>Data loaded correctly from CSV with proper date parsing</td>
+<td>Create pivot table or additional analysis</td>
 </tr>
 <tr class="even">
-<td><strong>Data Inspection</strong></td>
+<td><strong>Extra Visualization</strong></td>
 <td>5</td>
-<td>Used head(), info(), shape to explore data</td>
+<td>Create third visualization (time trend)</td>
 </tr>
 <tr class="odd">
-<td><strong>Summary Statistics</strong></td>
+<td><strong>Reflection</strong></td>
 <td>5</td>
-<td>Generated and interpreted describe() output</td>
-</tr>
-<tr class="even">
-<td><strong>Categorical Analysis</strong></td>
-<td>5</td>
-<td>Analyzed unique values and value counts</td>
+<td>Thoughtful reflection on learning and tools</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="part-3-data-manipulation-with-pandas-25-points" class="level3">
-<h3 class="anchored" data-anchor-id="part-3-data-manipulation-with-pandas-25-points">Part 3: Data Manipulation with Pandas (25 points)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 32%">
-<col style="width: 25%">
-<col style="width: 41%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Criteria</th>
-<th>Points</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Calculated Columns</strong></td>
-<td>8</td>
-<td>Added Month, Day_of_Week, Is_Weekend columns correctly</td>
-</tr>
-<tr class="even">
-<td><strong>Grouping Operations</strong></td>
-<td>8</td>
-<td>Performed groupby aggregations for business questions</td>
-</tr>
-<tr class="odd">
-<td><strong>Time-based Analysis</strong></td>
-<td>5</td>
-<td>Analyzed daily revenue and weekend patterns</td>
-</tr>
-<tr class="even">
-<td><strong>Data Quality</strong></td>
-<td>4</td>
-<td>Code is efficient and follows pandas best practices</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="part-4-numerical-analysis-with-numpy-15-points" class="level3">
-<h3 class="anchored" data-anchor-id="part-4-numerical-analysis-with-numpy-15-points">Part 4: Numerical Analysis with NumPy (15 points)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 32%">
-<col style="width: 25%">
-<col style="width: 41%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Criteria</th>
-<th>Points</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Statistical Calculations</strong></td>
-<td>7</td>
-<td>Used NumPy for mean, median, std, percentiles</td>
-</tr>
-<tr class="even">
-<td><strong>Array Operations</strong></td>
-<td>5</td>
-<td>Demonstrated vectorized operations for profit calculation</td>
-</tr>
-<tr class="odd">
-<td><strong>Correlation Analysis</strong></td>
-<td>3</td>
-<td>Calculated and interpreted correlation</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="part-5-data-visualization-with-matplotlib-25-points" class="level3">
-<h3 class="anchored" data-anchor-id="part-5-data-visualization-with-matplotlib-25-points">Part 5: Data Visualization with Matplotlib (25 points)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 32%">
-<col style="width: 25%">
-<col style="width: 41%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Criteria</th>
-<th>Points</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Bar Chart</strong></td>
-<td>6</td>
-<td>Created clear bar chart with proper labels</td>
-</tr>
-<tr class="even">
-<td><strong>Horizontal Bar Chart</strong></td>
-<td>6</td>
-<td>Created horizontal bar chart for product performance</td>
-</tr>
-<tr class="odd">
-<td><strong>Line Chart</strong></td>
-<td>6</td>
-<td>Created time series visualization</td>
-</tr>
-<tr class="even">
-<td><strong>Grouped Bar Chart</strong></td>
-<td>5</td>
-<td>Created complex multi-series visualization</td>
-</tr>
-<tr class="odd">
-<td><strong>Formatting</strong></td>
-<td>2</td>
-<td>All charts have titles, labels, legends as needed</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="part-6-business-insights-and-recommendations-15-points" class="level3">
-<h3 class="anchored" data-anchor-id="part-6-business-insights-and-recommendations-15-points">Part 6: Business Insights and Recommendations (15 points)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 32%">
-<col style="width: 25%">
-<col style="width: 41%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Criteria</th>
-<th>Points</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Key Findings</strong></td>
-<td>5</td>
-<td>Identified 5 important findings with supporting data</td>
-</tr>
-<tr class="even">
-<td><strong>Recommendations</strong></td>
-<td>7</td>
-<td>Provided 4 actionable, data-driven recommendations</td>
-</tr>
-<tr class="odd">
-<td><strong>Business Communication</strong></td>
-<td>3</td>
-<td>Clear, professional writing that connects to business value</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="part-7-technical-reflection-bonus-5-points" class="level3">
-<h3 class="anchored" data-anchor-id="part-7-technical-reflection-bonus-5-points">Part 7: Technical Reflection (Bonus: 5 points)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 32%">
-<col style="width: 25%">
-<col style="width: 41%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Criteria</th>
-<th>Points</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Learning Reflection</strong></td>
-<td>2</td>
-<td>Thoughtful reflection on what was learned</td>
-</tr>
-<tr class="even">
-<td><strong>Tool Comparison</strong></td>
-<td>2</td>
-<td>Meaningful comparison with Excel</td>
-</tr>
-<tr class="odd">
-<td><strong>Future Learning</strong></td>
-<td>1</td>
-<td>Identified areas for continued learning</td>
-</tr>
-</tbody>
-</table>
+<section id="grading-notes" class="level3">
+<h3 class="anchored" data-anchor-id="grading-notes">Grading Notes</h3>
+<p><strong>Full Credit Guidelines:</strong> - Code runs without errors - Student demonstrates understanding of concepts - Reasonable attempt at business interpretation - Work is original and shows effort</p>
+<p><strong>Partial Credit:</strong> - Minor errors that don’t affect overall analysis - Missing labels or formatting issues - Incomplete but reasonable attempts</p>
+<p><strong>Focus Areas:</strong> 1. <strong>Understanding over perfection</strong> - Credit for demonstrating concept knowledge 2. <strong>Practical application</strong> - Using tools to answer business questions 3. <strong>Communication</strong> - Clear explanation of findings</p>
 <hr>
 </section>
 </section>
@@ -2633,31 +2448,32 @@ vertical-align: -.125em;
 <tbody>
 <tr class="odd">
 <td>A</td>
-<td>90-100</td>
-<td>Exceptional work with insightful analysis</td>
+<td>72-80+</td>
+<td>Strong work meeting all requirements (90%+)</td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td>80-89</td>
-<td>Good work meeting all requirements</td>
+<td>64-71</td>
+<td>Good work with minor issues (80-89%)</td>
 </tr>
 <tr class="odd">
 <td>C</td>
-<td>70-79</td>
-<td>Satisfactory work with minor issues</td>
+<td>56-63</td>
+<td>Satisfactory work (70-79%)</td>
 </tr>
 <tr class="even">
 <td>D</td>
-<td>60-69</td>
-<td>Below average with significant gaps</td>
+<td>48-55</td>
+<td>Below average (60-69%)</td>
 </tr>
 <tr class="odd">
 <td>F</td>
-<td>&lt;60</td>
-<td>Incomplete or major deficiencies</td>
+<td>&lt;48</td>
+<td>Incomplete or major issues (&lt;60%)</td>
 </tr>
 </tbody>
 </table>
+<p><em>Note: Bonus points can raise your score above 80</em></p>
 <hr>
 </section>
 <section id="academic-integrity" class="level2">
@@ -2685,9 +2501,9 @@ vertical-align: -.125em;
 <ul>
 <li>Forgetting to set your student ID</li>
 <li>Not saving the CSV file with the correct name</li>
-<li>Leaving TODO comments in the submission</li>
-<li>Missing business interpretations</li>
 <li>Submitting without running all cells</li>
+<li>Missing the two required visualizations</li>
+<li>Not answering the three key business questions</li>
 </ul>
 </section>
 <section id="getting-help" class="level3">
@@ -2718,9 +2534,11 @@ vertical-align: -.125em;
 <h3 class="anchored" data-anchor-id="expected-dataframe-shape">Expected DataFrame Shape</h3>
 <p>Your dataset should have approximately: - 3,000-4,000 transactions - 6 columns initially - 92 days of data (Oct 1 - Dec 31, 2024)</p>
 </section>
-<section id="sample-visualization" class="level3">
-<h3 class="anchored" data-anchor-id="sample-visualization">Sample Visualization</h3>
-<p>Your bar chart should look similar to this structure: - X-axis: Store names - Y-axis: Revenue values - Title, labels, and grid visible - Values displayed on bars</p>
+<section id="sample-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="sample-requirements">Sample Requirements</h3>
+<p><strong>Minimum Visualizations (2 required):</strong> 1. Bar chart showing store or product performance 2. Your choice of second visualization</p>
+<p><strong>Key Business Questions (3 required):</strong> 1. Which store has the highest revenue? 2. What is the best-selling product? 3. How do sales vary by time period?</p>
+<p>Remember: Focus on demonstrating understanding rather than perfection!</p>
 <hr>
 </section>
 </section>

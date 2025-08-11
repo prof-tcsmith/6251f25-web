@@ -77,12 +77,24 @@
         .reveal .columns .column-50.code-column {
             flex: 0 0 47% !important;
             max-width: 47% !important;
+            margin-right: 1.5% !important;
+        }
+        
+        /* Remove margin from last column to prevent overflow */
+        .reveal .columns .column-50.code-column:last-child {
+            margin-right: 0 !important;
         }
         
         /* When only column-50 (no code-column) - slightly wider */
         .reveal .columns .column-50:not(.code-column) {
             flex: 0 0 48% !important;
             max-width: 48% !important;
+            margin-right: 1% !important;
+        }
+        
+        /* Remove margin from last column */
+        .reveal .columns .column-50:not(.code-column):last-child {
+            margin-right: 0 !important;
         }
         
         /* Code blocks in code-column - optimized for dense code */

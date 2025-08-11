@@ -42,6 +42,39 @@
             border-radius: 3px;
             font-size: 0.6em;
         }
+        
+        /* Fix two-column code layouts */
+        /* When both columns have code - narrower with gap */
+        .reveal .columns .column-50.code-column {
+            flex: 0 0 47% !important;
+            max-width: 47% !important;
+        }
+        
+        /* When only column-50 (no code-column) - slightly wider */
+        .reveal .columns .column-50:not(.code-column) {
+            flex: 0 0 48% !important;
+            max-width: 48% !important;
+        }
+        
+        /* Code blocks in standard column-50 (not code-column) */
+        .reveal .columns .column-50:not(.code-column) pre {
+            max-height: 550px !important;
+            font-size: 0.48em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+        
+        /* Code blocks in code-column */
+        .reveal .columns .column-50.code-column pre {
+            max-height: 550px !important;
+            font-size: 0.46em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
     </style>
 </head>
 <body>
@@ -162,7 +195,7 @@ a = b = c = 0
                 <section>
                     <h2>Operators</h2>
                     <div class="columns">
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <h3>Arithmetic</h3>
                             <pre><code class="python">a = 10
 b = 3
@@ -174,7 +207,7 @@ print(a // b) # 3 (floor)
 print(a % b)  # 1 (remainder)
 print(a ** b) # 1000 (power)</code></pre>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <h3>Comparison</h3>
                             <pre><code class="python">x = 5
 y = 10
@@ -419,7 +452,7 @@ process("sum", 1, 2, 3, verbose=True)</code></pre>
                 <section>
                     <h2>Creating and Importing Python Modules</h2>
                     <div class="columns">
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <h4>File: ml_utils.py</h4>
                             <pre><code class="python"># ml_utils.py
 """Utility functions for ML tasks"""
@@ -442,7 +475,7 @@ def accuracy(y_true, y_pred):
                   if t == p)
     return correct / len(y_true)</code></pre>
                         </div>
-                        <div class="column-50">
+                        <div class="column-50 code-column">
                             <h4>Using in Notebook</h4>
                             <pre><code class="python"># In your notebook or script
 import ml_utils

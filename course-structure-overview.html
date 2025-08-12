@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Tim Smith">
+<meta name="dcterms.date" content="2025-01-01">
+
+<title>ISM6251: Course Structure Overview</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="course-structure-overview_files/libs/clipboard/clipboard.min.js"></script>
+<script src="course-structure-overview_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="course-structure-overview_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="course-structure-overview_files/libs/quarto-html/popper.min.js"></script>
+<script src="course-structure-overview_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="course-structure-overview_files/libs/quarto-html/anchor.min.js"></script>
+<link href="course-structure-overview_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="course-structure-overview_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="course-structure-overview_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="course-structure-overview_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="course-structure-overview_files/libs/bootstrap/bootstrap-abca7cf23c106facc1a9136e0efbb4fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#course-topic-hierarchies" id="toc-course-topic-hierarchies" class="nav-link active" data-scroll-target="#course-topic-hierarchies">Course Topic Hierarchies</a>
+  <ul class="collapse">
+  <li><a href="#week-1a-course-introduction" id="toc-week-1a-course-introduction" class="nav-link" data-scroll-target="#week-1a-course-introduction">Week 1a: Course Introduction</a></li>
+  <li><a href="#week-1b-ml-introduction" id="toc-week-1b-ml-introduction" class="nav-link" data-scroll-target="#week-1b-ml-introduction">Week 1b: ML Introduction</a></li>
+  <li><a href="#week-2-python-fundamentals" id="toc-week-2-python-fundamentals" class="nav-link" data-scroll-target="#week-2-python-fundamentals">Week 2: Python Fundamentals</a></li>
+  <li><a href="#week-3-data-preparation" id="toc-week-3-data-preparation" class="nav-link" data-scroll-target="#week-3-data-preparation">Week 3: Data Preparation</a></li>
+  <li><a href="#week-4-linear-regression" id="toc-week-4-linear-regression" class="nav-link" data-scroll-target="#week-4-linear-regression">Week 4: Linear Regression</a></li>
+  <li><a href="#week-5-classification-logistic-regression" id="toc-week-5-classification-logistic-regression" class="nav-link" data-scroll-target="#week-5-classification-logistic-regression">Week 5: Classification &amp; Logistic Regression</a></li>
+  <li><a href="#week-6-knn-distance-metrics" id="toc-week-6-knn-distance-metrics" class="nav-link" data-scroll-target="#week-6-knn-distance-metrics">Week 6: KNN &amp; Distance Metrics</a></li>
+  <li><a href="#week-7-support-vector-machines" id="toc-week-7-support-vector-machines" class="nav-link" data-scroll-target="#week-7-support-vector-machines">Week 7: Support Vector Machines</a></li>
+  </ul></li>
+  <li><a href="#critical-analysis-of-course-structure" id="toc-critical-analysis-of-course-structure" class="nav-link" data-scroll-target="#critical-analysis-of-course-structure">Critical Analysis of Course Structure</a>
+  <ul class="collapse">
+  <li><a href="#overall-assessment" id="toc-overall-assessment" class="nav-link" data-scroll-target="#overall-assessment">Overall Assessment</a></li>
+  <li><a href="#strengths-of-current-structure" id="toc-strengths-of-current-structure" class="nav-link" data-scroll-target="#strengths-of-current-structure">Strengths of Current Structure</a>
+  <ul class="collapse">
+  <li><a href="#progressive-complexity" id="toc-progressive-complexity" class="nav-link" data-scroll-target="#progressive-complexity">1. <strong>Progressive Complexity</strong></a></li>
+  <li><a href="#theory-practice-balance" id="toc-theory-practice-balance" class="nav-link" data-scroll-target="#theory-practice-balance">2. <strong>Theory-Practice Balance</strong></a></li>
+  <li><a href="#business-context-integration" id="toc-business-context-integration" class="nav-link" data-scroll-target="#business-context-integration">3. <strong>Business Context Integration</strong></a></li>
+  </ul></li>
+  <li><a href="#areas-for-improvement" id="toc-areas-for-improvement" class="nav-link" data-scroll-target="#areas-for-improvement">Areas for Improvement</a>
+  <ul class="collapse">
+  <li><a href="#missing-critical-topics" id="toc-missing-critical-topics" class="nav-link" data-scroll-target="#missing-critical-topics">1. <strong>Missing Critical Topics</strong></a></li>
+  <li><a href="#sequencing-issues" id="toc-sequencing-issues" class="nav-link" data-scroll-target="#sequencing-issues">2. <strong>Sequencing Issues</strong></a></li>
+  <li><a href="#depth-vs.-breadth-concerns" id="toc-depth-vs.-breadth-concerns" class="nav-link" data-scroll-target="#depth-vs.-breadth-concerns">3. <strong>Depth vs.&nbsp;Breadth Concerns</strong></a></li>
+  </ul></li>
+  <li><a href="#recommended-restructuring" id="toc-recommended-restructuring" class="nav-link" data-scroll-target="#recommended-restructuring">Recommended Restructuring</a>
+  <ul class="collapse">
+  <li><a href="#option-1-rebalanced-12-week-structure" id="toc-option-1-rebalanced-12-week-structure" class="nav-link" data-scroll-target="#option-1-rebalanced-12-week-structure">Option 1: Rebalanced 12-Week Structure</a></li>
+  <li><a href="#option-2-module-based-organization" id="toc-option-2-module-based-organization" class="nav-link" data-scroll-target="#option-2-module-based-organization">Option 2: Module-Based Organization</a></li>
+  </ul></li>
+  <li><a href="#specific-recommendations" id="toc-specific-recommendations" class="nav-link" data-scroll-target="#specific-recommendations">Specific Recommendations</a>
+  <ul class="collapse">
+  <li><a href="#create-prerequisites-module" id="toc-create-prerequisites-module" class="nav-link" data-scroll-target="#create-prerequisites-module">1. <strong>Create Prerequisites Module</strong></a></li>
+  <li><a href="#integrate-evaluation-framework" id="toc-integrate-evaluation-framework" class="nav-link" data-scroll-target="#integrate-evaluation-framework">2. <strong>Integrate Evaluation Framework</strong></a></li>
+  <li><a href="#add-practical-workshops" id="toc-add-practical-workshops" class="nav-link" data-scroll-target="#add-practical-workshops">3. <strong>Add Practical Workshops</strong></a></li>
+  <li><a href="#enhance-business-integration" id="toc-enhance-business-integration" class="nav-link" data-scroll-target="#enhance-business-integration">4. <strong>Enhance Business Integration</strong></a></li>
+  <li><a href="#include-modern-tools" id="toc-include-modern-tools" class="nav-link" data-scroll-target="#include-modern-tools">5. <strong>Include Modern Tools</strong></a></li>
+  <li><a href="#add-capstone-project-thread" id="toc-add-capstone-project-thread" class="nav-link" data-scroll-target="#add-capstone-project-thread">6. <strong>Add Capstone Project Thread</strong></a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ISM6251: Course Structure Overview</h1>
+<p class="subtitle lead">Hierarchical Topic Organization and Critical Analysis</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Tim Smith </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 1, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="course-topic-hierarchies" class="level1">
+<h1>Course Topic Hierarchies</h1>
+<p>This document presents the complete hierarchical structure of topics covered in ISM6251, followed by a critical analysis of the course organization.</p>
+<section id="week-1a-course-introduction" class="level2">
+<h2 class="anchored" data-anchor-id="week-1a-course-introduction">Week 1a: Course Introduction</h2>
+<pre><code>📚 Course Structure
+├── Welcome &amp; Overview
+│   ├── Course objectives
+│   ├── Learning outcomes
+│   └── Why ML for business?
+├── 12-Week Schedule
+│   ├── Foundations (Weeks 1-4)
+│   ├── Core ML (Weeks 5-8)
+│   └── Advanced (Weeks 9-12)
+└── Class Format
+    ├── Interactive lectures
+    ├── Hands-on coding
+    └── Business cases
+
+📊 Grading Components
+├── Assignments (40%)
+│   ├── Weekly programming
+│   └── Business applications
+├── Exams (30%)
+│   ├── Midterm exam
+│   └── Final exam
+├── Projects (20%)
+│   └── Real-world ML project
+└── Participation (10%)
+    └── Class engagement
+
+🔧 Technology Requirements
+├── Software Setup
+│   ├── Python 3.8+
+│   ├── Jupyter notebooks
+│   └── VS Code/PyCharm
+├── Libraries
+│   ├── NumPy, Pandas
+│   ├── Scikit-learn
+│   └── TensorFlow/PyTorch
+└── Platforms
+    ├── GitHub classroom
+    └── Canvas LMS
+
+📋 Course Policies
+├── Academic Integrity
+│   ├── Code attribution
+│   └── Collaboration rules
+├── Late Work
+│   └── 10% daily penalty
+└── Resources
+    ├── Office hours
+    ├── TA support
+    └── Study groups
+
+🚀 Getting Started
+├── Pre-requisites Check
+│   ├── Basic programming
+│   └── Statistics foundation
+├── First Week Tasks
+│   ├── Environment setup
+│   └── Diagnostic quiz
+└── Success Strategies
+    ├── Active participation
+    ├── Regular practice
+    └── Business thinking</code></pre>
+</section>
+<section id="week-1b-ml-introduction" class="level2">
+<h2 class="anchored" data-anchor-id="week-1b-ml-introduction">Week 1b: ML Introduction</h2>
+<pre><code>📖 Core Concepts
+├── What is Machine Learning?
+│   ├── Evolution of Intelligent Systems
+│   ├── Traditional vs ML Approach
+│   └── Key Differentiators
+├── Formal Definition
+│   ├── Task (T) - What to solve
+│   ├── Experience (E) - Learning data
+│   └── Performance (P) - Success metrics
+└── ML vs Traditional Programming
+    ├── Rule-based → Data-driven
+    ├── Explicit → Implicit logic
+    └── Static → Adaptive systems
+
+🎯 Types of Machine Learning
+├── Supervised Learning
+│   ├── Classification
+│   │   ├── Binary classification
+│   │   └── Multi-class problems
+│   └── Regression
+│       ├── Linear relationships
+│       └── Non-linear patterns
+├── Unsupervised Learning
+│   ├── Clustering (K-means, DBSCAN)
+│   └── Dimensionality Reduction (PCA)
+└── Reinforcement Learning
+    ├── Agent-Environment interaction
+    ├── Reward optimization
+    └── Q-learning, Policy gradient
+
+⚙️ ML Workflow
+├── 1. Problem Definition
+│   ├── Business objectives
+│   └── Success metrics
+├── 2. Data Collection
+│   ├── Source identification
+│   └── Quality assessment
+├── 3. Data Preparation
+│   ├── Cleaning &amp; validation
+│   └── Feature engineering
+├── 4. Model Selection
+│   ├── Algorithm choice
+│   └── Complexity tradeoffs
+├── 5. Model Training
+│   ├── Split strategies
+│   ├── Hyperparameter tuning
+│   └── Cross-validation
+├── 6. Model Evaluation
+│   ├── Classification metrics
+│   └── Regression metrics
+├── 7. Deployment
+│   ├── API services
+│   ├── Batch processing
+│   └── Edge deployment
+└── 8. Monitoring &amp; Maintenance
+    ├── Performance tracking
+    ├── Data drift detection
+    └── Model retraining
+
+💼 Business Applications
+├── Industry Sectors
+│   ├── Finance (fraud, credit)
+│   ├── Healthcare (diagnosis, drug)
+│   ├── Retail (recommendations)
+│   └── Manufacturing (quality, predictive)
+└── Success Stories
+    ├── Netflix recommendations
+    ├── Amazon forecasting
+    └── UPS route optimization</code></pre>
+</section>
+<section id="week-2-python-fundamentals" class="level2">
+<h2 class="anchored" data-anchor-id="week-2-python-fundamentals">Week 2: Python Fundamentals</h2>
+<pre><code>🐍 Python Basics
+├── Environment Setup
+│   ├── Python installation
+│   ├── Package managers (pip, conda)
+│   └── Virtual environments
+├── Core Syntax
+│   ├── Variables &amp; data types
+│   ├── Control flow (if, for, while)
+│   └── Functions &amp; scope
+└── Data Structures
+    ├── Lists &amp; tuples
+    ├── Dictionaries &amp; sets
+    └── List comprehensions
+
+📊 NumPy Essentials
+├── Array Operations
+│   ├── Creating arrays
+│   ├── Indexing &amp; slicing
+│   └── Broadcasting
+├── Mathematical Functions
+│   ├── Element-wise operations
+│   ├── Linear algebra
+│   └── Statistical functions
+└── Performance
+    ├── Vectorization benefits
+    └── Memory efficiency
+
+🐼 Pandas Fundamentals
+├── DataFrames &amp; Series
+│   ├── Creating DataFrames
+│   ├── Reading/writing files
+│   └── Data selection
+├── Data Manipulation
+│   ├── Filtering &amp; sorting
+│   ├── GroupBy operations
+│   └── Merging &amp; joining
+└── Time Series
+    ├── DateTime handling
+    └── Resampling
+
+📈 Data Visualization
+├── Matplotlib Basics
+│   ├── Line plots
+│   ├── Scatter plots
+│   └── Histograms
+├── Seaborn
+│   ├── Statistical plots
+│   ├── Heatmaps
+│   └── Pair plots
+└── Interactive Plots
+    └── Plotly basics
+
+🔧 Development Tools
+├── Jupyter Notebooks
+│   ├── Cell execution
+│   ├── Markdown integration
+│   └── Magic commands
+├── Debugging
+│   ├── Print debugging
+│   ├── Python debugger
+│   └── Error handling
+└── Version Control
+    ├── Git basics
+    └── GitHub workflow</code></pre>
+</section>
+<section id="week-3-data-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="week-3-data-preparation">Week 3: Data Preparation</h2>
+<pre><code>📊 Data Quality &amp; Cleaning
+├── Data Quality Assessment
+│   ├── Completeness checks
+│   ├── Consistency validation
+│   └── Accuracy verification
+├── Missing Data Handling
+│   ├── Detection methods
+│   ├── Imputation strategies
+│   │   ├── Mean/median/mode
+│   │   ├── Forward/backward fill
+│   │   └── KNN imputation
+│   └── Deletion approaches
+└── Outlier Detection
+    ├── Statistical methods (IQR, Z-score)
+    ├── Visualization techniques
+    └── Domain-based rules
+
+🔄 Data Transformation
+├── Scaling &amp; Normalization
+│   ├── Min-Max scaling
+│   ├── Standardization (Z-score)
+│   └── Robust scaling
+├── Encoding Categorical Variables
+│   ├── One-hot encoding
+│   ├── Label encoding
+│   ├── Target encoding
+│   └── Dummy variable trap
+└── Feature Engineering
+    ├── Creating new features
+    ├── Polynomial features
+    └── Interaction terms
+
+📈 Statistical Analysis
+├── Descriptive Statistics
+│   ├── Central tendency
+│   ├── Dispersion measures
+│   └── Distribution shape
+├── Correlation Analysis
+│   ├── Pearson correlation
+│   ├── Spearman correlation
+│   └── Correlation matrices
+└── Statistical Tests
+    ├── Normality tests
+    ├── T-tests
+    └── Chi-square tests
+
+🎯 Feature Selection
+├── Filter Methods
+│   ├── Variance threshold
+│   ├── Correlation threshold
+│   └── Mutual information
+├── Wrapper Methods
+│   ├── Forward selection
+│   ├── Backward elimination
+│   └── Recursive feature elimination
+└── Embedded Methods
+    ├── LASSO (L1)
+    ├── Ridge (L2)
+    └── Tree-based importance
+
+⚠️ Common Pitfalls
+├── Data Leakage
+│   └── Train-test contamination
+├── Sampling Bias
+│   └── Non-representative samples
+└── Overfitting Features
+    └── Too many engineered features</code></pre>
+</section>
+<section id="week-4-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="week-4-linear-regression">Week 4: Linear Regression</h2>
+<pre><code>📐 Fundamentals
+├── Simple Linear Regression
+│   ├── y = mx + b
+│   ├── Least squares method
+│   └── Interpretation
+├── Multiple Linear Regression
+│   ├── Multiple predictors
+│   ├── Matrix formulation
+│   └── Coefficient meaning
+└── Assumptions
+    ├── Linearity
+    ├── Independence
+    ├── Homoscedasticity
+    ├── Normality of residuals
+    └── No multicollinearity
+
+🔬 Model Building
+├── Ordinary Least Squares (OLS)
+│   ├── Normal equation
+│   ├── Gradient descent
+│   └── Computational complexity
+├── Feature Interactions
+│   ├── Cross-product terms
+│   ├── Business interpretation
+│   └── Connection to kernels
+└── Polynomial Regression
+    ├── Degree selection
+    ├── Overfitting risks
+    └── Regularization need
+
+📊 Model Evaluation
+├── Metrics
+│   ├── R-squared
+│   ├── Adjusted R-squared
+│   ├── MSE/RMSE/MAE
+│   └── MAPE
+├── Residual Analysis
+│   ├── Residual plots
+│   ├── Q-Q plots
+│   └── Pattern detection
+└── Cross-Validation
+    ├── K-fold CV
+    ├── Leave-one-out
+    └── Time series splits
+
+🎯 Regularization
+├── Ridge Regression (L2)
+│   ├── Penalty term: λΣβ²
+│   ├── Shrinkage effect
+│   └── All features kept
+├── LASSO (L1)
+│   ├── Penalty term: λΣ|β|
+│   ├── Feature selection
+│   └── Sparse solutions
+└── Elastic Net
+    ├── Combined L1+L2
+    ├── Best of both
+    └── Hyperparameter tuning
+
+💼 Business Applications
+├── Sales Forecasting
+├── Price Optimization
+├── Risk Assessment
+└── Demand Planning</code></pre>
+</section>
+<section id="week-5-classification-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="week-5-classification-logistic-regression">Week 5: Classification &amp; Logistic Regression</h2>
+<pre><code>📊 Classification Fundamentals
+├── Binary vs Multi-class
+│   ├── Problem formulation
+│   ├── Decision boundaries
+│   └── Class imbalance
+├── Linear Classifiers
+│   ├── Perceptron
+│   ├── Linear discriminant
+│   └── Separability
+└── Probabilistic View
+    ├── Class probabilities
+    ├── Decision thresholds
+    └── Confidence scores
+
+🎯 Logistic Regression
+├── Core Concepts
+│   ├── Sigmoid function: 1/(1+e^-z)
+│   ├── Log-odds interpretation
+│   └── Maximum likelihood
+├── Model Training
+│   ├── Gradient descent
+│   ├── Newton-Raphson
+│   └── Convergence criteria
+├── Multi-class Extension
+│   ├── One-vs-Rest (OvR)
+│   ├── One-vs-One (OvO)
+│   └── Softmax regression
+└── Regularization
+    ├── L1/L2 penalties
+    ├── C parameter tuning
+    └── Feature importance
+
+📈 Model Evaluation
+├── Confusion Matrix
+│   ├── TP, TN, FP, FN
+│   ├── Visual interpretation
+│   └── Multi-class extensions
+├── Key Metrics
+│   ├── Accuracy limitations
+│   ├── Precision &amp; Recall
+│   ├── F1-Score
+│   └── Matthews Correlation
+├── ROC Analysis
+│   ├── ROC curve
+│   ├── AUC interpretation
+│   └── Threshold selection
+└── Class Imbalance
+    ├── SMOTE
+    ├── Class weights
+    └── Stratified sampling
+
+⚙️ Advanced Topics
+├── Feature Engineering
+│   ├── Polynomial features
+│   ├── Interaction terms
+│   └── Domain features
+├── Ensemble Methods
+│   ├── Voting classifiers
+│   ├── Bagging
+│   └── Boosting preview
+└── Calibration
+    ├── Platt scaling
+    ├── Isotonic regression
+    └── Reliability diagrams
+
+💼 Applications
+├── Credit Scoring
+├── Medical Diagnosis
+├── Customer Churn
+└── Fraud Detection</code></pre>
+</section>
+<section id="week-6-knn-distance-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="week-6-knn-distance-metrics">Week 6: KNN &amp; Distance Metrics</h2>
+<pre><code>🎯 KNN Fundamentals
+├── Core Algorithm
+│   ├── Instance-based learning
+│   ├── Lazy vs eager learning
+│   └── Non-parametric nature
+├── Classification Process
+│   ├── Distance calculation
+│   ├── K nearest selection
+│   └── Majority voting
+└── Regression with KNN
+    ├── Average of neighbors
+    ├── Weighted average
+    └── Local smoothing
+
+📏 Distance Metrics
+├── Minkowski Family
+│   ├── Euclidean (p=2): √Σ(xi-yi)²
+│   ├── Manhattan (p=1): Σ|xi-yi|
+│   └── Chebyshev (p=∞): max|xi-yi|
+├── Specialized Metrics
+│   ├── Cosine similarity
+│   ├── Hamming distance
+│   └── Mahalanobis distance
+└── Metric Selection
+    ├── Data type considerations
+    ├── Scale sensitivity
+    └── Curse of dimensionality
+
+⚙️ Implementation Details
+├── K Selection
+│   ├── Odd vs even K
+│   ├── Cross-validation
+│   └── Elbow method
+├── Optimization Techniques
+│   ├── KD-trees
+│   ├── Ball trees
+│   └── Approximate methods
+└── Weighted KNN
+    ├── Distance weighting
+    ├── Kernel functions
+    └── Adaptive K
+
+🔧 Preprocessing for KNN
+├── Feature Scaling
+│   ├── Standardization critical
+│   ├── Min-max normalization
+│   └── Robust scaling
+├── Dimensionality Reduction
+│   ├── PCA preprocessing
+│   ├── Feature selection
+│   └── Manifold learning
+└── Missing Values
+    ├── Imputation strategies
+    └── Distance modifications
+
+📊 Evaluation &amp; Applications
+├── Performance Considerations
+│   ├── Computational complexity
+│   ├── Memory requirements
+│   └── Prediction speed
+├── Strengths &amp; Weaknesses
+│   ├── ✓ Simple, interpretable
+│   ├── ✓ No training phase
+│   ├── ✗ Curse of dimensionality
+│   └── ✗ Sensitive to noise
+└── Use Cases
+    ├── Recommendation systems
+    ├── Pattern recognition
+    └── Anomaly detection</code></pre>
+</section>
+<section id="week-7-support-vector-machines" class="level2">
+<h2 class="anchored" data-anchor-id="week-7-support-vector-machines">Week 7: Support Vector Machines</h2>
+<pre><code>📐 Linear SVM
+├── Maximum Margin Classifier
+│   ├── Separating hyperplane
+│   ├── Support vectors
+│   └── Margin maximization
+├── Mathematical Foundation
+│   ├── Optimization problem
+│   ├── Lagrange multipliers
+│   └── KKT conditions
+└── Soft Margin SVM
+    ├── Slack variables (ξ)
+    ├── C parameter tuning
+    └── Error tolerance
+
+🌀 Kernel Trick
+├── Non-linear Transformation
+│   ├── Feature space mapping φ(x)
+│   ├── Implicit computation
+│   └── Kernel functions K(x,y)
+├── Common Kernels
+│   ├── Linear: x·y
+│   ├── Polynomial: (γx·y + r)^d
+│   ├── RBF: exp(-γ||x-y||²)
+│   └── Sigmoid: tanh(γx·y + r)
+└── Kernel Selection
+    ├── Data complexity
+    ├── Computational cost
+    └── Cross-validation
+
+⚙️ Implementation
+├── Training Process
+│   ├── Quadratic programming
+│   ├── SMO algorithm
+│   └── LibSVM/LibLinear
+├── Hyperparameters
+│   ├── C: regularization
+│   ├── γ: kernel coefficient
+│   ├── degree: polynomial
+│   └── Grid search
+└── Multi-class SVM
+    ├── One-vs-Rest
+    ├── One-vs-One
+    └── ECOC strategies
+
+📊 Practical Aspects
+├── Preprocessing
+│   ├── Feature scaling crucial
+│   ├── Outlier sensitivity
+│   └── Dimensionality
+├── Model Selection
+│   ├── Cross-validation
+│   ├── Nested CV
+│   └── Performance metrics
+└── Computational Considerations
+    ├── O(n²) to O(n³) training
+    ├── Memory requirements
+    └── Sparse data handling
+
+💼 Applications &amp; Extensions
+├── Text Classification
+│   ├── Document categorization
+│   └── Sentiment analysis
+├── Image Recognition
+│   ├── Face detection
+│   └── Object classification
+├── SVM Variants
+│   ├── SVR (regression)
+│   ├── One-class SVM
+│   └── Structured SVM
+└── Comparison with Others
+    ├── vs Logistic Regression
+    ├── vs Neural Networks
+    └── vs Random Forests</code></pre>
+</section>
+</section>
+<section id="critical-analysis-of-course-structure" class="level1">
+<h1>Critical Analysis of Course Structure</h1>
+<section id="overall-assessment" class="level2">
+<h2 class="anchored" data-anchor-id="overall-assessment">Overall Assessment</h2>
+<p>The course demonstrates a well-thought-out progression from foundational concepts to advanced machine learning techniques. The structure follows a logical learning path that builds knowledge incrementally. However, there are several areas where the organization could be enhanced for better learning outcomes.</p>
+</section>
+<section id="strengths-of-current-structure" class="level2">
+<h2 class="anchored" data-anchor-id="strengths-of-current-structure">Strengths of Current Structure</h2>
+<section id="progressive-complexity" class="level3">
+<h3 class="anchored" data-anchor-id="progressive-complexity">1. <strong>Progressive Complexity</strong></h3>
+<p>The course effectively builds from basic Python programming (Week 2) through data preparation (Week 3) to increasingly complex ML algorithms (Weeks 4-7). This scaffolding approach helps students develop confidence before tackling advanced topics.</p>
+</section>
+<section id="theory-practice-balance" class="level3">
+<h3 class="anchored" data-anchor-id="theory-practice-balance">2. <strong>Theory-Practice Balance</strong></h3>
+<p>Each week appears to blend theoretical foundations with practical implementation, which is essential for business students who need both conceptual understanding and hands-on skills.</p>
+</section>
+<section id="business-context-integration" class="level3">
+<h3 class="anchored" data-anchor-id="business-context-integration">3. <strong>Business Context Integration</strong></h3>
+<p>The consistent inclusion of business applications and use cases throughout each week helps students understand the practical relevance of technical concepts.</p>
+</section>
+</section>
+<section id="areas-for-improvement" class="level2">
+<h2 class="anchored" data-anchor-id="areas-for-improvement">Areas for Improvement</h2>
+<section id="missing-critical-topics" class="level3">
+<h3 class="anchored" data-anchor-id="missing-critical-topics">1. <strong>Missing Critical Topics</strong></h3>
+<p>Several important topics appear to be absent or underrepresented:</p>
+<ul>
+<li><strong>Deep Learning Fundamentals</strong>: Given the 12-week structure mentioned in Week 1a, weeks 8-12 content is missing. This should include:
+<ul>
+<li>Neural network basics</li>
+<li>Deep learning frameworks</li>
+<li>CNNs for computer vision</li>
+<li>RNNs/LSTMs for sequential data</li>
+<li>Transfer learning</li>
+</ul></li>
+<li><strong>Ensemble Methods</strong>: While briefly mentioned in Week 5, dedicated coverage is needed for:
+<ul>
+<li>Random Forests</li>
+<li>Gradient Boosting (XGBoost, LightGBM)</li>
+<li>Stacking and blending</li>
+</ul></li>
+<li><strong>Model Deployment &amp; MLOps</strong>: Critical for business applications but not adequately covered:
+<ul>
+<li>Model serialization</li>
+<li>API development</li>
+<li>Docker containers</li>
+<li>Cloud deployment (AWS, Azure, GCP)</li>
+<li>Model monitoring in production</li>
+</ul></li>
+<li><strong>Time Series Analysis</strong>: Important for business forecasting but absent:
+<ul>
+<li>ARIMA models</li>
+<li>Seasonal decomposition</li>
+<li>Prophet and modern approaches</li>
+</ul></li>
+</ul>
+</section>
+<section id="sequencing-issues" class="level3">
+<h3 class="anchored" data-anchor-id="sequencing-issues">2. <strong>Sequencing Issues</strong></h3>
+<ul>
+<li><p><strong>Feature Engineering Placement</strong>: Currently split between Week 3 (basic) and Week 4 (interactions). Consider consolidating or creating a dedicated module after students understand basic modeling.</p></li>
+<li><p><strong>Evaluation Metrics Redundancy</strong>: Model evaluation appears in multiple weeks (4, 5, 6, 7). Consider a unified evaluation framework introduced early and referenced throughout.</p></li>
+<li><p><strong>Statistical Foundations</strong>: Week 3 includes statistical analysis, but students might benefit from this earlier (perhaps Week 2) as it underlies all ML concepts.</p></li>
+</ul>
+</section>
+<section id="depth-vs.-breadth-concerns" class="level3">
+<h3 class="anchored" data-anchor-id="depth-vs.-breadth-concerns">3. <strong>Depth vs.&nbsp;Breadth Concerns</strong></h3>
+<ul>
+<li><p><strong>Week 2 Scope</strong>: Attempting to cover Python basics, NumPy, Pandas, visualization, and development tools in one week seems ambitious. Consider splitting into two weeks or providing pre-course preparation.</p></li>
+<li><p><strong>SVM Complexity</strong>: Week 7’s SVM content is quite theoretical (Lagrange multipliers, KKT conditions). For business students, consider emphasizing practical usage over mathematical derivations.</p></li>
+</ul>
+</section>
+</section>
+<section id="recommended-restructuring" class="level2">
+<h2 class="anchored" data-anchor-id="recommended-restructuring">Recommended Restructuring</h2>
+<section id="option-1-rebalanced-12-week-structure" class="level3">
+<h3 class="anchored" data-anchor-id="option-1-rebalanced-12-week-structure">Option 1: Rebalanced 12-Week Structure</h3>
+<pre><code>Weeks 1-2: Foundations
+- Week 1: Course intro + ML overview (current 1a &amp; 1b)
+- Week 2: Python &amp; statistical foundations (expanded)
+
+Weeks 3-4: Data Preparation
+- Week 3: Data quality, cleaning, and transformation
+- Week 4: Feature engineering and selection (consolidated)
+
+Weeks 5-8: Core ML Algorithms
+- Week 5: Linear models (regression &amp; logistic)
+- Week 6: Tree-based methods (decision trees, Random Forest)
+- Week 7: Ensemble methods (boosting, stacking)
+- Week 8: Instance-based methods (KNN) &amp; SVM
+
+Weeks 9-11: Advanced Topics
+- Week 9: Neural networks &amp; deep learning basics
+- Week 10: Unsupervised learning (clustering, PCA)
+- Week 11: Time series &amp; specialized applications
+
+Week 12: Integration &amp; Deployment
+- Model deployment, MLOps, and course project presentations</code></pre>
+</section>
+<section id="option-2-module-based-organization" class="level3">
+<h3 class="anchored" data-anchor-id="option-2-module-based-organization">Option 2: Module-Based Organization</h3>
+<p>Instead of weekly topics, organize into modules that can flex based on student progress:</p>
+<pre><code>Module 1: Foundations (3-4 weeks)
+- Programming skills
+- Statistical concepts
+- Data manipulation
+- ML overview
+
+Module 2: Supervised Learning (4-5 weeks)
+- Regression methods
+- Classification algorithms
+- Ensemble techniques
+- Evaluation frameworks
+
+Module 3: Advanced Topics (2-3 weeks)
+- Unsupervised learning
+- Deep learning introduction
+- Special topics (NLP, computer vision basics)
+
+Module 4: Application &amp; Deployment (1-2 weeks)
+- Real-world projects
+- Deployment strategies
+- Ethics and bias</code></pre>
+</section>
+</section>
+<section id="specific-recommendations" class="level2">
+<h2 class="anchored" data-anchor-id="specific-recommendations">Specific Recommendations</h2>
+<section id="create-prerequisites-module" class="level3">
+<h3 class="anchored" data-anchor-id="create-prerequisites-module">1. <strong>Create Prerequisites Module</strong></h3>
+<p>Develop a pre-course module covering Python basics and statistical foundations, allowing Week 2 to focus on ML-specific libraries and techniques.</p>
+</section>
+<section id="integrate-evaluation-framework" class="level3">
+<h3 class="anchored" data-anchor-id="integrate-evaluation-framework">2. <strong>Integrate Evaluation Framework</strong></h3>
+<p>Introduce a comprehensive evaluation framework in Week 3 that’s consistently applied throughout, rather than re-teaching metrics in each algorithm week.</p>
+</section>
+<section id="add-practical-workshops" class="level3">
+<h3 class="anchored" data-anchor-id="add-practical-workshops">3. <strong>Add Practical Workshops</strong></h3>
+<p>Include dedicated workshop sessions for: - Kaggle competition walkthroughs - Real dataset challenges - Industry guest speakers - Deployment exercises</p>
+</section>
+<section id="enhance-business-integration" class="level3">
+<h3 class="anchored" data-anchor-id="enhance-business-integration">4. <strong>Enhance Business Integration</strong></h3>
+<p>Each week should include: - A business case study - ROI calculations for ML projects - Stakeholder communication exercises - Ethical considerations</p>
+</section>
+<section id="include-modern-tools" class="level3">
+<h3 class="anchored" data-anchor-id="include-modern-tools">5. <strong>Include Modern Tools</strong></h3>
+<p>Update tool coverage to include: - AutoML platforms (H2O, AutoSklearn) - Experiment tracking (MLflow, Weights &amp; Biases) - Cloud ML services - Low-code ML platforms</p>
+</section>
+<section id="add-capstone-project-thread" class="level3">
+<h3 class="anchored" data-anchor-id="add-capstone-project-thread">6. <strong>Add Capstone Project Thread</strong></h3>
+<p>Introduce a semester-long project that builds incrementally: - Week 2-3: Problem definition and data collection - Week 4-5: Initial modeling - Week 6-8: Model improvement - Week 9-11: Advanced techniques - Week 12: Deployment and presentation</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The current course structure provides a solid foundation for machine learning education with good progressive complexity and business integration. However, to better serve business students in 2025, the course would benefit from:</p>
+<ol type="1">
+<li>More comprehensive coverage of modern ML topics (deep learning, MLOps)</li>
+<li>Better sequencing to reduce redundancy and improve flow</li>
+<li>Stronger emphasis on practical deployment and business value</li>
+<li>Integration of contemporary tools and platforms</li>
+<li>A clearer path from theory to production-ready applications</li>
+</ol>
+<p>These improvements would transform the course from a traditional ML survey into a more practical, business-focused program that prepares students for real-world ML implementation and management.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

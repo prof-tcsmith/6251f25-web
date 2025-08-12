@@ -1,0 +1,2326 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 7: Support Vector Machines (SVM/SVC)</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Common slide styles -->
+    <link rel="stylesheet" href="../common-slides.css">
+    
+    <!-- Page-specific styles for SVM visualizations -->
+    <style>
+        /* MathML styling */
+        math {
+            font-size: 1.1em;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .math-equation math {
+            font-size: 1.2em;
+        }
+        
+        /* SVM-specific styling */
+        .svm-concept-box {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(106, 90, 205, 0.1) 100%);
+            border: 2px solid #4a90e2;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .margin-illustration {
+            background: rgba(255, 239, 213, 0.3);
+            border-left: 4px solid #ff9800;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        .kernel-box {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.1) 0%, rgba(103, 58, 183, 0.1) 100%);
+            border: 2px solid #9c27b0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .math-equation {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .visualization-container {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .support-vector-highlight {
+            background: rgba(255, 193, 7, 0.2);
+            border: 2px solid #ffc107;
+            border-radius: 4px;
+            padding: 5px;
+            display: inline-block;
+        }
+        
+        /* 3D visualization styles */
+        .three-d-container {
+            perspective: 1000px;
+            margin: 20px auto;
+        }
+        
+        .comparison-table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 0.8em;
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(135deg, #1e3a5f 0%, #4a90e2 100%);
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        /* Animation for kernel transformation */
+        @keyframes kernelTransform {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            50% { transform: rotateX(30deg) rotateY(45deg); }
+            100% { transform: rotateX(0deg) rotateY(0deg); }
+        }
+        
+        .animated-transform {
+            animation: kernelTransform 10s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section>
+                <h1>Support Vector Machines</h1>
+                <h3 style="border: none; text-align: center; color: #666;">Finding Optimal Decision Boundaries</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">Maximum Margin Classification & The Kernel Trick</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251 | Week 7</strong><br>
+                    Linear SVM • Non-linear Classification • Kernel Methods • Business Applications
+                </p>
+            </section>
+
+            <!-- Topic Overview Hierarchy -->
+            <section>
+                <h2>Week 7: Support Vector Machines - Topic Hierarchy</h2>
+                
+                <!-- Learning Path at the top -->
+                <div style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 1em; text-align: center; margin: 0; color: white; font-weight: bold;">
+                        Learning Path: Maximum Margin → Mathematical Foundation → Kernel Trick → Hyperparameter Tuning → Applications
+                    </p>
+                </div>
+                
+                <!-- Two-column ASCII tree layout -->
+                <div style="display: flex; gap: 20px; height: 450px;">
+                    <!-- Left Column -->
+                    <div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+                        <pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #e74c3c;">SUPPORT VECTOR MACHINES: OPTIMAL BOUNDARIES</strong>
+
+<strong style="color: #3498db;">📚 Learning Objectives</strong>
+├── Maximum Margin Intuition
+├── Support Vectors Role
+├── Non-linear Separability
+├── Kernel Trick Mastery
+├── Kernel Function Comparison
+├── Hyperparameter Tuning
+├── Multi-class Strategies
+└── Business Applications
+
+<strong style="color: #9b59b6;">🎯 Part 1: The SVM Revolution</strong>
+├── Why SVM Changed ML
+│   ├── Maximum Margin Principle
+│   ├── Structural Risk Minimization
+│   └── Generalization Power
+├── Maximum Margin Intuition
+│   ├── Widest Street Analogy
+│   ├── Decision Boundary
+│   ├── Margin Definition
+│   └── Optimal Hyperplane
+└── Support Vectors
+    ├── Critical Training Points
+    ├── Define the Boundary
+    ├── Sparse Representation
+    └── Robustness to Outliers
+
+<strong style="color: #e67e22;">📐 Part 2: Mathematical Foundation</strong>
+├── Hard Margin SVM
+│   ├── Optimization: min ½||w||²
+│   ├── Constraints: yi(w·xi + b) ≥ 1
+│   ├── Lagrangian Formulation
+│   └── Quadratic Programming
+├── Soft Margin SVM
+│   ├── Slack Variables (ξi)
+│   ├── <span style="background: #fff3cd; padding: 1px;">⚠️ C Parameter Trade-off</span>
+│   ├── C → 0: Wide margin, errors OK
+│   └── C → ∞: Narrow margin, no errors
+└── Dual Formulation
+    ├── Depends Only on Dot Products
+    ├── Enables Kernel Trick
+    └── Sparse Solution (αi = 0 for non-SVs)
+                        </pre>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+                        <pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #16a085;">🔮 Part 3: Non-linear Classification</strong>
+├── The Circle Problem
+│   ├── Linear Boundary Fails
+│   ├── Need Feature Transformation
+│   └── 2D → 3D Solution
+├── Feature Space Transformation
+│   ├── φ: x → φ(x)
+│   ├── Add z = x² + y²
+│   ├── Linear in New Space
+│   └── Non-linear in Original Space
+└── Computational Challenge
+    ├── High-Dimensional Spaces
+    ├── Expensive Transformations
+    └── Solution: Kernel Trick
+
+<strong style="color: #d35400;">✨ Part 4: The Kernel Trick</strong>
+├── Key Insight
+│   ├── K(x,y) = φ(x)·φ(y)
+│   ├── Compute Without Transform!
+│   ├── Implicit High-D Space
+│   └── Computational Efficiency
+├── Common Kernels
+│   ├── Linear: K(x,y) = x·y
+│   ├── Polynomial: K(x,y) = (x·y + r)^d
+│   ├── RBF: K(x,y) = exp(-γ||x-y||²)
+│   └── Sigmoid: K(x,y) = tanh(αx·y + c)
+└── RBF Kernel (Gaussian)
+    ├── Most Popular Choice
+    ├── Infinite Dimensions
+    ├── γ Controls Flexibility
+    └── Local Influence
+
+<strong style="color: #27ae60;">🎛️ Part 5: Hyperparameter Tuning</strong>
+├── Key Parameters
+│   ├── C: Regularization Strength
+│   ├── γ (gamma): RBF Width
+│   ├── degree: Polynomial Degree
+│   └── kernel: Type Selection
+├── Tuning Strategies
+│   ├── Grid Search
+│   ├── Random Search
+│   ├── Bayesian Optimization
+│   └── Cross-Validation
+├── Parameter Effects
+│   ├── Low C, Low γ: Simple, Smooth
+│   ├── Low C, High γ: Underfitting
+│   ├── High C, Low γ: Some Complexity
+│   └── High C, High γ: Overfitting Risk
+└── Best Practices
+    ├── Always Scale Features
+    ├── Use Stratified CV
+    ├── Log-scale for C and γ
+    └── Monitor Training Time
+
+<strong style="color: #c0392b;">💼 Part 6: Applications & Advanced</strong>
+├── Business Applications
+│   ├── Text Classification
+│   ├── Image Recognition
+│   ├── Bioinformatics
+│   └── Financial Forecasting
+├── Multi-class Strategies
+│   ├── One-vs-Rest (OvR)
+│   ├── One-vs-One (OvO)
+│   └── Error Correcting Codes
+├── SVM for Regression (SVR)
+│   ├── ε-insensitive Loss
+│   └── Tube Around Function
+└── Key Takeaways
+    ├── Powerful for High-D Data
+    ├── Kernel Choice Critical
+    ├── Feature Scaling Essential
+    └── Next: Ensemble Methods
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Learning Objectives -->
+            <section>
+                <h2>Learning Objectives</h2>
+                <div class="info-box">
+                    <p><strong>By the end of this session, you will be able to:</strong></p>
+                </div>
+                <ul>
+                    <li>Understand the intuition behind Support Vector Machines</li>
+                    <li>Grasp the concept of maximum margin classification</li>
+                    <li>Identify support vectors and their role in defining decision boundaries</li>
+                    <li>Understand how SVMs handle non-linearly separable data</li>
+                    <li>Master the kernel trick for transforming feature spaces</li>
+                    <li>Compare different kernel functions (linear, polynomial, RBF, sigmoid)</li>
+                    <li>Understand and tune SVM hyperparameters (C, gamma, kernel parameters)</li>
+                    <li>Apply systematic hyperparameter tuning strategies (Grid Search, Random Search, Bayesian Optimization)</li>
+                    <li>Use cross-validation for robust model selection</li>
+                    <li>Handle class imbalance with SVMs using class weights</li>
+                    <li>Apply SVMs to real-world business problems (fraud detection, customer segmentation)</li>
+                    <li>Understand the trade-offs between SVMs and other classifiers</li>
+                </ul>
+            </section>
+
+            <!-- Part 1: Introduction to SVM -->
+            <section>
+                <section>
+                    <h2>Part 1: The SVM Revolution</h2>
+                    <h3>Why Support Vector Machines Changed Machine Learning</h3>
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Historical Context</h4>
+                            <ul>
+                                <li>Developed by Vapnik & Cortes (1995)</li>
+                                <li>Based on statistical learning theory</li>
+                                <li>Dominated ML competitions in late 1990s/early 2000s</li>
+                                <li>Still widely used in industry today</li>
+                            </ul>
+                        </div>
+                        <div class="column-50">
+                            <h4>Key Advantages</h4>
+                            <ul>
+                                <li>Effective in high-dimensional spaces</li>
+                                <li>Memory efficient (uses subset of points)</li>
+                                <li>Versatile through kernel functions</li>
+                                <li>Strong theoretical foundations</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="svm-concept-box">
+                        <strong>Core Idea:</strong> Find the hyperplane that best separates classes with the maximum margin between them
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Intuition: Maximum Margin</h2>
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>The Problem with Simple Boundaries</h4>
+                            <div class="visualization-container">
+                                <svg width="400" height="300" viewBox="0 0 400 300">
+                                    <!-- Multiple possible decision boundaries -->
+                                    <line x1="50" y1="250" x2="350" y2="50" stroke="#ff9999" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                                    <line x1="100" y1="250" x2="300" y2="50" stroke="#ff9999" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                                    <line x1="150" y1="250" x2="250" y2="50" stroke="#ff9999" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                                    
+                                    <!-- Class 1 points (blue circles) -->
+                                    <circle cx="80" cy="80" r="6" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    <circle cx="120" cy="100" r="6" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    <circle cx="100" cy="140" r="6" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    <circle cx="140" cy="120" r="6" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    <circle cx="60" cy="120" r="6" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    
+                                    <!-- Class 2 points (red squares) -->
+                                    <rect x="250" y="160" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    <rect x="280" y="140" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    <rect x="300" y="180" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    <rect x="320" y="200" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    <rect x="270" y="200" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    
+                                    <text x="200" y="20" text-anchor="middle" font-size="14" font-weight="bold">Many Possible Boundaries</text>
+                                    <text x="30" y="290" font-size="12" fill="#666">All boundaries classify correctly, but which is best?</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="column-50">
+                            <h4>The SVM Solution</h4>
+                            <div class="visualization-container">
+                                <svg width="420" height="300" viewBox="0 0 420 300">
+                                    <!-- Define arrow markers -->
+                                    <defs>
+                                        <marker id="arrowhead-green" markerWidth="5" markerHeight="3" refX="5" refY="1.5" orient="auto">
+                                            <polygon points="0 0, 5 1.5, 0 3" fill="#4CAF50"/>
+                                        </marker>
+                                        <marker id="arrowhead-orange" markerWidth="5" markerHeight="3" refX="5" refY="1.5" orient="auto">
+                                            <polygon points="0 0, 5 1.5, 0 3" fill="orange"/>
+                                        </marker>
+                                        <marker id="arrowhead-purple" markerWidth="5" markerHeight="3" refX="5" refY="1.5" orient="auto">
+                                            <polygon points="0 0, 5 1.5, 0 3" fill="#9C27B0"/>
+                                        </marker>
+                                    </defs>
+                                    
+                                    <!-- Margin area (shaded) -->
+                                    <polygon points="70,210 250,50 330,90 150,250" fill="#4CAF50" opacity="0.1"/>
+                                    
+                                    <!-- Margin boundaries (support vector planes) -->
+                                    <line x1="70" y1="210" x2="250" y2="50" stroke="#4CAF50" stroke-width="2" stroke-dasharray="4,2"/>
+                                    <line x1="150" y1="250" x2="330" y2="90" stroke="#4CAF50" stroke-width="2" stroke-dasharray="4,2"/>
+                                    
+                                    <!-- Optimal decision boundary (middle line) -->
+                                    <line x1="110" y1="230" x2="290" y2="70" stroke="#4CAF50" stroke-width="3"/>
+                                    
+                                    <!-- Class 1 points (blue circles) -->
+                                    <!-- Support vectors on upper margin -->
+                                    <circle cx="120" cy="115" r="6" fill="blue" stroke="orange" stroke-width="3"/>
+                                    <circle cx="160" cy="130" r="6" fill="blue" stroke="orange" stroke-width="3"/>
+                                    
+                                    <!-- Other blue points -->
+                                    <circle cx="80" cy="80" r="6" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    <circle cx="100" cy="90" r="6" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    <circle cx="60" cy="100" r="6" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    
+                                    <!-- Class 2 points (red squares) -->
+                                    <!-- Support vector on lower margin -->
+                                    <rect x="234" y="174" width="12" height="12" fill="red" stroke="orange" stroke-width="3"/>
+                                    
+                                    <!-- Other red points -->
+                                    <rect x="270" y="160" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    <rect x="290" y="180" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    <rect x="310" y="200" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    <rect x="260" y="200" width="12" height="12" fill="red" stroke="darkred" stroke-width="2"/>
+                                    
+                                    <!-- Labels and Annotations -->
+                                    <text x="210" y="20" text-anchor="middle" font-size="14" font-weight="bold">Maximum Margin Classifier</text>
+                                    
+                                    <!-- Upper margin boundary label with arrow pointing to top of line -->
+                                    <text x="280" y="43" font-size="9" fill="#4CAF50" font-weight="bold">Positive Margin</text>
+                                    <text x="280" y="55" font-size="8" fill="#4CAF50">(w·x + b = +1)</text>
+                                    <line x1="280" y1="58" x2="250" y2="50" stroke="#4CAF50" stroke-width="1" marker-end="url(#arrowhead-green)"/>
+                                    
+                                    <!-- Decision boundary label with arrow pointing to top of line -->
+                                    <text x="320" y="63" font-size="10" fill="#4CAF50" font-weight="bold">Decision Boundary</text>
+                                    <text x="320" y="75" font-size="9" fill="#4CAF50">(w·x + b = 0)</text>
+                                    <line x1="320" y1="78" x2="290" y2="70" stroke="#4CAF50" stroke-width="1" marker-end="url(#arrowhead-green)"/>
+                                    
+                                    <!-- Lower margin boundary label with arrow pointing to top of line -->
+                                    <text x="350" y="83" font-size="9" fill="#4CAF50" font-weight="bold">Negative Margin</text>
+                                    <text x="350" y="95" font-size="8" fill="#4CAF50">(w·x + b = -1)</text>
+                                    <line x1="350" y1="98" x2="330" y2="90" stroke="#4CAF50" stroke-width="1" marker-end="url(#arrowhead-green)"/>
+                                    
+                                    <!-- Support vector annotations with arrows pointing to actual support vectors -->
+                                    <text x="35" y="140" font-size="9" fill="orange" font-weight="bold">Support Vector</text>
+                                    <line x1="90" y1="135" x2="115" y2="118" stroke="orange" stroke-width="1" marker-end="url(#arrowhead-orange)"/>
+                                    
+                                    <text x="195" y="108" font-size="9" fill="orange">Support Vector</text>
+                                    <line x1="190" y1="105" x2="165" y2="128" stroke="orange" stroke-width="1" marker-end="url(#arrowhead-orange)"/>
+                                    
+                                    <text x="275" y="155" font-size="9" fill="orange">Support Vector</text>
+                                    <line x1="270" y1="155" x2="245" y2="175" stroke="orange" stroke-width="1" marker-end="url(#arrowhead-orange)"/>
+                                    
+                                    <!-- Margin width indicator perpendicular to boundaries (moved down and left 10px) -->
+                                    <line x1="150" y1="140" x2="190" y2="160" stroke="#9C27B0" stroke-width="2" stroke-dasharray="2,2"/>
+                                    <circle cx="150" cy="140" r="2" fill="#9C27B0"/>
+                                    <circle cx="190" cy="160" r="2" fill="#9C27B0"/>
+                                    <text x="160" y="155" font-size="9" fill="#9C27B0" font-weight="bold">Margin</text>
+                                    <text x="162" y="167" font-size="8" fill="#9C27B0">2/||w||</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 15px;">
+                        <strong>Three Key Components:</strong>
+                        <ul style="font-size: 0.85em; margin-top: 5px;">
+                            <li><strong>Support Vectors:</strong> The critical data points (with orange borders) that touch the margin boundaries and define the SVM solution</li>
+                            <li><strong>Margins:</strong> The parallel dashed lines at distance 1/||w|| from the decision boundary where support vectors lie</li>
+                            <li><strong>Decision Boundary:</strong> The optimal separating hyperplane (solid line) equidistant from both margin boundaries</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="margin-illustration">
+                        <strong>Key Insight:</strong> Only the support vectors matter for defining the boundary - you could remove all other points and get the same solution!
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Support Vectors: The Critical Points</h2>
+                    <div class="columns">
+                        <div class="column-60">
+                            <h4>What Are Support Vectors?</h4>
+                            <ul>
+                                <li><span class="support-vector-highlight">Support vectors</span> are the data points closest to the decision boundary</li>
+                                <li>They "support" or define the position of the hyperplane</li>
+                                <li>Removing other points doesn't change the boundary</li>
+                                <li>Removing a support vector changes the boundary</li>
+                            </ul>
+                            
+                            <div class="info-box">
+                                <strong>Memory Efficiency:</strong> SVM only needs to store support vectors for prediction, not the entire training set
+                            </div>
+                        </div>
+                        <div class="column-40 code-column">
+                            <pre><code class="python"># Identifying support vectors
+from sklearn import svm
+import numpy as np
+
+# Train SVM
+clf = svm.SVC(kernel='linear')
+clf.fit(X_train, y_train)
+
+# Get support vectors
+support_vectors = clf.support_vectors_
+n_support = clf.n_support_
+
+print(f"Total training points: {len(X_train)}")
+print(f"Support vectors: {len(support_vectors)}")
+print(f"Class 0: {n_support[0]} vectors")
+print(f"Class 1: {n_support[1]} vectors")
+print(f"Efficiency: {len(support_vectors)/len(X_train):.1%}")
+
+# Support vector indices
+sv_indices = clf.support_
+print(f"Indices: {sv_indices[:5]}...")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 2: Mathematical Foundation -->
+            <section>
+                <section>
+                    <h2>Part 2: The Mathematics of SVM</h2>
+                    <h3>Understanding the Optimization Problem</h3>
+                    
+                    <div class="math-equation">
+                        <strong>Objective:</strong> Maximize margin = <math><mfrac><mn>2</mn><mrow><mo>||</mo><mi>w</mi><mo>||</mo></mrow></mfrac></math><br>
+                        <strong>Equivalent to:</strong> Minimize <math><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo>||</mo><mi>w</mi><mo>||</mo></mrow><mn>2</mn></msup></math><br>
+                        <strong>Subject to:</strong> <math><msub><mi>y</mi><mi>i</mi></msub><mo>(</mo><mi>w</mi><mo>·</mo><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo><mi>b</mi><mo>)</mo><mo>≥</mo><mn>1</mn></math> for all i
+                    </div>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>The Hyperplane Equation</h4>
+                            <ul>
+                                <li>Decision boundary: <strong><math><mi>w</mi><mo>·</mo><mi>x</mi><mo>+</mo><mi>b</mi><mo>=</mo><mn>0</mn></math></strong></li>
+                                <li><math><mi>w</mi></math>: weight vector (perpendicular to hyperplane)</li>
+                                <li><math><mi>b</mi></math>: bias term (distance from origin)</li>
+                                <li><math><mi>x</mi></math>: feature vector</li>
+                            </ul>
+                        </div>
+                        <div class="column-50">
+                            <h4>Classification Rule</h4>
+                            <ul>
+                                <li>If <math><mi>w</mi><mo>·</mo><mi>x</mi><mo>+</mo><mi>b</mi><mo>></mo><mn>0</mn></math> → Class +1</li>
+                                <li>If <math><mi>w</mi><mo>·</mo><mi>x</mi><mo>+</mo><mi>b</mi><mo><</mo><mn>0</mn></math> → Class -1</li>
+                                <li>Margin boundaries: <math><mi>w</mi><mo>·</mo><mi>x</mi><mo>+</mo><mi>b</mi><mo>=</mo><mo>±</mo><mn>1</mn></math></li>
+                                <li>Margin width: <math><mfrac><mn>2</mn><mrow><mo>||</mo><mi>w</mi><mo>||</mo></mrow></mfrac></math></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Soft Margin SVM: Handling Real Data</h2>
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>The Problem: Data Isn't Perfect</h4>
+                            <div class="visualization-container">
+                                <svg width="350" height="250" viewBox="0 0 350 250">
+                                    <!-- Decision boundary -->
+                                    <line x1="50" y1="200" x2="300" y2="50" stroke="#4CAF50" stroke-width="2"/>
+                                    
+                                    <!-- Margin boundaries -->
+                                    <line x1="30" y1="180" x2="280" y2="30" stroke="#4CAF50" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <line x1="70" y1="220" x2="320" y2="70" stroke="#4CAF50" stroke-width="1" stroke-dasharray="3,3"/>
+                                    
+                                    <!-- Correctly classified points -->
+                                    <circle cx="60" cy="60" r="5" fill="blue" stroke="darkblue" stroke-width="1"/>
+                                    <circle cx="90" cy="80" r="5" fill="blue" stroke="darkblue" stroke-width="1"/>
+                                    <circle cx="120" cy="100" r="5" fill="blue" stroke="darkblue" stroke-width="1"/>
+                                    
+                                    <rect x="220" y="140" width="10" height="10" fill="red" stroke="darkred" stroke-width="1"/>
+                                    <rect x="250" y="160" width="10" height="10" fill="red" stroke="darkred" stroke-width="1"/>
+                                    <rect x="270" y="180" width="10" height="10" fill="red" stroke="darkred" stroke-width="1"/>
+                                    
+                                    <!-- Misclassified/margin violations (outliers) -->
+                                    <circle cx="200" cy="150" r="5" fill="blue" stroke="purple" stroke-width="3"/>
+                                    <rect x="100" y="90" width="10" height="10" fill="red" stroke="purple" stroke-width="3"/>
+                                    
+                                    <!-- Slack variables visualization -->
+                                    <line x1="200" y1="150" x2="175" y2="125" stroke="purple" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <line x1="105" y1="95" x2="130" y2="120" stroke="purple" stroke-width="1" stroke-dasharray="2,2"/>
+                                    
+                                    <text x="210" y="145" font-size="10" fill="purple">ξ₁</text>
+                                    <text x="85" y="90" font-size="10" fill="purple">ξ₂</text>
+                                    
+                                    <text x="175" y="20" text-anchor="middle" font-size="12" font-weight="bold">Soft Margin: Allowing Violations</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="column-50">
+                            <h4>The C Parameter</h4>
+                            <div class="math-equation">
+                                Minimize: <math><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo>||</mo><mi>w</mi><mo>||</mo></mrow><mn>2</mn></msup><mo>+</mo><mi>C</mi><mo>·</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>ξ</mi><mi>i</mi></msub></math>
+                            </div>
+                            <ul>
+                                <li><strong><math><mi>C</mi></math> controls the trade-off:</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>Large <math><mi>C</mi></math>: Less tolerant of violations (hard margin)</li>
+                                        <li>Small <math><mi>C</mi></math>: More tolerant of violations (soft margin)</li>
+                                    </ul>
+                                </li>
+                                <li><strong><math><msub><mi>ξ</mi><mi>i</mi></msub></math> (xi):</strong> Slack variables for each point</li>
+                                <li>Allows some misclassification for better generalization</li>
+                            </ul>
+                            
+                            <div class="warning-box">
+                                <strong>Business Trade-off:</strong> Stricter boundaries (high C) may overfit; flexible boundaries (low C) may underfit
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 3: The Circle Problem -->
+            <section>
+                <section>
+                    <h2>Part 3: The Circle Within a Ring Problem</h2>
+                    <h3>When Linear Boundaries Fail</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>The Challenge</h4>
+                            <div class="visualization-container">
+                                <svg width="350" height="350" viewBox="0 0 350 350">
+                                    <!-- Outer ring (Class A - red) -->
+                                    <g id="outer-ring">
+                                        <!-- Points arranged in outer circle -->
+                                        <circle cx="175" cy="50" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="250" cy="75" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="300" cy="125" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="325" cy="175" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="300" cy="225" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="250" cy="275" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="175" cy="300" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="100" cy="275" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="50" cy="225" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="25" cy="175" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="50" cy="125" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="100" cy="75" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        
+                                        <!-- More outer points -->
+                                        <circle cx="210" cy="60" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="275" cy="100" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="310" cy="150" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="310" cy="200" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="275" cy="250" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="210" cy="290" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="140" cy="290" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="75" cy="250" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="40" cy="200" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="40" cy="150" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="75" cy="100" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                        <circle cx="140" cy="60" r="5" fill="red" stroke="darkred" stroke-width="2"/>
+                                    </g>
+                                    
+                                    <!-- Inner circle (Class B - blue) -->
+                                    <g id="inner-circle">
+                                        <circle cx="175" cy="175" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="160" cy="160" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="190" cy="160" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="160" cy="190" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="190" cy="190" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="175" cy="150" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="175" cy="200" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="150" cy="175" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="200" cy="175" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        
+                                        <!-- More inner points -->
+                                        <circle cx="165" cy="175" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="185" cy="175" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="175" cy="165" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                        <circle cx="175" cy="185" r="5" fill="blue" stroke="darkblue" stroke-width="2"/>
+                                    </g>
+                                    
+                                    <!-- Failed linear attempts -->
+                                    <line x1="0" y1="175" x2="350" y2="175" stroke="gray" stroke-width="1" stroke-dasharray="5,5" opacity="0.3"/>
+                                    <line x1="175" y1="0" x2="175" y2="350" stroke="gray" stroke-width="1" stroke-dasharray="5,5" opacity="0.3"/>
+                                    <line x1="50" y1="50" x2="300" y2="300" stroke="gray" stroke-width="1" stroke-dasharray="5,5" opacity="0.3"/>
+                                    
+                                    <text x="175" y="25" text-anchor="middle" font-size="14" font-weight="bold">Non-linearly Separable Data</text>
+                                    <text x="175" y="335" text-anchor="middle" font-size="11" fill="#666">No linear boundary can separate these classes!</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="column-50">
+                            <h4>Why This Matters in Business</h4>
+                            <div class="business-case">
+                                <h4>Real-World Analogies</h4>
+                                <ul style="font-size: 0.9em;">
+                                    <li><strong>Customer Segmentation:</strong> Premium customers might be in the "middle" of behavior space (moderate spending, moderate frequency)</li>
+                                    <li><strong>Fraud Detection:</strong> Normal transactions in a "safe zone" surrounded by various types of suspicious activity</li>
+                                    <li><strong>Quality Control:</strong> Acceptable products in a specific range, defects both above and below</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="danger-box">
+                                <strong>The Problem:</strong> Many real-world patterns are not linearly separable in their original feature space
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Solution: Adding a Third Dimension</h2>
+                    <h3>Transforming the Feature Space</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>The Transformation</h4>
+                            <div class="kernel-box">
+                                <strong>Original 2D space:</strong> <math><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo></math><br>
+                                <strong>New 3D space:</strong> <math><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>)</mo></math><br>
+                                where <strong><math><mi>z</mi><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></math></strong> (distance from origin)
+                            </div>
+                            
+                            <div class="visualization-container">
+                                <svg width="350" height="300" viewBox="0 0 350 300">
+                                    <!-- 3D projection visualization (isometric view) -->
+                                    
+                                    <!-- 3D axes -->
+                                    <!-- Origin at (175, 200) -->
+                                    <!-- X-axis (to the right and down) -->
+                                    <line x1="175" y1="200" x2="250" y2="230" stroke="#999" stroke-width="1.5"/>
+                                    <text x="255" y="235" font-size="9">x</text>
+                                    
+                                    <!-- Y-axis (to the left and down) -->
+                                    <line x1="175" y1="200" x2="100" y2="230" stroke="#999" stroke-width="1.5"/>
+                                    <text x="90" y="235" font-size="9">y</text>
+                                    
+                                    <!-- Z-axis (straight up) -->
+                                    <line x1="175" y1="200" x2="175" y2="70" stroke="#999" stroke-width="1.5"/>
+                                    <text x="180" y="65" font-size="9">z</text>
+                                    
+                                    <!-- Base plane grid -->
+                                    <g stroke="#eee" stroke-width="0.5">
+                                        <line x1="125" y1="180" x2="225" y2="220"/>
+                                        <line x1="150" y1="190" x2="200" y2="210"/>
+                                        <line x1="200" y1="210" x2="150" y2="230"/>
+                                        <line x1="225" y1="220" x2="125" y2="260"/>
+                                    </g>
+                                    
+                                    <!-- HYPERPLANE (horizontal plane at z = 0.5) -->
+                                    <g id="hyperplane">
+                                        <!-- Hyperplane surface as a parallelogram -->
+                                        <path d="M 80 140 L 270 140 L 320 170 L 130 170 Z" 
+                                              fill="#4CAF50" opacity="0.25" stroke="#4CAF50" stroke-width="2"/>
+                                        
+                                        <!-- Grid lines on hyperplane for 3D effect -->
+                                        <g stroke="#4CAF50" stroke-width="0.5" opacity="0.4">
+                                            <line x1="100" y1="145" x2="300" y2="145"/>
+                                            <line x1="100" y1="155" x2="300" y2="155"/>
+                                            <line x1="100" y1="165" x2="300" y2="165"/>
+                                            <line x1="130" y1="140" x2="130" y2="170"/>
+                                            <line x1="175" y1="140" x2="175" y2="170"/>
+                                            <line x1="220" y1="140" x2="220" y2="170"/>
+                                            <line x1="265" y1="140" x2="265" y2="170"/>
+                                        </g>
+                                        
+                                        <text x="275" y="155" font-size="10" fill="#4CAF50" font-weight="bold">Hyperplane</text>
+                                        <text x="275" y="167" font-size="8" fill="#4CAF50">(z = 0.5)</text>
+                                    </g>
+                                    
+                                    <!-- Vertical projection lines -->
+                                    <g stroke="#ddd" stroke-width="0.5" stroke-dasharray="2,2">
+                                        <!-- Inner points (from base to low z) -->
+                                        <line x1="175" y1="230" x2="175" y2="185"/>
+                                        <line x1="160" y1="225" x2="160" y2="180"/>
+                                        <line x1="190" y1="225" x2="190" y2="180"/>
+                                        
+                                        <!-- Outer points (from base to high z) -->
+                                        <line x1="120" y1="210" x2="120" y2="100"/>
+                                        <line x1="230" y1="210" x2="230" y2="100"/>
+                                        <line x1="140" y1="215" x2="140" y2="105"/>
+                                        <line x1="210" y1="215" x2="210" y2="105"/>
+                                    </g>
+                                    
+                                    <!-- Points in 3D -->
+                                    <!-- Inner circle points (BELOW hyperplane, low z) -->
+                                    <g fill="blue" stroke="darkblue" stroke-width="2">
+                                        <circle cx="175" cy="185" r="4"/>
+                                        <circle cx="160" cy="180" r="4"/>
+                                        <circle cx="190" cy="180" r="4"/>
+                                        <circle cx="165" cy="190" r="4"/>
+                                        <circle cx="185" cy="190" r="4"/>
+                                    </g>
+                                    
+                                    <!-- Outer ring points (ABOVE hyperplane, high z) -->
+                                    <g fill="red" stroke="darkred" stroke-width="2">
+                                        <circle cx="120" cy="100" r="4"/>
+                                        <circle cx="230" cy="100" r="4"/>
+                                        <circle cx="140" cy="105" r="4"/>
+                                        <circle cx="210" cy="105" r="4"/>
+                                        <circle cx="175" cy="95" r="4"/>
+                                        <circle cx="100" cy="110" r="4"/>
+                                        <circle cx="250" cy="110" r="4"/>
+                                    </g>
+                                    
+                                    <!-- Annotations -->
+                                    <g>
+                                        <line x1="200" y1="185" x2="220" y2="185" stroke="blue" stroke-width="1"/>
+                                        <text x="225" y="188" font-size="8" fill="blue">Below plane</text>
+                                        
+                                        <line x1="250" y1="100" x2="270" y2="100" stroke="red" stroke-width="1"/>
+                                        <text x="275" y="103" font-size="8" fill="red">Above plane</text>
+                                    </g>
+                                    
+                                    <text x="175" y="20" text-anchor="middle" font-size="12" font-weight="bold">3D Transformation</text>
+                                    <text x="175" y="35" text-anchor="middle" font-size="9" fill="#666">z = x² + y²</text>
+                                    <text x="175" y="290" text-anchor="middle" font-size="10" fill="#666">Inner points stay low, outer points rise high</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <h4>Implementation</h4>
+                            <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Generate circle-in-ring data
+np.random.seed(42)
+
+# Inner circle (Class 0)
+theta_inner = np.random.uniform(0, 2*np.pi, 50)
+r_inner = np.random.normal(0.3, 0.05, 50)
+X_inner = np.column_stack([
+    r_inner * np.cos(theta_inner),
+    r_inner * np.sin(theta_inner)
+])
+y_inner = np.zeros(50)
+
+# Outer ring (Class 1)
+theta_outer = np.random.uniform(0, 2*np.pi, 100)
+r_outer = np.random.normal(1.0, 0.1, 100)
+X_outer = np.column_stack([
+    r_outer * np.cos(theta_outer),
+    r_outer * np.sin(theta_outer)
+])
+y_outer = np.ones(100)
+
+# Combine data
+X = np.vstack([X_inner, X_outer])
+y = np.hstack([y_inner, y_outer])
+
+# Add third dimension
+z = X[:, 0]**2 + X[:, 1]**2
+
+# Now data is linearly separable in 3D!
+# A plane at z = 0.5 perfectly separates classes</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Visualizing the 3D Transformation</h2>
+                    <div class="columns">
+                        <div class="column-100">
+                            <div class="visualization-container" style="height: 450px;">
+                                <svg width="800" height="450" viewBox="0 0 800 450">
+                                    <!-- Left panel: 2D original space -->
+                                    <g id="2d-space">
+                                        <rect x="10" y="10" width="380" height="380" fill="white" stroke="#333" stroke-width="2"/>
+                                        <text x="200" y="30" text-anchor="middle" font-size="14" font-weight="bold">Original 2D Space</text>
+                                        
+                                        <!-- Draw rings -->
+                                        <circle cx="200" cy="200" r="60" fill="none" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5"/>
+                                        <circle cx="200" cy="200" r="120" fill="none" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5"/>
+                                        
+                                        <!-- Inner points -->
+                                        <g fill="blue" stroke="darkblue" stroke-width="1">
+                                            <circle cx="200" cy="200" r="4"/>
+                                            <circle cx="180" cy="190" r="4"/>
+                                            <circle cx="220" cy="190" r="4"/>
+                                            <circle cx="180" cy="210" r="4"/>
+                                            <circle cx="220" cy="210" r="4"/>
+                                            <circle cx="200" cy="175" r="4"/>
+                                            <circle cx="200" cy="225" r="4"/>
+                                            <circle cx="175" cy="200" r="4"/>
+                                            <circle cx="225" cy="200" r="4"/>
+                                        </g>
+                                        
+                                        <!-- Outer points -->
+                                        <g fill="red" stroke="darkred" stroke-width="1">
+                                            <circle cx="200" cy="80" r="4"/>
+                                            <circle cx="280" cy="120" r="4"/>
+                                            <circle cx="320" cy="200" r="4"/>
+                                            <circle cx="280" cy="280" r="4"/>
+                                            <circle cx="200" cy="320" r="4"/>
+                                            <circle cx="120" cy="280" r="4"/>
+                                            <circle cx="80" cy="200" r="4"/>
+                                            <circle cx="120" cy="120" r="4"/>
+                                            <circle cx="260" cy="100" r="4"/>
+                                            <circle cx="300" cy="160" r="4"/>
+                                            <circle cx="300" cy="240" r="4"/>
+                                            <circle cx="260" cy="300" r="4"/>
+                                            <circle cx="140" cy="300" r="4"/>
+                                            <circle cx="100" cy="240" r="4"/>
+                                            <circle cx="100" cy="160" r="4"/>
+                                            <circle cx="140" cy="100" r="4"/>
+                                        </g>
+                                        
+                                        <text x="200" y="370" text-anchor="middle" font-size="11" fill="#666">Cannot separate with a line</text>
+                                    </g>
+                                    
+                                    <!-- Arrow -->
+                                    <g>
+                                        <path d="M 400 200 L 450 200" stroke="#333" stroke-width="3" marker-end="url(#arrowhead2)"/>
+                                        <text x="425" y="190" text-anchor="middle" font-size="12">Transform</text>
+                                        <text x="425" y="215" text-anchor="middle" font-size="10">z = x² + y²</text>
+                                    </g>
+                                    
+                                    <!-- Right panel: 3D transformed space (isometric view) -->
+                                    <g id="3d-space" transform="translate(460, 0)">
+                                        <rect x="10" y="10" width="330" height="430" fill="white" stroke="#333" stroke-width="2"/>
+                                        <text x="175" y="30" text-anchor="middle" font-size="14" font-weight="bold">Transformed 3D Space</text>
+                                        
+                                        <!-- 3D coordinate system (isometric projection) -->
+                                        <!-- Origin at (175, 300) -->
+                                        
+                                        <!-- X-axis (to the right and down) -->
+                                        <line x1="175" y1="300" x2="275" y2="340" stroke="#999" stroke-width="2"/>
+                                        <text x="285" y="345" font-size="10">X</text>
+                                        
+                                        <!-- Y-axis (to the left and down) -->
+                                        <line x1="175" y1="300" x2="75" y2="340" stroke="#999" stroke-width="2"/>
+                                        <text x="60" y="345" font-size="10">Y</text>
+                                        
+                                        <!-- Z-axis (straight up) -->
+                                        <line x1="175" y1="300" x2="175" y2="100" stroke="#999" stroke-width="2"/>
+                                        <text x="180" y="95" font-size="10">Z</text>
+                                        
+                                        <!-- Grid lines on the base (X-Y plane) -->
+                                        <g stroke="#eee" stroke-width="0.5">
+                                            <line x1="125" y1="280" x2="225" y2="320"/>
+                                            <line x1="100" y1="290" x2="200" y2="330"/>
+                                            <line x1="150" y1="290" x2="250" y2="330"/>
+                                            <line x1="200" y1="310" x2="100" y2="350"/>
+                                            <line x1="225" y1="320" x2="125" y2="360"/>
+                                            <line x1="150" y1="290" x2="150" y2="370"/>
+                                        </g>
+                                        
+                                        <!-- HYPERPLANE in 3D (shown as a translucent rectangle) -->
+                                        <!-- The hyperplane is at z = 0.5 (in the middle height) -->
+                                        <g id="hyperplane">
+                                            <!-- Hyperplane surface (parallelogram in isometric view) -->
+                                            <path d="M 75 220 L 275 220 L 325 260 L 125 260 Z" 
+                                                  fill="#4CAF50" opacity="0.3" stroke="#4CAF50" stroke-width="2"/>
+                                            
+                                            <!-- Grid lines on hyperplane for 3D effect -->
+                                            <g stroke="#4CAF50" stroke-width="0.5" opacity="0.5">
+                                                <line x1="100" y1="225" x2="300" y2="225"/>
+                                                <line x1="100" y1="235" x2="300" y2="235"/>
+                                                <line x1="100" y1="245" x2="300" y2="245"/>
+                                                <line x1="100" y1="255" x2="300" y2="255"/>
+                                                
+                                                <line x1="125" y1="220" x2="125" y2="260"/>
+                                                <line x1="175" y1="220" x2="175" y2="260"/>
+                                                <line x1="225" y1="220" x2="225" y2="260"/>
+                                                <line x1="275" y1="220" x2="275" y2="260"/>
+                                            </g>
+                                            
+                                            <text x="330" y="240" font-size="11" fill="#4CAF50" font-weight="bold">Separating</text>
+                                            <text x="330" y="255" font-size="11" fill="#4CAF50" font-weight="bold">Hyperplane</text>
+                                            <text x="330" y="270" font-size="9" fill="#4CAF50">(z = 0.5)</text>
+                                        </g>
+                                        
+                                        <!-- Vertical lines showing point projections -->
+                                        <g stroke="#ddd" stroke-width="0.5" stroke-dasharray="2,2">
+                                            <!-- Inner points projections (below hyperplane) -->
+                                            <line x1="175" y1="340" x2="175" y2="280"/>
+                                            <line x1="160" y1="335" x2="160" y2="275"/>
+                                            <line x1="190" y1="335" x2="190" y2="275"/>
+                                            
+                                            <!-- Outer points projections (above hyperplane) -->
+                                            <line x1="120" y1="320" x2="120" y2="160"/>
+                                            <line x1="230" y1="320" x2="230" y2="160"/>
+                                            <line x1="250" y1="330" x2="250" y2="170"/>
+                                        </g>
+                                        
+                                        <!-- Transformed points in 3D -->
+                                        <!-- Inner points (BELOW the hyperplane, low z) -->
+                                        <g fill="blue" stroke="darkblue" stroke-width="1">
+                                            <circle cx="175" cy="280" r="5"/>
+                                            <circle cx="160" cy="275" r="5"/>
+                                            <circle cx="190" cy="275" r="5"/>
+                                            <circle cx="165" cy="285" r="5"/>
+                                            <circle cx="185" cy="285" r="5"/>
+                                            <circle cx="175" cy="270" r="5"/>
+                                            <circle cx="175" cy="290" r="5"/>
+                                            <circle cx="155" cy="280" r="5"/>
+                                            <circle cx="195" cy="280" r="5"/>
+                                        </g>
+                                        
+                                        <!-- Outer points (ABOVE the hyperplane, high z) -->
+                                        <g fill="red" stroke="darkred" stroke-width="1">
+                                            <circle cx="175" cy="160" r="5"/>
+                                            <circle cx="220" cy="165" r="5"/>
+                                            <circle cx="250" cy="170" r="5"/>
+                                            <circle cx="220" cy="155" r="5"/>
+                                            <circle cx="175" cy="150" r="5"/>
+                                            <circle cx="130" cy="155" r="5"/>
+                                            <circle cx="100" cy="170" r="5"/>
+                                            <circle cx="130" cy="165" r="5"/>
+                                            <circle cx="210" cy="160" r="5"/>
+                                            <circle cx="240" cy="175" r="5"/>
+                                            <circle cx="240" cy="165" r="5"/>
+                                            <circle cx="210" cy="150" r="5"/>
+                                            <circle cx="140" cy="150" r="5"/>
+                                            <circle cx="110" cy="165" r="5"/>
+                                            <circle cx="110" cy="175" r="5"/>
+                                            <circle cx="140" cy="160" r="5"/>
+                                        </g>
+                                        
+                                        <!-- Annotations with arrows -->
+                                        <g>
+                                            <line x1="200" y1="280" x2="230" y2="280" stroke="blue" stroke-width="1" marker-end="url(#arrowblue)"/>
+                                            <text x="235" y="283" font-size="9" fill="blue">Inner points</text>
+                                            <text x="235" y="295" font-size="9" fill="blue">(below plane)</text>
+                                            
+                                            <line x1="200" y1="160" x2="260" y2="160" stroke="red" stroke-width="1" marker-end="url(#arrowred)"/>
+                                            <text x="265" y="163" font-size="9" fill="red">Outer points</text>
+                                            <text x="265" y="175" font-size="9" fill="red">(above plane)</text>
+                                        </g>
+                                        
+                                        <text x="175" y="420" text-anchor="middle" font-size="11" fill="#666">Perfect linear separation in 3D!</text>
+                                    </g>
+                                    
+                                    <!-- Arrow markers -->
+                                    <defs>
+                                        <marker id="arrowhead2" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto">
+                                            <polygon points="0 0, 6 2, 0 4" fill="#333"/>
+                                        </marker>
+                                        <marker id="arrowblue" markerWidth="5" markerHeight="3" refX="5" refY="1.5" orient="auto">
+                                            <polygon points="0 0, 5 1.5, 0 3" fill="blue"/>
+                                        </marker>
+                                        <marker id="arrowred" markerWidth="5" markerHeight="3" refX="5" refY="1.5" orient="auto">
+                                            <polygon points="0 0, 5 1.5, 0 3" fill="red"/>
+                                        </marker>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> By adding a dimension based on distance from origin (z = x² + y²), the circular pattern becomes linearly separable! The green hyperplane at z = 0.5 perfectly separates the blue points (below) from the red points (above).
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 4: The Kernel Trick -->
+            <section>
+                <section>
+                    <h2>Part 4: The Kernel Trick</h2>
+                    <h3>Computing in High Dimensions Without the Cost</h3>
+                    
+                    <div class="kernel-box">
+                        <strong>The Magic:</strong> We can compute dot products in high-dimensional space without explicitly transforming the data!
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>What Does This Mean?</h4>
+                        <p><strong>The Problem:</strong> To separate non-linear patterns (like circles), we need to transform data to higher dimensions where it becomes linearly separable. For example:</p>
+                        <ul style="font-size: 0.85em;">
+                            <li>2D → 3D: Add z = x² + y² (as shown earlier)</li>
+                            <li>2D → 5D: (x, y) → (x, y, x², y², xy)</li>
+                            <li>2D → ∞D: Using RBF kernel (infinite dimensions!)</li>
+                        </ul>
+                        
+                        <p><strong>The Computational Challenge:</strong> Explicitly transforming to high dimensions is expensive:</p>
+                        <ul style="font-size: 0.85em;">
+                            <li>100 features → 5,050 features in degree-2 polynomial space</li>
+                            <li>1,000 features → 500,500 features!</li>
+                            <li>RBF kernel → infinite dimensional space (impossible to compute directly)</li>
+                        </ul>
+                        
+                        <p><strong>The Kernel Trick Solution:</strong> Instead of:</p>
+                        <ol style="font-size: 0.85em;">
+                            <li>Transform x → φ(x) in high-dimensional space</li>
+                            <li>Transform y → φ(y) in high-dimensional space</li>
+                            <li>Compute dot product φ(x)·φ(y)</li>
+                        </ol>
+                        <p style="font-size: 0.85em;">We directly compute K(x,y) = φ(x)·φ(y) using the kernel function, getting the <em>same result</em> without ever creating the high-dimensional vectors!</p>
+                        
+                        <div class="math-equation">
+                            <strong>Example:</strong> Polynomial kernel K(x,y) = (x·y + 1)² computes a 5D dot product using only 2D operations!
+                        </div>
+                    </div>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Common Kernel Functions</h4>
+                            <table class="comparison-table">
+                                <tr>
+                                    <th>Kernel</th>
+                                    <th>Function K(x, y)</th>
+                                    <th>Use Case</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>Linear</strong></td>
+                                    <td><math><mi>x</mi><mo>·</mo><mi>y</mi></math></td>
+                                    <td>Linearly separable data</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Polynomial</strong></td>
+                                    <td><math><msup><mrow><mo>(</mo><mi>γ</mi><mi>x</mi><mo>·</mo><mi>y</mi><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>d</mi></msup></math></td>
+                                    <td>Polynomial decision boundaries</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RBF (Gaussian)</strong></td>
+                                    <td><math><mi>exp</mi><mo>(</mo><mo>-</mo><mi>γ</mi><msup><mrow><mo>||</mo><mi>x</mi><mo>-</mo><mi>y</mi><mo>||</mo></mrow><mn>2</mn></msup><mo>)</mo></math></td>
+                                    <td>Most versatile, local influence</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sigmoid</strong></td>
+                                    <td><math><mi>tanh</mi><mo>(</mo><mi>γ</mi><mi>x</mi><mo>·</mo><mi>y</mi><mo>+</mo><mi>r</mi><mo>)</mo></math></td>
+                                    <td>Neural network-like</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn import svm
+import numpy as np
+
+# Different kernels for our circle problem
+X_train = X  # Our circle-in-ring data
+y_train = y
+
+# Linear kernel (will fail)
+svm_linear = svm.SVC(kernel='linear')
+svm_linear.fit(X_train, y_train)
+acc_linear = svm_linear.score(X_test, y_test)
+print(f"Linear kernel accuracy: {acc_linear:.2%}")
+
+# Polynomial kernel
+svm_poly = svm.SVC(kernel='poly', degree=2)
+svm_poly.fit(X_train, y_train)
+acc_poly = svm_poly.score(X_test, y_test)
+print(f"Polynomial kernel accuracy: {acc_poly:.2%}")
+
+# RBF kernel (Radial Basis Function)
+svm_rbf = svm.SVC(kernel='rbf', gamma='scale')
+svm_rbf.fit(X_train, y_train)
+acc_rbf = svm_rbf.score(X_test, y_test)
+print(f"RBF kernel accuracy: {acc_rbf:.2%}")
+
+# Output:
+# Linear kernel accuracy: 52.3%
+# Polynomial kernel accuracy: 98.7%
+# RBF kernel accuracy: 99.2%</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>RBF Kernel: The Swiss Army Knife</h2>
+                    <h3>Understanding the Radial Basis Function</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>How RBF Works</h4>
+                            <div class="math-equation">
+                                <math><mi>K</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>=</mo><mi>exp</mi><mo>(</mo><mo>-</mo><mi>γ</mi><msup><mrow><mo>||</mo><mi>x</mi><mo>-</mo><mi>y</mi><mo>||</mo></mrow><mn>2</mn></msup><mo>)</mo></math>
+                            </div>
+                            <ul>
+                                <li><strong>Similarity measure:</strong> High when <math><mi>x</mi></math> and <math><mi>y</mi></math> are close</li>
+                                <li><strong>Local influence:</strong> Each point affects nearby regions</li>
+                                <li><strong><math><mi>γ</mi></math> (gamma) parameter:</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>High <math><mi>γ</mi></math>: Tight, complex boundaries</li>
+                                        <li>Low <math><mi>γ</mi></math>: Smooth, simple boundaries</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <div class="info-box">
+                                <strong>Think of it as:</strong> Each support vector creates a "bubble" of influence. Classification is based on which bubbles affect a point most.
+                            </div>
+                        </div>
+                        <div class="column-50">
+                            <h4>Visualizing RBF Decision Boundaries</h4>
+                            <div class="visualization-container">
+                                <svg width="350" height="350" viewBox="0 0 350 350">
+                                    <!-- Background gradient showing decision regions -->
+                                    <defs>
+                                        <radialGradient id="rbf-gradient1" cx="50%" cy="50%">
+                                            <stop offset="0%" style="stop-color:blue;stop-opacity:0.3"/>
+                                            <stop offset="40%" style="stop-color:blue;stop-opacity:0.1"/>
+                                            <stop offset="60%" style="stop-color:red;stop-opacity:0.1"/>
+                                            <stop offset="100%" style="stop-color:red;stop-opacity:0.3"/>
+                                        </radialGradient>
+                                    </defs>
+                                    
+                                    <rect x="0" y="0" width="350" height="350" fill="url(#rbf-gradient1)"/>
+                                    
+                                    <!-- Decision boundary (circular for our problem) -->
+                                    <circle cx="175" cy="175" r="90" fill="none" stroke="#4CAF50" stroke-width="3"/>
+                                    
+                                    <!-- Support vector influence regions -->
+                                    <circle cx="175" cy="175" r="50" fill="blue" opacity="0.1"/>
+                                    <circle cx="120" cy="120" r="30" fill="red" opacity="0.1"/>
+                                    <circle cx="230" cy="120" r="30" fill="red" opacity="0.1"/>
+                                    <circle cx="230" cy="230" r="30" fill="red" opacity="0.1"/>
+                                    <circle cx="120" cy="230" r="30" fill="red" opacity="0.1"/>
+                                    
+                                    <!-- Data points -->
+                                    <!-- Inner circle -->
+                                    <g fill="blue" stroke="darkblue" stroke-width="2">
+                                        <circle cx="175" cy="175" r="5"/>
+                                        <circle cx="160" cy="160" r="5"/>
+                                        <circle cx="190" cy="160" r="5"/>
+                                        <circle cx="160" cy="190" r="5"/>
+                                        <circle cx="190" cy="190" r="5"/>
+                                    </g>
+                                    
+                                    <!-- Outer ring -->
+                                    <g fill="red" stroke="darkred" stroke-width="2">
+                                        <circle cx="120" cy="120" r="5"/>
+                                        <circle cx="230" cy="120" r="5"/>
+                                        <circle cx="230" cy="230" r="5"/>
+                                        <circle cx="120" cy="230" r="5"/>
+                                        <circle cx="175" cy="75" r="5"/>
+                                        <circle cx="175" cy="275" r="5"/>
+                                        <circle cx="75" cy="175" r="5"/>
+                                        <circle cx="275" cy="175" r="5"/>
+                                    </g>
+                                    
+                                    <text x="175" y="25" text-anchor="middle" font-size="12" font-weight="bold">RBF Kernel Solution</text>
+                                    <text x="175" y="335" text-anchor="middle" font-size="10" fill="#666">Perfect circular boundary without explicit transformation!</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 5: Hyperparameter Tuning -->
+            <section>
+                <section>
+                    <h2>Part 5: Hyperparameter Tuning</h2>
+                    <h3>Finding the Best Model Configuration Systematically</h3>
+                    
+                    <div class="svm-concept-box">
+                        <strong>What is a Hyperparameter?</strong><br>
+                        A hyperparameter is a parameter whose value is set <em>before</em> the learning process begins, unlike model parameters (weights) which are learned during training.
+                    </div>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Examples from Our Models</h4>
+                            <ul>
+                                <li><strong>Linear Regression:</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>Regularization strength (alpha)</li>
+                                        <li>Regularization type (L1, L2, ElasticNet)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Logistic Regression:</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>C (inverse regularization)</li>
+                                        <li>Penalty type</li>
+                                        <li>Solver algorithm</li>
+                                    </ul>
+                                </li>
+                                <li><strong>KNN:</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>n_neighbors (k)</li>
+                                        <li>Distance metric</li>
+                                        <li>Weight function</li>
+                                    </ul>
+                                </li>
+                                <li><strong>SVM:</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>C (regularization)</li>
+                                        <li>Kernel type</li>
+                                        <li>Gamma (RBF kernel width)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="column-50">
+                            <h4>The Challenge</h4>
+                            <div class="warning-box">
+                                <strong>Manual Testing is Inefficient:</strong>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Too many combinations to test manually</li>
+                                    <li>Risk of missing optimal values</li>
+                                    <li>Time-consuming and error-prone</li>
+                                    <li>No systematic exploration</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="success-box">
+                                <strong>Solution: Automated Hyperparameter Tuning</strong><br>
+                                Systematically search through hyperparameter space to find the best combination for your specific dataset
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Hyperparameter Tuning Strategies</h2>
+                    
+                    <div class="columns">
+                        <div class="column-33">
+                            <div class="metric-card">
+                                <h4>Grid Search</h4>
+                                <div class="visualization-container" style="height: 150px; padding: 10px;">
+                                    <svg width="120" height="120" viewBox="0 0 120 120">
+                                        <!-- Grid points -->
+                                        <g fill="#4a90e2" stroke="darkblue" stroke-width="1">
+                                            <!-- Draw grid of points -->
+                                            <circle cx="20" cy="20" r="3"/>
+                                            <circle cx="40" cy="20" r="3"/>
+                                            <circle cx="60" cy="20" r="3"/>
+                                            <circle cx="80" cy="20" r="3"/>
+                                            <circle cx="100" cy="20" r="3"/>
+                                            
+                                            <circle cx="20" cy="40" r="3"/>
+                                            <circle cx="40" cy="40" r="3"/>
+                                            <circle cx="60" cy="40" r="3"/>
+                                            <circle cx="80" cy="40" r="3"/>
+                                            <circle cx="100" cy="40" r="3"/>
+                                            
+                                            <circle cx="20" cy="60" r="3"/>
+                                            <circle cx="40" cy="60" r="3"/>
+                                            <circle cx="60" cy="60" r="4" fill="#4CAF50"/>
+                                            <circle cx="80" cy="60" r="3"/>
+                                            <circle cx="100" cy="60" r="3"/>
+                                            
+                                            <circle cx="20" cy="80" r="3"/>
+                                            <circle cx="40" cy="80" r="3"/>
+                                            <circle cx="60" cy="80" r="3"/>
+                                            <circle cx="80" cy="80" r="3"/>
+                                            <circle cx="100" cy="80" r="3"/>
+                                            
+                                            <circle cx="20" cy="100" r="3"/>
+                                            <circle cx="40" cy="100" r="3"/>
+                                            <circle cx="60" cy="100" r="3"/>
+                                            <circle cx="80" cy="100" r="3"/>
+                                            <circle cx="100" cy="100" r="3"/>
+                                        </g>
+                                        
+                                        <text x="60" y="115" text-anchor="middle" font-size="8">Exhaustive Search</text>
+                                    </svg>
+                                </div>
+                                <p style="font-size: 0.75em; text-align: left;">
+                                    <strong>Pros:</strong><br>
+                                    • Guaranteed to find best in grid<br>
+                                    • Reproducible results<br>
+                                    • Simple to understand<br>
+                                    <strong>Cons:</strong><br>
+                                    • Computationally expensive<br>
+                                    • Curse of dimensionality<br>
+                                    • May miss values between grid points
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="column-33">
+                            <div class="metric-card">
+                                <h4>Random Search</h4>
+                                <div class="visualization-container" style="height: 150px; padding: 10px;">
+                                    <svg width="120" height="120" viewBox="0 0 120 120">
+                                        <!-- Random points -->
+                                        <g fill="#e74c3c" stroke="darkred" stroke-width="1">
+                                            <circle cx="35" cy="28" r="3"/>
+                                            <circle cx="72" cy="45" r="3"/>
+                                            <circle cx="23" cy="67" r="3"/>
+                                            <circle cx="88" cy="35" r="3"/>
+                                            <circle cx="55" cy="72" r="4" fill="#4CAF50"/>
+                                            <circle cx="42" cy="89" r="3"/>
+                                            <circle cx="78" cy="82" r="3"/>
+                                            <circle cx="15" cy="48" r="3"/>
+                                            <circle cx="95" cy="65" r="3"/>
+                                            <circle cx="65" cy="25" r="3"/>
+                                            <circle cx="48" cy="55" r="3"/>
+                                            <circle cx="82" cy="95" r="3"/>
+                                            <circle cx="30" cy="15" r="3"/>
+                                            <circle cx="68" cy="88" r="3"/>
+                                            <circle cx="92" cy="18" r="3"/>
+                                        </g>
+                                        
+                                        <text x="60" y="115" text-anchor="middle" font-size="8">Random Sampling</text>
+                                    </svg>
+                                </div>
+                                <p style="font-size: 0.75em; text-align: left;">
+                                    <strong>Pros:</strong><br>
+                                    • More efficient than grid search<br>
+                                    • Better for many hyperparameters<br>
+                                    • Can find unexpected optima<br>
+                                    <strong>Cons:</strong><br>
+                                    • No guarantee of finding optimum<br>
+                                    • Results may vary between runs<br>
+                                    • Harder to reproduce exactly
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="column-33">
+                            <div class="metric-card">
+                                <h4>Bayesian Optimization</h4>
+                                <div class="visualization-container" style="height: 150px; padding: 10px;">
+                                    <svg width="120" height="120" viewBox="0 0 120 120">
+                                        <!-- Smart sampling -->
+                                        <g>
+                                            <!-- Initial random points -->
+                                            <circle cx="25" cy="30" r="3" fill="#9b59b6" stroke="purple" stroke-width="1"/>
+                                            <circle cx="85" cy="40" r="3" fill="#9b59b6" stroke="purple" stroke-width="1"/>
+                                            <circle cx="45" cy="75" r="3" fill="#9b59b6" stroke="purple" stroke-width="1"/>
+                                            
+                                            <!-- Arrows showing progression -->
+                                            <path d="M 45 75 L 55 65" stroke="purple" stroke-width="1" marker-end="url(#arrowpurple)"/>
+                                            <circle cx="55" cy="65" r="3" fill="#9b59b6" stroke="purple" stroke-width="1"/>
+                                            
+                                            <path d="M 55 65 L 60 55" stroke="purple" stroke-width="1" marker-end="url(#arrowpurple)"/>
+                                            <circle cx="60" cy="55" r="4" fill="#4CAF50" stroke="darkgreen" stroke-width="1"/>
+                                        </g>
+                                        
+                                        <defs>
+                                            <marker id="arrowpurple" markerWidth="5" markerHeight="3" refX="5" refY="1.5" orient="auto">
+                                                <polygon points="0 0, 5 1.5, 0 3" fill="purple"/>
+                                            </marker>
+                                        </defs>
+                                        
+                                        <text x="60" y="115" text-anchor="middle" font-size="8">Intelligent Search</text>
+                                    </svg>
+                                </div>
+                                <p style="font-size: 0.75em; text-align: left;">
+                                    <strong>Pros:</strong><br>
+                                    • Most efficient exploration<br>
+                                    • Learns from previous trials<br>
+                                    • Fewer evaluations needed<br>
+                                    <strong>Cons:</strong><br>
+                                    • More complex to implement<br>
+                                    • Requires tuning itself<br>
+                                    • Computationally intensive per step
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>Recommended Strategy:</strong> Start with Random Search for initial exploration, then use Grid Search to fine-tune around promising regions
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Cross-Validation: The Key to Reliable Tuning</h2>
+                    <h3>Avoiding Overfitting During Hyperparameter Selection</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Why Cross-Validation?</h4>
+                            <ul>
+                                <li>Single train-test split can be misleading</li>
+                                <li>Different splits might favor different hyperparameters</li>
+                                <li>Need robust estimate of model performance</li>
+                                <li>Prevents overfitting to validation set</li>
+                            </ul>
+                            
+                            <div class="visualization-container" style="height: 200px;">
+                                <svg width="350" height="180" viewBox="0 0 350 180">
+                                    <text x="175" y="20" text-anchor="middle" font-size="12" font-weight="bold">5-Fold Cross-Validation</text>
+                                    
+                                    <!-- Fold 1 -->
+                                    <g transform="translate(0, 30)">
+                                        <rect x="10" y="0" width="60" height="20" fill="#e74c3c" stroke="#333" stroke-width="1"/>
+                                        <rect x="70" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="130" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="190" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="250" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <text x="320" y="12" font-size="10">Fold 1</text>
+                                    </g>
+                                    
+                                    <!-- Fold 2 -->
+                                    <g transform="translate(0, 60)">
+                                        <rect x="10" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="70" y="0" width="60" height="20" fill="#e74c3c" stroke="#333" stroke-width="1"/>
+                                        <rect x="130" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="190" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="250" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <text x="320" y="12" font-size="10">Fold 2</text>
+                                    </g>
+                                    
+                                    <!-- Fold 3 -->
+                                    <g transform="translate(0, 90)">
+                                        <rect x="10" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="70" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="130" y="0" width="60" height="20" fill="#e74c3c" stroke="#333" stroke-width="1"/>
+                                        <rect x="190" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="250" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <text x="320" y="12" font-size="10">Fold 3</text>
+                                    </g>
+                                    
+                                    <!-- Fold 4 -->
+                                    <g transform="translate(0, 120)">
+                                        <rect x="10" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="70" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="130" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="190" y="0" width="60" height="20" fill="#e74c3c" stroke="#333" stroke-width="1"/>
+                                        <rect x="250" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <text x="320" y="12" font-size="10">Fold 4</text>
+                                    </g>
+                                    
+                                    <!-- Fold 5 -->
+                                    <g transform="translate(0, 150)">
+                                        <rect x="10" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="70" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="130" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="190" y="0" width="60" height="20" fill="#3498db" stroke="#333" stroke-width="1"/>
+                                        <rect x="250" y="0" width="60" height="20" fill="#e74c3c" stroke="#333" stroke-width="1"/>
+                                        <text x="320" y="12" font-size="10">Fold 5</text>
+                                    </g>
+                                    
+                                    <!-- Legend -->
+                                    <rect x="100" y="5" width="15" height="10" fill="#3498db"/>
+                                    <text x="118" y="13" font-size="9">Train</text>
+                                    <rect x="160" y="5" width="15" height="10" fill="#e74c3c"/>
+                                    <text x="178" y="13" font-size="9">Validation</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <h4>Implementation in scikit-learn</h4>
+                            <pre><code class="python">from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+import numpy as np
+
+# Example 1: Grid Search with Cross-Validation
+param_grid = {
+    'C': [0.1, 1, 10, 100],
+    'gamma': [0.001, 0.01, 0.1, 1],
+    'kernel': ['rbf', 'poly']
+}
+
+# 5-fold cross-validation
+grid_search = GridSearchCV(
+    estimator=SVC(),
+    param_grid=param_grid,
+    cv=5,  # 5-fold cross-validation
+    scoring='f1',  # Optimize for F1 score
+    n_jobs=-1,  # Use all CPU cores
+    verbose=1
+)
+
+grid_search.fit(X_train, y_train)
+
+print(f"Best parameters: {grid_search.best_params_}")
+print(f"Best CV score: {grid_search.best_score_:.3f}")
+print(f"Test score: {grid_search.score(X_test, y_test):.3f}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Hyperparameter Tuning: KNN Example</h2>
+                    <h3>Finding the Optimal K and Distance Metric</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <h4>KNN Hyperparameter Space</h4>
+                            <pre><code class="python">from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import GridSearchCV
+import numpy as np
+
+# Define hyperparameter space for KNN
+knn_param_grid = {
+    'n_neighbors': [3, 5, 7, 9, 11, 15, 21, 31],
+    'weights': ['uniform', 'distance'],
+    'metric': ['euclidean', 'manhattan', 'minkowski'],
+    'p': [1, 2]  # Parameter for minkowski distance
+}
+
+# Create KNN classifier
+knn = KNeighborsClassifier()
+
+# Grid search with cross-validation
+knn_grid = GridSearchCV(
+    estimator=knn,
+    param_grid=knn_param_grid,
+    cv=5,
+    scoring='accuracy',
+    n_jobs=-1,
+    verbose=1
+)
+
+# Fit and find best parameters
+knn_grid.fit(X_train_scaled, y_train)
+
+print("KNN Best Parameters:")
+print(f"  n_neighbors: {knn_grid.best_params_['n_neighbors']}")
+print(f"  weights: {knn_grid.best_params_['weights']}")
+print(f"  metric: {knn_grid.best_params_['metric']}")
+print(f"  Best CV accuracy: {knn_grid.best_score_:.3f}")
+
+# Total combinations tested
+n_combinations = (len(knn_param_grid['n_neighbors']) * 
+                 len(knn_param_grid['weights']) * 
+                 len(knn_param_grid['metric']) * 
+                 len(knn_param_grid['p']))
+print(f"\nTotal combinations tested: {n_combinations}")
+print(f"Total fits (with 5-fold CV): {n_combinations * 5}")</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Visualizing K Selection Impact</h4>
+                            <div class="visualization-container">
+                                <svg width="350" height="250" viewBox="0 0 350 250">
+                                    <text x="175" y="20" text-anchor="middle" font-size="12" font-weight="bold">Accuracy vs K Value</text>
+                                    
+                                    <!-- Axes -->
+                                    <line x1="40" y1="210" x2="320" y2="210" stroke="black" stroke-width="1"/>
+                                    <line x1="40" y1="210" x2="40" y2="40" stroke="black" stroke-width="1"/>
+                                    
+                                    <!-- Y-axis labels -->
+                                    <text x="30" y="210" font-size="9" text-anchor="end">0.70</text>
+                                    <text x="30" y="170" font-size="9" text-anchor="end">0.80</text>
+                                    <text x="30" y="130" font-size="9" text-anchor="end">0.90</text>
+                                    <text x="30" y="90" font-size="9" text-anchor="end">0.95</text>
+                                    <text x="30" y="50" font-size="9" text-anchor="end">1.00</text>
+                                    
+                                    <!-- X-axis labels -->
+                                    <text x="60" y="225" font-size="9" text-anchor="middle">3</text>
+                                    <text x="100" y="225" font-size="9" text-anchor="middle">5</text>
+                                    <text x="140" y="225" font-size="9" text-anchor="middle">7</text>
+                                    <text x="180" y="225" font-size="9" text-anchor="middle">9</text>
+                                    <text x="220" y="225" font-size="9" text-anchor="middle">11</text>
+                                    <text x="260" y="225" font-size="9" text-anchor="middle">15</text>
+                                    <text x="300" y="225" font-size="9" text-anchor="middle">21</text>
+                                    
+                                    <!-- Axis labels -->
+                                    <text x="180" y="240" font-size="10" text-anchor="middle">K (Number of Neighbors)</text>
+                                    <text x="15" y="125" font-size="10" text-anchor="middle" transform="rotate(-90 15 125)">Accuracy</text>
+                                    
+                                    <!-- Training accuracy line (blue) -->
+                                    <polyline points="60,50 100,55 140,62 180,70 220,78 260,88 300,95" 
+                                              fill="none" stroke="blue" stroke-width="2"/>
+                                    
+                                    <!-- Validation accuracy line (red) -->
+                                    <polyline points="60,120 100,95 140,88 180,85 220,88 260,92 300,98" 
+                                              fill="none" stroke="red" stroke-width="2"/>
+                                    
+                                    <!-- Points -->
+                                    <g fill="blue" stroke="darkblue">
+                                        <circle cx="60" cy="50" r="3"/>
+                                        <circle cx="100" cy="55" r="3"/>
+                                        <circle cx="140" cy="62" r="3"/>
+                                        <circle cx="180" cy="70" r="3"/>
+                                        <circle cx="220" cy="78" r="3"/>
+                                        <circle cx="260" cy="88" r="3"/>
+                                        <circle cx="300" cy="95" r="3"/>
+                                    </g>
+                                    
+                                    <g fill="red" stroke="darkred">
+                                        <circle cx="60" cy="120" r="3"/>
+                                        <circle cx="100" cy="95" r="3"/>
+                                        <circle cx="140" cy="88" r="3"/>
+                                        <circle cx="180" cy="85" r="4" stroke="green" stroke-width="2"/>
+                                        <circle cx="220" cy="88" r="3"/>
+                                        <circle cx="260" cy="92" r="3"/>
+                                        <circle cx="300" cy="98" r="3"/>
+                                    </g>
+                                    
+                                    <!-- Legend -->
+                                    <line x1="250" y1="50" x2="270" y2="50" stroke="blue" stroke-width="2"/>
+                                    <text x="275" y="53" font-size="9">Training</text>
+                                    <line x1="250" y1="65" x2="270" y2="65" stroke="red" stroke-width="2"/>
+                                    <text x="275" y="68" font-size="9">Validation</text>
+                                    
+                                    <!-- Optimal point annotation -->
+                                    <text x="180" y="75" font-size="9" text-anchor="middle" fill="green">Optimal K=9</text>
+                                </svg>
+                            </div>
+                            
+                            <div class="info-box">
+                                <strong>Key Insights:</strong>
+                                <ul style="font-size: 0.85em;">
+                                    <li>Small K: High variance, low bias (overfitting)</li>
+                                    <li>Large K: Low variance, high bias (underfitting)</li>
+                                    <li>Optimal K balances bias-variance trade-off</li>
+                                    <li>Cross-validation finds robust optimal value</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Hyperparameter Tuning: SVM Example</h2>
+                    <h3>Optimizing C and Gamma for RBF Kernel</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <h4>SVM Hyperparameter Optimization</h4>
+                            <pre><code class="python">from sklearn.svm import SVC
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import loguniform, uniform
+
+# Random search for SVM (more efficient for large spaces)
+svm_param_dist = {
+    'C': loguniform(1e-3, 1e3),  # Log-uniform distribution
+    'gamma': loguniform(1e-4, 1e0),
+    'kernel': ['rbf', 'poly', 'sigmoid'],
+    'degree': [2, 3, 4],  # Only for poly kernel
+    'class_weight': [None, 'balanced']
+}
+
+# Random search with 100 iterations
+svm_random = RandomizedSearchCV(
+    estimator=SVC(probability=True),
+    param_distributions=svm_param_dist,
+    n_iter=100,  # Number of random combinations to try
+    cv=5,
+    scoring='f1',
+    n_jobs=-1,
+    verbose=1,
+    random_state=42
+)
+
+svm_random.fit(X_train_scaled, y_train)
+
+print("SVM Best Parameters:")
+for param, value in svm_random.best_params_.items():
+    print(f"  {param}: {value}")
+print(f"\nBest CV F1 score: {svm_random.best_score_:.3f}")
+
+# Refined grid search around best parameters
+refined_param_grid = {
+    'C': [svm_random.best_params_['C'] * i 
+          for i in [0.5, 0.75, 1, 1.5, 2]],
+    'gamma': [svm_random.best_params_['gamma'] * i 
+              for i in [0.5, 0.75, 1, 1.5, 2]],
+    'kernel': [svm_random.best_params_['kernel']]
+}
+
+# Fine-tune with grid search
+svm_refined = GridSearchCV(
+    SVC(probability=True),
+    refined_param_grid,
+    cv=5,
+    scoring='f1',
+    n_jobs=-1
+)
+
+svm_refined.fit(X_train_scaled, y_train)
+print(f"\nRefined best score: {svm_refined.best_score_:.3f}")</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>C and Gamma Interaction</h4>
+                            <div class="visualization-container">
+                                <svg width="350" height="300" viewBox="0 0 350 300">
+                                    <text x="175" y="20" text-anchor="middle" font-size="12" font-weight="bold">SVM Parameter Heatmap</text>
+                                    
+                                    <!-- Axes -->
+                                    <text x="30" y="50" font-size="10" text-anchor="end">C</text>
+                                    <text x="175" y="290" font-size="10" text-anchor="middle">Gamma</text>
+                                    
+                                    <!-- C axis labels (vertical) -->
+                                    <text x="45" y="65" font-size="8" text-anchor="end">1000</text>
+                                    <text x="45" y="105" font-size="8" text-anchor="end">100</text>
+                                    <text x="45" y="145" font-size="8" text-anchor="end">10</text>
+                                    <text x="45" y="185" font-size="8" text-anchor="end">1</text>
+                                    <text x="45" y="225" font-size="8" text-anchor="end">0.1</text>
+                                    <text x="45" y="265" font-size="8" text-anchor="end">0.01</text>
+                                    
+                                    <!-- Gamma axis labels (horizontal) -->
+                                    <text x="70" y="280" font-size="8" text-anchor="middle">0.001</text>
+                                    <text x="120" y="280" font-size="8" text-anchor="middle">0.01</text>
+                                    <text x="170" y="280" font-size="8" text-anchor="middle">0.1</text>
+                                    <text x="220" y="280" font-size="8" text-anchor="middle">1</text>
+                                    <text x="270" y="280" font-size="8" text-anchor="middle">10</text>
+                                    
+                                    <!-- Heatmap grid -->
+                                    <g id="heatmap">
+                                        <!-- Row 1 (C=1000) -->
+                                        <rect x="50" y="50" width="40" height="35" fill="#fee0d2"/>
+                                        <rect x="90" y="50" width="40" height="35" fill="#fcbba1"/>
+                                        <rect x="130" y="50" width="40" height="35" fill="#fc9272"/>
+                                        <rect x="170" y="50" width="40" height="35" fill="#fb6a4a"/>
+                                        <rect x="210" y="50" width="40" height="35" fill="#ef3b2c"/>
+                                        
+                                        <!-- Row 2 (C=100) -->
+                                        <rect x="50" y="85" width="40" height="35" fill="#deebf7"/>
+                                        <rect x="90" y="85" width="40" height="35" fill="#c6dbef"/>
+                                        <rect x="130" y="85" width="40" height="35" fill="#9ecae1"/>
+                                        <rect x="170" y="85" width="40" height="35" fill="#6baed6"/>
+                                        <rect x="210" y="85" width="40" height="35" fill="#fc9272"/>
+                                        
+                                        <!-- Row 3 (C=10) -->
+                                        <rect x="50" y="120" width="40" height="35" fill="#e5f5e0"/>
+                                        <rect x="90" y="120" width="40" height="35" fill="#c7e9c0"/>
+                                        <rect x="130" y="120" width="40" height="35" fill="#74c476" stroke="gold" stroke-width="3"/>
+                                        <rect x="170" y="120" width="40" height="35" fill="#41ab5d"/>
+                                        <rect x="210" y="120" width="40" height="35" fill="#fcbba1"/>
+                                        
+                                        <!-- Row 4 (C=1) -->
+                                        <rect x="50" y="155" width="40" height="35" fill="#e5f5e0"/>
+                                        <rect x="90" y="155" width="40" height="35" fill="#c7e9c0"/>
+                                        <rect x="130" y="155" width="40" height="35" fill="#a1d99b"/>
+                                        <rect x="170" y="155" width="40" height="35" fill="#74c476"/>
+                                        <rect x="210" y="155" width="40" height="35" fill="#fee0d2"/>
+                                        
+                                        <!-- Row 5 (C=0.1) -->
+                                        <rect x="50" y="190" width="40" height="35" fill="#f7f7f7"/>
+                                        <rect x="90" y="190" width="40" height="35" fill="#e5f5e0"/>
+                                        <rect x="130" y="190" width="40" height="35" fill="#c7e9c0"/>
+                                        <rect x="170" y="190" width="40" height="35" fill="#a1d99b"/>
+                                        <rect x="210" y="190" width="40" height="35" fill="#fee0d2"/>
+                                        
+                                        <!-- Row 6 (C=0.01) -->
+                                        <rect x="50" y="225" width="40" height="35" fill="#f7f7f7"/>
+                                        <rect x="90" y="225" width="40" height="35" fill="#f7f7f7"/>
+                                        <rect x="130" y="225" width="40" height="35" fill="#e5f5e0"/>
+                                        <rect x="170" y="225" width="40" height="35" fill="#c7e9c0"/>
+                                        <rect x="210" y="225" width="40" height="35" fill="#fee0d2"/>
+                                    </g>
+                                    
+                                    <!-- Color scale -->
+                                    <text x="300" y="120" font-size="9">F1 Score</text>
+                                    <rect x="295" y="130" width="20" height="10" fill="#238b45"/>
+                                    <text x="320" y="138" font-size="8">0.95</text>
+                                    <rect x="295" y="145" width="20" height="10" fill="#74c476"/>
+                                    <text x="320" y="153" font-size="8">0.90</text>
+                                    <rect x="295" y="160" width="20" height="10" fill="#c7e9c0"/>
+                                    <text x="320" y="168" font-size="8">0.85</text>
+                                    <rect x="295" y="175" width="20" height="10" fill="#f7f7f7"/>
+                                    <text x="320" y="183" font-size="8">0.80</text>
+                                    <rect x="295" y="190" width="20" height="10" fill="#fc9272"/>
+                                    <text x="320" y="198" font-size="8">0.75</text>
+                                    
+                                    <!-- Best point annotation -->
+                                    <text x="150" y="115" font-size="8" text-anchor="middle" fill="gold" font-weight="bold">Best</text>
+                                </svg>
+                            </div>
+                            
+                            <div class="warning-box">
+                                <strong>Parameter Interactions:</strong>
+                                <ul style="font-size: 0.85em;">
+                                    <li>Large C + Small gamma = Complex boundaries</li>
+                                    <li>Small C + Large gamma = Smooth boundaries</li>
+                                    <li>Optimal region often diagonal in heatmap</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Best Practices for Hyperparameter Tuning</h2>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Strategic Approach</h4>
+                            <ol>
+                                <li><strong>Start with defaults</strong> - Get baseline performance</li>
+                                <li><strong>Use random search first</strong> - Explore parameter space efficiently</li>
+                                <li><strong>Refine with grid search</strong> - Fine-tune around best regions</li>
+                                <li><strong>Consider computational budget</strong> - Balance thoroughness vs. time</li>
+                                <li><strong>Use appropriate scoring metric</strong> - Align with business objectives</li>
+                            </ol>
+                            
+                            <div class="info-box">
+                                <strong>Scoring Metrics for Different Problems:</strong>
+                                <ul style="font-size: 0.85em;">
+                                    <li>Balanced classes: 'accuracy'</li>
+                                    <li>Imbalanced classes: 'f1', 'roc_auc'</li>
+                                    <li>Cost-sensitive: 'precision' or 'recall'</li>
+                                    <li>Custom: Define your own scorer</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <h4>Efficient Pipeline</h4>
+                            <pre><code class="python"># Complete hyperparameter tuning pipeline
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import RandomizedSearchCV
+import time
+
+# Create pipeline with preprocessing
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('classifier', SVC())
+])
+
+# Parameter distribution for pipeline
+param_dist = {
+    'classifier__C': loguniform(1e-3, 1e3),
+    'classifier__gamma': loguniform(1e-4, 1e0),
+    'classifier__kernel': ['rbf', 'poly'],
+}
+
+# Track timing
+start_time = time.time()
+
+# Random search
+random_search = RandomizedSearchCV(
+    pipeline,
+    param_dist,
+    n_iter=50,
+    cv=5,
+    scoring='f1',
+    n_jobs=-1,
+    random_state=42
+)
+
+random_search.fit(X_train, y_train)
+
+elapsed_time = time.time() - start_time
+
+# Results
+print(f"Time taken: {elapsed_time:.1f} seconds")
+print(f"Best score: {random_search.best_score_:.3f}")
+print(f"Test score: {random_search.score(X_test, y_test):.3f}")
+
+# Save best model
+import joblib
+joblib.dump(random_search.best_estimator_, 'best_model.pkl')</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="success-box">
+                        <strong>Remember:</strong> Hyperparameter tuning is an investment. The time spent finding optimal parameters often pays off in significantly improved model performance and business value.
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 6: Business Applications -->
+            <section>
+                <section>
+                    <h2>Part 5: SVM in Business Applications</h2>
+                    <h3>Real-World Use Cases</h3>
+                    
+                    <div class="columns">
+                        <div class="column-33">
+                            <div class="metric-card">
+                                <h4>Financial Services</h4>
+                                <ul style="text-align: left; font-size: 0.8em;">
+                                    <li><strong>Credit Scoring:</strong> Non-linear patterns in creditworthiness</li>
+                                    <li><strong>Fraud Detection:</strong> Complex fraud patterns</li>
+                                    <li><strong>Trading Signals:</strong> High-dimensional market data</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column-33">
+                            <div class="metric-card">
+                                <h4>Healthcare</h4>
+                                <ul style="text-align: left; font-size: 0.8em;">
+                                    <li><strong>Disease Diagnosis:</strong> Complex symptom patterns</li>
+                                    <li><strong>Drug Discovery:</strong> Molecular structure classification</li>
+                                    <li><strong>Risk Stratification:</strong> Patient outcome prediction</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column-33">
+                            <div class="metric-card">
+                                <h4>Marketing</h4>
+                                <ul style="text-align: left; font-size: 0.8em;">
+                                    <li><strong>Customer Segmentation:</strong> Complex behavioral patterns</li>
+                                    <li><strong>Churn Prediction:</strong> Non-linear churn indicators</li>
+                                    <li><strong>Response Modeling:</strong> Campaign effectiveness</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="business-case">
+                        <h4>Case Study: Fraud Detection with Imbalanced Data</h4>
+                        <div class="columns">
+                            <div class="column-50">
+                                <p><strong>Challenge:</strong> 0.1% fraud rate (severe imbalance)</p>
+                                <p><strong>SVM Solution:</strong></p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Use class_weight='balanced' to handle imbalance</li>
+                                    <li>RBF kernel captures complex fraud patterns</li>
+                                    <li>Focus on precision-recall rather than accuracy</li>
+                                </ul>
+                            </div>
+                            <div class="column-50 code-column">
+                                <pre><code class="python"># Fraud detection with imbalanced data
+from sklearn import svm
+from sklearn.metrics import classification_report
+
+# Handle imbalance
+clf = svm.SVC(
+    kernel='rbf',
+    class_weight='balanced',  # Key for imbalanced data
+    probability=True,  # For probability scores
+    gamma='scale'
+)
+
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+
+print(classification_report(y_test, y_pred,
+                          target_names=['Normal', 'Fraud']))</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>SVM vs Other Classifiers</h2>
+                    <table class="comparison-table" style="font-size: 0.7em;">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>SVM</th>
+                            <th>Logistic Regression</th>
+                            <th>Random Forest</th>
+                            <th>Neural Networks</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Strengths</strong></td>
+                            <td>• High-dimensional data<br>• Clear margin of separation<br>• Many kernel options</td>
+                            <td>• Interpretable<br>• Probabilistic output<br>• Fast training</td>
+                            <td>• No scaling needed<br>• Feature importance<br>• Handles non-linearity</td>
+                            <td>• Complex patterns<br>• Automatic feature learning<br>• State-of-the-art performance</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Weaknesses</strong></td>
+                            <td>• Slow on large datasets<br>• Memory intensive<br>• Kernel selection</td>
+                            <td>• Linear boundaries only<br>• Feature engineering needed</td>
+                            <td>• Can overfit<br>• Black box<br>• Memory intensive</td>
+                            <td>• Requires lots of data<br>• Black box<br>• Computationally expensive</td>
+                        </tr>
+                        <tr>
+                            <td><strong>When to Use</strong></td>
+                            <td>• Medium-sized datasets<br>• Non-linear patterns<br>• High dimensions</td>
+                            <td>• Linear relationships<br>• Interpretability crucial<br>• Baseline model</td>
+                            <td>• Mixed data types<br>• No strict real-time needs<br>• Feature importance needed</td>
+                            <td>• Large datasets<br>• Complex patterns<br>• Image/text data</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Typical Dataset Size</strong></td>
+                            <td>1K - 100K samples</td>
+                            <td>Any size</td>
+                            <td>1K - 10M samples</td>
+                            <td>10K - 1B+ samples</td>
+                        </tr>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>Practical Implementation Tips</h2>
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li><strong>Always scale your features!</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>SVM is sensitive to feature scales</li>
+                                        <li>Use StandardScaler or MinMaxScaler</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Start with RBF kernel</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>Most versatile option</li>
+                                        <li>Works well in most cases</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Use GridSearchCV for hyperparameters</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>C: regularization (1e-3 to 1e3)</li>
+                                        <li>gamma: RBF width ('scale' or 'auto')</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Consider LinearSVC for large datasets</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>Much faster than SVC with linear kernel</li>
+                                        <li>Better scaling to large datasets</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Complete SVM pipeline
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import GridSearchCV
+from sklearn import svm
+
+# Create pipeline
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('svm', svm.SVC())
+])
+
+# Parameter grid
+param_grid = {
+    'svm__C': [0.1, 1, 10, 100],
+    'svm__gamma': ['scale', 'auto', 0.001, 0.01],
+    'svm__kernel': ['rbf', 'poly', 'sigmoid']
+}
+
+# Grid search with cross-validation
+grid = GridSearchCV(
+    pipe, 
+    param_grid,
+    cv=5,
+    scoring='f1',
+    n_jobs=-1,
+    verbose=1
+)
+
+grid.fit(X_train, y_train)
+
+print(f"Best parameters: {grid.best_params_}")
+print(f"Best CV score: {grid.best_score_:.3f}")
+
+# Evaluate on test set
+test_score = grid.score(X_test, y_test)
+print(f"Test score: {test_score:.3f}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 6: Advanced Topics -->
+            <section>
+                <section>
+                    <h2>Part 6: Advanced SVM Topics</h2>
+                    <h3>Multi-class Classification with SVM</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Strategies for Multi-class</h4>
+                            <ul>
+                                <li><strong>One-vs-Rest (OvR):</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>Train N classifiers for N classes</li>
+                                        <li>Each classifier: class i vs all others</li>
+                                        <li>Prediction: class with highest confidence</li>
+                                    </ul>
+                                </li>
+                                <li><strong>One-vs-One (OvO):</strong>
+                                    <ul style="font-size: 0.9em; margin-left: 20px;">
+                                        <li>Train N(N-1)/2 classifiers</li>
+                                        <li>Each classifier: class i vs class j</li>
+                                        <li>Prediction: voting among all classifiers</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <div class="info-box">
+                                <strong>Scikit-learn default:</strong> OvO for SVC, OvR for LinearSVC
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Multi-class classification
+from sklearn import svm
+from sklearn.datasets import load_iris
+from sklearn.multiclass import OneVsRestClassifier
+
+# Load multi-class data
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# Automatic multi-class handling
+clf = svm.SVC(kernel='rbf', decision_function_shape='ovr')
+clf.fit(X_train, y_train)
+
+# Explicit One-vs-Rest
+ovr_clf = OneVsRestClassifier(
+    svm.SVC(kernel='rbf', probability=True)
+)
+ovr_clf.fit(X_train, y_train)
+
+# Get class probabilities
+probas = ovr_clf.predict_proba(X_test)
+print(f"Class probabilities shape: {probas.shape}")
+print(f"Sample prediction: {probas[0]}")
+# Output: [0.05, 0.85, 0.10] for 3 classes</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>SVM for Regression (SVR)</h2>
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Support Vector Regression</h4>
+                            <ul>
+                                <li>Same principles applied to regression</li>
+                                <li><math><mi>ε</mi></math>-insensitive tube instead of margin</li>
+                                <li>Predictions within <math><mi>ε</mi></math> of true value have no penalty</li>
+                                <li>Support vectors: points outside the tube</li>
+                            </ul>
+                            
+                            <div class="svm-concept-box">
+                                <strong>Key difference:</strong> Instead of maximizing margin between classes, SVR fits as many points as possible within an <math><mi>ε</mi></math>-tube
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn.svm import SVR
+import numpy as np
+
+# Generate sample regression data
+X = np.sort(5 * np.random.rand(100, 1), axis=0)
+y = np.sin(X).ravel() + np.random.normal(0, 0.1, X.shape[0])
+
+# Different SVR models
+svr_rbf = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=0.1)
+svr_linear = SVR(kernel='linear', C=100, epsilon=0.1)
+svr_poly = SVR(kernel='poly', C=100, degree=3, epsilon=0.1)
+
+# Fit models
+svr_rbf.fit(X, y)
+svr_linear.fit(X, y)
+svr_poly.fit(X, y)
+
+# Number of support vectors
+print(f"RBF support vectors: {len(svr_rbf.support_)}")
+print(f"Linear support vectors: {len(svr_linear.support_)}")
+print(f"Polynomial support vectors: {len(svr_poly.support_)}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Summary -->
+            <section>
+                <h2>Key Takeaways</h2>
+                <div class="columns">
+                    <div class="column-50">
+                        <h4>Core Concepts</h4>
+                        <ul>
+                            <li>SVMs find the maximum margin hyperplane</li>
+                            <li>Support vectors define the decision boundary</li>
+                            <li>Kernel trick enables non-linear classification</li>
+                            <li>RBF kernel is most versatile for complex patterns</li>
+                            <li>Soft margin (C parameter) handles noisy data</li>
+                        </ul>
+                        
+                        <h4>When to Use SVM</h4>
+                        <ul>
+                            <li>High-dimensional data (text, genes)</li>
+                            <li>Clear margin of separation expected</li>
+                            <li>Non-linear patterns (with kernels)</li>
+                            <li>Medium-sized datasets (< 100K samples)</li>
+                        </ul>
+                    </div>
+                    <div class="column-50">
+                        <h4>Practical Considerations</h4>
+                        <ul>
+                            <li><strong>Always scale features</strong> - critical for SVM</li>
+                            <li><strong>Start with RBF kernel</strong> - usually works well</li>
+                            <li><strong>Use GridSearchCV</strong> - for C and gamma</li>
+                            <li><strong>Handle imbalance</strong> - use class_weight</li>
+                            <li><strong>Consider LinearSVC</strong> - for large datasets</li>
+                        </ul>
+                        
+                        <h4>Limitations</h4>
+                        <ul>
+                            <li>Computationally expensive for large datasets</li>
+                            <li>Memory intensive (stores support vectors)</li>
+                            <li>Less interpretable than linear models</li>
+                            <li>Sensitive to hyperparameter tuning</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Practice & Next Steps -->
+            <section>
+                <h2>Practice Exercises & Next Steps</h2>
+                <div class="columns">
+                    <div class="column-50">
+                        <h4>This Week's Assignment</h4>
+                        <div class="info-box">
+                            <strong>Fraud Detection with SVM</strong><br>
+                            Build an SVM classifier for fraud detection:
+                            <ul style="font-size: 0.9em; margin-top: 10px;">
+                                <li>Handle severe class imbalance (0.17% fraud)</li>
+                                <li>Compare different kernels</li>
+                                <li>Optimize precision-recall trade-off</li>
+                                <li>Visualize decision boundaries</li>
+                                <li>Compare with logistic regression baseline</li>
+                                <li>Implement cost-sensitive learning</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="column-50">
+                        <h4>Next Week: Decision Trees</h4>
+                        <div class="success-box">
+                            <strong>Preview of Topics:</strong>
+                            <ul style="font-size: 0.9em; margin-top: 10px;">
+                                <li>Tree-based decision making</li>
+                                <li>Information gain and entropy</li>
+                                <li>Pruning and overfitting</li>
+                                <li>Feature importance</li>
+                                <li>Interpretable models</li>
+                            </ul>
+                        </div>
+                        
+                        <h4>Resources</h4>
+                        <ul style="font-size: 0.8em;">
+                            <li>Original SVM paper by Vapnik & Cortes</li>
+                            <li>Scikit-learn SVM documentation</li>
+                            <li>"Pattern Recognition and Machine Learning" - Bishop</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/search/search.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom,
+                RevealSearch,
+                RevealMath.KaTeX
+            ]
+        });
+    </script>
+</body>
+</html>

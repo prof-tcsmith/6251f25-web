@@ -1,0 +1,2305 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 2: Python Fundamentals</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Common slide styles -->
+    <link rel="stylesheet" href="../common-slides.css">
+    
+    <!-- Page-specific styles if needed -->
+    <style>
+        /* Page-specific styles for Week 2 Python Fundamentals */
+        
+        /* Center alignment helper */
+        .center {
+            text-align: center !important;
+        }
+        
+        /* Small text helper */
+        .small-text {
+            font-size: 0.7em;
+        }
+        
+        /* Highlight helper */
+        .highlight {
+            background-color: rgba(243, 156, 18, 0.3);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        /* Ensure slide numbers are visible */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.6em;
+        }
+        
+        /* Fix two-column code layouts */
+        /* When both columns have code - narrower with gap */
+        .reveal .columns .column-50.code-column {
+            flex: 0 0 47% !important;
+            max-width: 47% !important;
+            margin-right: 1.5% !important;
+        }
+        
+        /* Remove margin from last column to prevent overflow */
+        .reveal .columns .column-50.code-column:last-child {
+            margin-right: 0 !important;
+        }
+        
+        /* When only column-50 (no code-column) - slightly wider */
+        .reveal .columns .column-50:not(.code-column) {
+            flex: 0 0 48% !important;
+            max-width: 48% !important;
+            margin-right: 1% !important;
+        }
+        
+        /* Remove margin from last column */
+        .reveal .columns .column-50:not(.code-column):last-child {
+            margin-right: 0 !important;
+        }
+        
+        /* Code blocks in standard column-50 (not code-column) */
+        .reveal .columns .column-50:not(.code-column) pre {
+            max-height: 550px !important;
+            font-size: 0.48em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+        
+        /* Code blocks in code-column */
+        .reveal .columns .column-50.code-column pre {
+            max-height: 550px !important;
+            font-size: 0.46em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section>
+                <h1>Python Fundamentals</h1>
+                <h3 style="border: none; text-align: center; color: #666;">Essential Programming Skills for Machine Learning</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">Building Your Data Science Foundation</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251 | Week 2</strong><br>
+                    Python • NumPy • Pandas • Matplotlib
+                </p>
+            </section>
+
+            <!-- Topic Overview Hierarchy -->
+            <section>
+                <h2>Week 2: Python Fundamentals - Topic Hierarchy</h2>
+                
+                <!-- Learning Path at the top -->
+                <div style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 1em; text-align: center; margin: 0; color: white; font-weight: bold;">
+                        Learning Path: Python Basics → Data Structures → NumPy → Pandas → Matplotlib
+                    </p>
+                </div>
+                
+                <!-- Two-column ASCII tree layout -->
+                <div style="display: flex; gap: 20px; height: 450px;">
+                    <!-- Left Column -->
+                    <div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+                        <pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #e74c3c;">PYTHON FUNDAMENTALS: YOUR DATA SCIENCE FOUNDATION</strong>
+
+<strong style="color: #3498db;">📚 Learning Objectives</strong>
+├── Python Code with Variables & Control Flow
+├── Create Functions with Various Arguments
+├── Work with Data Structures
+├── Use Comprehensions Effectively
+├── Manipulate NumPy Arrays
+├── Analyze with Pandas DataFrames
+└── Visualize with Matplotlib
+
+<strong style="color: #9b59b6;">🐍 Part 1: Python Basics</strong>
+├── Variables & Data Types
+│   ├── int, float, str, bool
+│   ├── Dynamic Typing
+│   ├── Type Conversion
+│   └── Variable Naming
+├── Operators
+│   ├── Arithmetic: +, -, *, /, //, %, **
+│   ├── Comparison: ==, !=, <, >, <=, >=
+│   ├── Logical: and, or, not
+│   └── Assignment: =, +=, -=, *=, /=
+├── Strings
+│   ├── Indexing & Slicing
+│   ├── Methods: .upper(), .lower(), .strip()
+│   ├── f-strings Formatting
+│   └── String Operations
+├── Control Flow
+│   ├── if/elif/else Statements
+│   ├── for Loops (range, enumerate)
+│   ├── while Loops
+│   └── break/continue
+├── Functions
+│   ├── def Keyword
+│   ├── Parameters & Arguments
+│   ├── Return Values
+│   ├── *args & **kwargs
+│   └── Lambda Functions
+└── Modules
+    ├── Creating Modules
+    ├── import Statement
+    ├── from ... import
+    └── if __name__ == "__main__"
+                        </pre>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+                        <pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #e67e22;">📦 Part 2: Data Structures</strong>
+├── Lists []
+│   ├── Creating & Indexing
+│   ├── Methods: append(), extend(), pop()
+│   ├── Slicing [start:end:step]
+│   └── Mutable Operations
+├── Tuples ()
+│   ├── Immutable Sequences
+│   ├── Unpacking
+│   └── Use Cases
+├── Dictionaries {}
+│   ├── Key-Value Pairs
+│   ├── Methods: keys(), values(), items()
+│   ├── get() with Default
+│   └── Nested Dictionaries
+├── Comprehensions
+│   ├── List: [x**2 for x in range(10)]
+│   ├── Dict: {k: v for k, v in items}
+│   ├── Conditional: if x > 0
+│   └── Nested Comprehensions
+└── Mutable vs Immutable
+    ├── Mutable: list, dict, set
+    └── Immutable: int, str, tuple
+
+<strong style="color: #16a085;">🔢 Part 3: NumPy</strong>
+├── Array Creation
+│   ├── np.array(), np.zeros(), np.ones()
+│   ├── np.arange(), np.linspace()
+│   ├── np.random Arrays
+│   └── Data Types (dtype)
+├── Indexing & Slicing
+│   ├── 1D, 2D, nD Arrays
+│   ├── Boolean Indexing
+│   └── Fancy Indexing
+├── Operations & Broadcasting
+│   ├── Element-wise Operations
+│   ├── Broadcasting Rules
+│   └── Universal Functions (ufuncs)
+└── Statistical Functions
+    ├── mean(), std(), var()
+    ├── min(), max(), sum()
+    ├── axis Parameter
+    └── Performance vs Lists
+
+<strong style="color: #d35400;">🐼 Part 4: Pandas</strong>
+├── DataFrames
+│   ├── Creating from Dict/List
+│   ├── read_csv(), read_excel()
+│   ├── Index & Columns
+│   └── info(), describe()
+├── Data Selection
+│   ├── [] Column Selection
+│   ├── .loc[] Label-based
+│   ├── .iloc[] Position-based
+│   └── Boolean Indexing
+├── Data Manipulation
+│   ├── Adding/Dropping Columns
+│   ├── Filtering Rows
+│   ├── apply() Functions
+│   └── merge() & concat()
+└── Aggregation
+    ├── groupby() Operations
+    ├── agg() Multiple Functions
+    ├── pivot_table()
+    └── Statistical Methods
+
+<strong style="color: #c0392b;">📊 Part 5: Matplotlib</strong>
+├── Basic Plots
+│   ├── plt.plot() Line Plots
+│   ├── plt.scatter() Scatter
+│   ├── plt.bar() Bar Charts
+│   └── plt.hist() Histograms
+├── Customization
+│   ├── Labels & Titles
+│   ├── Colors & Styles
+│   ├── Legends
+│   └── Grid & Axes
+└── Subplots
+    ├── fig, ax = plt.subplots()
+    ├── Multiple Plots
+    └── Saving Figures
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Overview -->
+            <section>
+                <h2>Learning Objectives</h2>
+                <div class="info-box">
+                    <p><strong>By the end of this week, you will be able to:</strong></p>
+                </div>
+                <ul>
+                    <li>Write Python code using variables, operators, and control flow</li>
+                    <li>Create and use functions with various argument types</li>
+                    <li>Work with Python data structures (lists, tuples, dictionaries)</li>
+                    <li>Use list and dictionary comprehensions effectively</li>
+                    <li>Create and manipulate NumPy arrays</li>
+                    <li>Perform data analysis with Pandas DataFrames</li>
+                    <li>Create visualizations with Matplotlib</li>
+                </ul>
+            </section>
+
+            <!-- Part 1: Python Basics -->
+            <section>
+                <section>
+                    <h2>Part 1: Python Basics</h2>
+                    <h3>Variables, Data Types, Control Flow, and Functions</h3>
+                    <div class="info-box">
+                        <strong>Foundation of Programming:</strong><br>
+                        <em>"Python's simplicity lets you become productive quickly, yet it scales to power some of the world's largest applications."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Core Concepts</h4>
+                            <ul>
+                                <li>Dynamic typing system</li>
+                                <li>Variable assignment & naming</li>
+                                <li>Basic data types</li>
+                                <li>Type conversion</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Control Structures</h4>
+                            <ul>
+                                <li>Conditional statements (if/elif/else)</li>
+                                <li>Loop constructs (for/while)</li>
+                                <li>Function definition & calls</li>
+                                <li>Scope and parameters</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Python's readable syntax and powerful features make it ideal for data science,
+                        allowing you to focus on solving problems rather than fighting with the language.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Variables and Data Types</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Key Concepts</h4>
+                            <ul>
+                                <li><strong>Dynamic Typing:</strong> Variables get their type from the assigned value</li>
+                                <li><strong>No Declaration:</strong> No need to declare variable types</li>
+                                <li><strong>Case Sensitive:</strong> age and Age are different variables</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Common Types:</strong><br>
+                                • <strong>int</strong> - whole numbers<br>
+                                • <strong>float</strong> - decimal numbers<br>
+                                • <strong>str</strong> - text/strings<br>
+                                • <strong>bool</strong> - True/False
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Python is dynamically typed
+age = 25              # Integer
+price = 19.99         # Float
+name = "Alice"        # String
+is_student = True     # Boolean
+
+# Type checking
+print(type(age))      
+# Output: &lt;class 'int'&gt;
+
+print(type(price))    
+# Output: &lt;class 'float'&gt;
+
+print(type(name))
+# Output: &lt;class 'str'&gt;
+
+# Type conversion
+str_num = "42"
+int_num = int(str_num)
+float_num = float(str_num)
+
+# Multiple assignment
+x, y, z = 1, 2, 3
+a = b = c = 0
+ </code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Operators</h2>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <h3>Arithmetic</h3>
+                            <pre><code class="python">a = 10
+b = 3
+print(a + b)  # 13
+print(a - b)  # 7
+print(a * b)  # 30
+print(a / b)  # 3.333...
+print(a // b) # 3 (floor)
+print(a % b)  # 1 (remainder)
+print(a ** b) # 1000 (power)</code></pre>
+                        </div>
+                        <div class="column-50 code-column">
+                            <h3>Comparison</h3>
+                            <pre><code class="python">x = 5
+y = 10
+print(x < y)   # True
+print(x <= y)  # True
+print(x > y)   # False
+print(x >= y)  # False
+print(x == y)  # False
+print(x != y)  # True</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Strings</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>String Operations</h4>
+                            <ul>
+                                <li><strong>Concatenation:</strong> + operator</li>
+                                <li><strong>Repetition:</strong> * operator</li>
+                                <li><strong>Indexing:</strong> str[0], str[-1]</li>
+                                <li><strong>Slicing:</strong> str[start:end:step]</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Common Methods:</strong><br>
+                                • <strong>upper()</strong>, <strong>lower()</strong> - case conversion<br>
+                                • <strong>strip()</strong>, <strong>split()</strong> - whitespace & splitting<br>
+                                • <strong>replace()</strong>, <strong>find()</strong> - search & replace<br>
+                                • <strong>format()</strong>, <strong>f-strings</strong> - formatting
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># String creation
+greeting = "Hello"
+name = 'World'
+message = greeting + " " + name
+print(message)  # Hello World
+
+# String formatting
+age = 25
+height = 5.9
+info = f"{name} is {age} years old"
+print(info)
+
+# String methods
+text = "  Python Programming  "
+print(text.strip())      # Remove whitespace
+print(text.upper())      # PYTHON PROGRAMMING
+print(text.lower())      # python programming
+print(text.replace("Python", "Java"))
+
+# String slicing
+word = "Python"
+print(word[0])     # P
+print(word[-1])    # n
+print(word[0:3])   # Pyt
+print(word[::2])   # Pto
+print(word[::-1])  # nohtyP (reverse)</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Control Flow</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Conditional Logic</h4>
+                            <ul>
+                                <li><strong>if:</strong> Basic condition</li>
+                                <li><strong>elif:</strong> Additional conditions</li>
+                                <li><strong>else:</strong> Default case</li>
+                                <li><strong>for:</strong> Iterate sequences</li>
+                                <li><strong>while:</strong> Condition-based loop</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Remember:</strong><br>
+                                • Indentation matters! (defines code blocks)<br>
+                                • Use 4 spaces (not tabs)<br>
+                                • <strong>break</strong> exits the entire loop<br>
+                                • <strong>continue</strong> skips to next iteration
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># If-elif-else
+score = 85
+if score >= 90:
+    grade = 'A'
+elif score >= 80:
+    grade = 'B'
+elif score >= 70:
+    grade = 'C'
+else:
+    grade = 'F'
+print(f"Grade: {grade}")  # Grade: B
+
+# For loop
+fruits = ['apple', 'banana', 'orange']
+for fruit in fruits:
+    print(f"I like {fruit}")
+
+# For with range
+for i in range(5):
+    print(i, end=' ')  # 0 1 2 3 4
+
+# While loop
+count = 0
+while count < 3:
+    print(f"Count: {count}")
+    count += 1
+
+# Break and continue
+for i in range(10):
+    if i == 7:
+        break
+    if i % 2 == 0:
+        continue
+    print(i, end=' ')
+# Output: 1 3 5</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Functions - Basics</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Reusable Code Blocks</h4>
+                            <ul>
+                                <li><strong>def:</strong> Define a function</li>
+                                <li><strong>return:</strong> Send value back</li>
+                                <li><strong>Docstrings:</strong> Document purpose</li>
+                                <li><strong>Scope:</strong> Local vs global</li>
+                                <li><strong>Lambda:</strong> Anonymous functions</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Best Practices:</strong><br>
+                                • Descriptive function names<br>
+                                • Single responsibility principle<br>
+                                • Document with docstrings<br>
+                                • Type hints (optional but helpful)
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Basic function
+def greet(name):
+    """Simple greeting function"""
+    return f"Hello, {name}!"
+
+print(greet("Alice"))  # Hello, Alice!
+
+# Default parameters
+def power(base, exponent=2):
+    return base ** exponent
+
+print(power(3))      # 9 (3^2)
+print(power(3, 3))   # 27 (3^3)
+
+# Multiple return values
+def calculate_stats(numbers):
+    return (
+        min(numbers), 
+        max(numbers), 
+        sum(numbers)/len(numbers)
+    )
+
+min_val, max_val, avg = calculate_stats([1,2,3,4,5])
+print(f"Min: {min_val}, Max: {max_val}, Avg: {avg}")
+
+# Lambda functions
+square = lambda x: x**2
+numbers = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, numbers))
+print(squared)  # [1, 4, 9, 16, 25]
+
+# Filter with lambda
+evens = list(filter(lambda x: x%2==0, numbers))
+print(evens)  # [2, 4]</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Functions - *args and **kwargs</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Variable Arguments</h4>
+                            <ul>
+                                <li><strong>*args:</strong> Variable positional args</li>
+                                <li><strong>**kwargs:</strong> Variable keyword args</li>
+                                <li><strong>Flexibility:</strong> Accept any number</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Order Matters:</strong><br>
+                                1. Regular positional args<br>
+                                2. *args (variable positional)<br>
+                                3. Keyword args<br>
+                                4. **kwargs (variable keyword)
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># *args: Variable positional arguments
+def print_scores(*args):
+    """Accept any number of scores"""
+    if not args:
+        print("No scores provided")
+        return
+    
+    for i, score in enumerate(args, 1):
+        print(f"Score {i}: {score}")
+    print(f"Average: {sum(args)/len(args):.1f}")
+
+print_scores(85, 90, 78, 92, 88)
+# Score 1: 85
+# Score 2: 90...
+# Average: 86.6
+
+# **kwargs: Variable keyword arguments
+def create_profile(**kwargs):
+    """Create profile from keyword args"""
+    profile = {}
+    for key, value in kwargs.items():
+        profile[key] = value
+    return profile
+
+user = create_profile(
+    name="Alice", age=25, 
+    city="NYC", role="Developer"
+)
+
+# Combining all types
+def process(op, *values, **options):
+    print(f"Operation: {op}")
+    print(f"Values: {values}")
+    print(f"Options: {options}")
+
+process("sum", 1, 2, 3, verbose=True)</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Creating and Importing Python Modules</h2>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <h4>File: ml_utils.py</h4>
+                            <pre><code class="python"># ml_utils.py
+"""Utility functions for ML tasks"""
+
+def normalize(data):
+    """Min-max normalization"""
+    min_val = min(data)
+    max_val = max(data)
+    return [(x - min_val) / (max_val - min_val) 
+            for x in data]
+
+def train_test_split(data, test_size=0.2):
+    """Simple train-test split"""
+    split_idx = int(len(data) * (1 - test_size))
+    return data[:split_idx], data[split_idx:]
+
+def accuracy(y_true, y_pred):
+    """Calculate accuracy"""
+    correct = sum(1 for t, p in zip(y_true, y_pred) 
+                  if t == p)
+    return correct / len(y_true)</code></pre>
+                        </div>
+                        <div class="column-50 code-column">
+                            <h4>Using in Notebook</h4>
+                            <pre><code class="python"># In your notebook or script
+import ml_utils
+
+# Use the functions
+data = [10, 20, 30, 40, 50]
+normalized = ml_utils.normalize(data)
+print(normalized)
+
+# Or import specific functions
+from ml_utils import train_test_split
+
+train, test = train_test_split(data)
+print(f"Train: {train}")
+print(f"Test: {test}")
+
+# Import with alias
+import ml_utils as utils
+
+result = utils.accuracy([1,0,1,1], [1,0,0,1])
+print(f"Accuracy: {result:.2%}")</code></pre>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Best Practice:</strong> Organize reusable functions in .py files for clean, maintainable code</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 2: Data Structures -->
+            <section>
+                <section>
+                    <h2>Part 2: Data Structures</h2>
+                    <h3>Lists, Tuples, Dictionaries, and Comprehensions</h3>
+                    <div class="info-box">
+                        <strong>Organizing Your Data:</strong><br>
+                        <em>"The right data structure can be the difference between a solution that works and one that scales."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Sequential Structures</h4>
+                            <ul>
+                                <li><strong>Lists:</strong> Mutable, ordered sequences</li>
+                                <li><strong>Tuples:</strong> Immutable, fixed collections</li>
+                                <li><strong>Strings:</strong> Immutable text sequences</li>
+                                <li><strong>Ranges:</strong> Efficient number sequences</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Mapping & Advanced</h4>
+                            <ul>
+                                <li><strong>Dictionaries:</strong> Key-value mappings</li>
+                                <li><strong>Sets:</strong> Unique element collections</li>
+                                <li><strong>Comprehensions:</strong> Concise creation syntax</li>
+                                <li><strong>Generators:</strong> Memory-efficient iteration</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Mastering Python's built-in data structures enables efficient data manipulation,
+                        a crucial skill for machine learning preprocessing and feature engineering.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Lists</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Mutable Sequences</h4>
+                            <ul>
+                                <li><strong>Ordered:</strong> Items have index</li>
+                                <li><strong>Mutable:</strong> Can be modified</li>
+                                <li><strong>Mixed types:</strong> Any data type</li>
+                                <li><strong>Dynamic:</strong> Can grow/shrink</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Common Methods:</strong><br>
+                                • <strong>append()</strong>, <strong>extend()</strong> - add items<br>
+                                • <strong>insert()</strong>, <strong>remove()</strong> - modify at position<br>
+                                • <strong>pop()</strong>, <strong>clear()</strong> - remove items<br>
+                                • <strong>sort()</strong>, <strong>reverse()</strong> - reorder list
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Creating lists
+numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", 3.14, True]
+nested = [[1, 2], [3, 4], [5, 6]]
+
+# List operations
+fruits = ['apple', 'banana']
+fruits.append('orange')      # Add to end
+fruits.insert(1, 'grape')     # Insert at index
+print(fruits)  
+# ['apple', 'grape', 'banana', 'orange']
+
+# Remove items
+fruits.remove('grape')        # Remove by value
+last = fruits.pop()           # Remove & return last
+print(fruits)  # ['apple', 'banana']
+
+# List slicing
+nums = [0, 1, 2, 3, 4, 5]
+print(nums[2:5])    # [2, 3, 4]
+print(nums[::2])    # [0, 2, 4] (every 2nd)
+print(nums[::-1])   # [5, 4, 3, 2, 1, 0]
+
+# List methods
+scores = [85, 92, 78, 95, 88]
+scores.sort()
+print(scores)  # [78, 85, 88, 92, 95]
+print(f"Max: {max(scores)}, Min: {min(scores)}")
+print(f"Sum: {sum(scores)}, Avg: {sum(scores)/len(scores)}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Tuples</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Immutable Sequences</h4>
+                            <ul>
+                                <li><strong>Immutable:</strong> Cannot be changed</li>
+                                <li><strong>Ordered:</strong> Indexed like lists</li>
+                                <li><strong>Hashable:</strong> Can be dict keys</li>
+                                <li><strong>Memory efficient:</strong> Less overhead</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Use Cases:</strong><br>
+                                • Fixed collections (coordinates, RGB values)<br>
+                                • Function returns (multiple values)<br>
+                                • Dictionary keys (immutable required)<br>
+                                • Named tuples for structured records
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Creating tuples
+point = (3, 4)
+rgb = (255, 128, 0)
+single = (42,)  # Note comma for single item
+
+# Tuple unpacking
+x, y = point
+print(f"x: {x}, y: {y}")  # x: 3, y: 4
+
+# Multiple assignment
+def get_min_max(numbers):
+    return min(numbers), max(numbers)
+
+minimum, maximum = get_min_max([1, 2, 3, 4, 5])
+print(f"Min: {minimum}, Max: {maximum}")
+
+# Tuples are immutable
+# point[0] = 5  # This would raise TypeError
+
+# Named tuples (more readable)
+from collections import namedtuple
+Person = namedtuple('Person', ['name', 'age', 'city'])
+alice = Person('Alice', 30, 'NYC')
+print(alice.name)  # Alice
+print(alice.age)   # 30
+
+# Tuple as dictionary key (lists can't do this)
+locations = {
+    (40.7128, -74.0060): "New York",
+    (51.5074, -0.1278): "London"
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Dictionaries</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Key-Value Pairs</h4>
+                            <ul>
+                                <li><strong>Unordered:</strong> No index</li>
+                                <li><strong>Mutable:</strong> Can modify</li>
+                                <li><strong>Fast lookup:</strong> O(1) access</li>
+                                <li><strong>Unique keys:</strong> No duplicates</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Common Methods:</strong><br>
+                                • <strong>keys()</strong>, <strong>values()</strong>, <strong>items()</strong> - access parts<br>
+                                • <strong>get()</strong>, <strong>setdefault()</strong> - safe access<br>
+                                • <strong>update()</strong>, <strong>pop()</strong> - modify dict<br>
+                                • <strong>clear()</strong>, <strong>copy()</strong> - manage dict
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Creating dictionaries
+person = {
+    'name': 'Alice',
+    'age': 30,
+    'city': 'NYC'
+}
+
+# Alternative creation
+scores = dict(math=90, english=85, science=92)
+
+# Accessing values
+print(person['name'])  # Alice
+print(person.get('age'))  # 30
+print(person.get('job', 'Unknown'))  # Unknown
+
+# Adding/updating
+person['job'] = 'Developer'
+person['age'] = 31
+
+# Dictionary methods
+print(person.keys())    # dict_keys(['name', 'age', 'city', 'job'])
+print(person.values())  # dict_values(['Alice', 31, 'NYC', 'Developer'])
+
+# Iterating
+for key, value in person.items():
+    print(f"{key}: {value}")
+
+# Nested dictionaries
+data = {
+    'user1': {'name': 'Alice', 'age': 30},
+    'user2': {'name': 'Bob', 'age': 25}
+}
+print(data['user1']['name'])  # Alice</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Mutable vs Immutable</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Understanding Mutability</h4>
+                            <ul>
+                                <li><strong>Immutable:</strong> int, float, str, tuple</li>
+                                <li><strong>Mutable:</strong> list, dict, set</li>
+                                <li><strong>Assignment:</strong> Creates new reference</li>
+                                <li><strong>Modification:</strong> Changes in place</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Important Points:</strong><br>
+                                • Immutable = safer for sharing data<br>
+                                • Mutable = memory efficient updates<br>
+                                • Watch for aliasing issues with references<br>
+                                • Use copy() when needed to avoid side effects
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Immutable example
+x = 5
+y = x
+x = 10
+print(f"x: {x}, y: {y}")  # x: 10, y: 5
+
+# String (immutable)
+s1 = "hello"
+s2 = s1
+s1 = s1.upper()
+print(f"s1: {s1}, s2: {s2}")  
+# s1: HELLO, s2: hello
+
+# Mutable example - aliasing
+list1 = [1, 2, 3]
+list2 = list1  # Both point to same list
+list1.append(4)
+print(f"list1: {list1}")  # [1, 2, 3, 4]
+print(f"list2: {list2}")  # [1, 2, 3, 4] - also changed!
+
+# Avoid aliasing with copy
+list3 = [1, 2, 3]
+list4 = list3.copy()  # or list3[:]
+list3.append(4)
+print(f"list3: {list3}")  # [1, 2, 3, 4]
+print(f"list4: {list4}")  # [1, 2, 3] - unchanged
+
+# Function arguments
+def modify_list(lst):
+    lst.append(100)  # Modifies original!
+    
+my_list = [1, 2, 3]
+modify_list(my_list)
+print(my_list)  # [1, 2, 3, 100]</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Nested Data Structures</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Complex Structures</h4>
+                            <ul>
+                                <li><strong>List of dicts:</strong> Records/rows</li>
+                                <li><strong>Dict of lists:</strong> Grouped data</li>
+                                <li><strong>Dict of dicts:</strong> Hierarchical</li>
+                                <li><strong>Mixed nesting:</strong> Any combination</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Real-world Uses:</strong><br>
+                                • JSON data representation<br>
+                                • Database records mapping<br>
+                                • Configuration file storage<br>
+                                • API response handling
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># List of dictionaries (like database records)
+students = [
+    {'name': 'Alice', 'age': 20, 'grade': 85},
+    {'name': 'Bob', 'age': 21, 'grade': 92},
+    {'name': 'Charlie', 'age': 19, 'grade': 78}
+]
+
+# Access and modify
+print(students[0]['name'])  # Alice
+students[1]['grade'] = 95
+
+# Add new student
+students.append({'name': 'Diana', 'age': 22, 'grade': 88})
+
+# Find students with grade > 80
+high_performers = [s for s in students if s['grade'] > 80]
+print(f"High performers: {len(high_performers)}")
+
+# Average grade
+avg_grade = sum(s['grade'] for s in students) / len(students)
+print(f"Average grade: {avg_grade:.1f}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>More Nested Structures</h2>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <h4>Dictionary of Lists</h4>
+                            <pre><code class="python"># Dictionary of lists (grouped data)
+courses = {
+    'Math101': ['Alice', 'Bob', 'Charlie'],
+    'CS201': ['Bob', 'Diana'],
+    'Eng301': ['Alice', 'Charlie', 'Eve']
+}
+
+# Add student to course
+courses['Math101'].append('Frank')
+
+# Find all courses for a student
+student = 'Alice'
+alice_courses = [course for course, students 
+                 in courses.items() 
+                 if student in students]
+print(f"{student}'s courses: {alice_courses}")
+# Alice's courses: ['Math101', 'Eng301']</code></pre>
+                        </div>
+                        <div class="column-50 code-column">
+                            <h4>Dictionary of Lists of Dictionaries</h4>
+                            <pre><code class="python"># Complex nested structure
+company = {
+    'Engineering': [
+        {'name': 'Alice', 'salary': 120000},
+        {'name': 'Bob', 'salary': 105000}
+    ],
+    'Sales': [
+        {'name': 'Charlie', 'salary': 85000},
+        {'name': 'Diana', 'salary': 92000}
+    ]
+}
+
+# Calculate department averages
+for dept, employees in company.items():
+    avg_salary = sum(e['salary'] for e in employees) / len(employees)
+    print(f"{dept}: ${avg_salary:,.0f}")
+    
+# Engineering: $112,500
+# Sales: $88,500</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Working with Data Structures Using Functions</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Functional Approach</h4>
+                            <ul>
+                                <li><strong>Regular functions:</strong> Process complex data</li>
+                                <li><strong>Lambda functions:</strong> Quick transformations</li>
+                                <li><strong>Higher-order:</strong> Functions as arguments</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Common Patterns:</strong><br>
+                                • <strong>map()</strong> - Transform elements<br>
+                                • <strong>filter()</strong> - Select elements<br>
+                                • <strong>reduce()</strong> - Aggregate data<br>
+                                • <strong>sorted()</strong> - Custom sorting
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Regular function for complex processing
+def process_student_data(students):
+    """Calculate statistics for student records"""
+    if not students:
+        return {}
+    
+    grades = [s['grade'] for s in students]
+    return {
+        'count': len(students),
+        'average': sum(grades) / len(grades),
+        'highest': max(grades),
+        'lowest': min(grades),
+        'passing': len([g for g in grades if g >= 70])
+    }
+
+students = [
+    {'name': 'Alice', 'grade': 85},
+    {'name': 'Bob', 'grade': 92},
+    {'name': 'Charlie', 'grade': 78},
+    {'name': 'Diana', 'grade': 65}
+]
+
+stats = process_student_data(students)
+print(f"Class average: {stats['average']:.1f}")
+print(f"Passing students: {stats['passing']}/{stats['count']}")
+
+# Lambda function for sorting complex structures
+students_sorted = sorted(students, 
+                        key=lambda s: s['grade'], 
+                        reverse=True)
+print(f"Top student: {students_sorted[0]['name']}")
+
+# Using map with lambda on nested data
+student_names = list(map(lambda s: s['name'].upper(), 
+                         students))
+print(student_names)  # ['ALICE', 'BOB', 'CHARLIE', 'DIANA']</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>List Comprehensions</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Concise List Creation</h4>
+                            <ul>
+                                <li><strong>Syntax:</strong> [expr for item in iterable]</li>
+                                <li><strong>Filter:</strong> Add if condition</li>
+                                <li><strong>Nested:</strong> Multiple for loops</li>
+                                <li><strong>Faster:</strong> Than equivalent loops</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Benefits:</strong><br>
+                                • More readable and concise<br>
+                                • More Pythonic style<br>
+                                • Better performance than loops<br>
+                                • Less code to maintain
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Basic list comprehension
+squares = [x**2 for x in range(10)]
+print(squares)  
+# [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+# With condition
+evens = [x for x in range(20) if x % 2 == 0]
+print(evens)  
+# [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+
+# Multiple conditions
+filtered = [
+    x for x in range(100) 
+    if x % 2 == 0 and x % 3 == 0
+]
+
+# String operations
+words = ['hello', 'world', 'python']
+upper = [w.upper() for w in words]
+# ['HELLO', 'WORLD', 'PYTHON']
+
+# Nested comprehension
+matrix = [
+    [i+j for j in range(3)] 
+    for i in range(3)
+]
+# [[0,1,2], [1,2,3], [2,3,4]]
+
+# Flatten nested list
+nested = [[1,2], [3,4], [5,6]]
+flat = [x for sublist in nested for x in sublist]
+# [1, 2, 3, 4, 5, 6]</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>List Comprehensions with Functions</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Functions in Comprehensions</h4>
+                            <ul>
+                                <li><strong>Regular functions:</strong> Named, reusable</li>
+                                <li><strong>Lambda functions:</strong> Inline, one-time</li>
+                                <li><strong>Built-in functions:</strong> map(), filter()</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>When to Use:</strong><br>
+                                • <strong>Regular:</strong> Complex logic<br>
+                                • <strong>Lambda:</strong> Simple transforms<br>
+                                • <strong>Comprehension:</strong> Clean, readable
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Regular function in comprehension
+def is_valid_score(score):
+    """Check if score is valid (0-100)"""
+    return 0 <= score <= 100
+
+scores = [85, 92, -5, 78, 105, 88, 95]
+valid_scores = [s for s in scores if is_valid_score(s)]
+print(valid_scores)  # [85, 92, 78, 88, 95]
+
+# Lambda in comprehension
+numbers = [1, 2, 3, 4, 5]
+transformed = [(lambda x: x**2 + 2*x + 1)(n) for n in numbers]
+print(transformed)  # [4, 9, 16, 25, 36]
+
+# Equivalent using map with lambda
+squared_plus = list(map(lambda x: x**2 + 2*x + 1, numbers))
+print(squared_plus)  # [4, 9, 16, 25, 36]
+
+# Complex example: process student records
+students = [
+    {'name': 'Alice', 'scores': [85, 90, 88]},
+    {'name': 'Bob', 'scores': [78, 82, 85]},
+    {'name': 'Charlie', 'scores': [92, 95, 90]}
+]
+
+# Calculate averages using regular function
+def calculate_avg(scores):
+    return sum(scores) / len(scores)
+
+averages = [
+    {'name': s['name'], 'avg': calculate_avg(s['scores'])}
+    for s in students
+]
+
+# Same with lambda (less readable for complex logic)
+averages_lambda = [
+    {'name': s['name'], 
+     'avg': (lambda scores: sum(scores)/len(scores))(s['scores'])}
+    for s in students
+]</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Dictionary Comprehensions</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Concise Dict Creation</h4>
+                            <ul>
+                                <li><strong>Syntax:</strong> {k: v for item in iterable}</li>
+                                <li><strong>From Lists:</strong> Use zip()</li>
+                                <li><strong>Transform:</strong> Modify existing dicts</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Common Uses:</strong><br>
+                                • Invert dictionaries (swap keys/values)<br>
+                                • Filter by value conditions<br>
+                                • Transform values systematically<br>
+                                • Merge dictionaries efficiently
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Basic dictionary comprehension
+squares_dict = {x: x**2 for x in range(5)}
+print(squares_dict)  
+# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+
+# From two lists
+names = ['Alice', 'Bob', 'Charlie']
+ages = [25, 30, 35]
+people = {
+    name: age 
+    for name, age in zip(names, ages)
+}
+# {'Alice': 25, 'Bob': 30, 'Charlie': 35}
+
+# With condition
+adults = {
+    name: age 
+    for name, age in people.items() 
+    if age >= 30
+}
+# {'Bob': 30, 'Charlie': 35}
+
+# Invert dictionary
+inverted = {v: k for k, v in people.items()}
+# {25: 'Alice', 30: 'Bob', 35: 'Charlie'}
+
+# Transform values
+ages_in_months = {
+    name: age * 12 
+    for name, age in people.items()
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Dictionary Comprehensions with Functions</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Functions in Dict Comprehensions</h4>
+                            <ul>
+                                <li><strong>Process keys:</strong> Transform dictionary keys</li>
+                                <li><strong>Process values:</strong> Calculate new values</li>
+                                <li><strong>Filter entries:</strong> Conditional inclusion</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Best Practices:</strong><br>
+                                • Keep comprehensions readable<br>
+                                • Extract complex logic to functions<br>
+                                • Consider performance vs readability
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Regular function for value processing
+def calculate_tax(salary):
+    """Calculate tax based on salary"""
+    if salary < 50000:
+        return salary * 0.10
+    elif salary < 100000:
+        return salary * 0.20
+    else:
+        return salary * 0.30
+
+employees = {
+    'Alice': 45000,
+    'Bob': 75000,
+    'Charlie': 120000,
+    'Diana': 55000
+}
+
+# Dictionary comprehension with regular function
+taxes = {
+    name: calculate_tax(salary)
+    for name, salary in employees.items()
+}
+print(taxes)
+# {'Alice': 4500.0, 'Bob': 15000.0, 
+#  'Charlie': 36000.0, 'Diana': 11000.0}
+
+# Lambda for simple transformations
+# Convert to after-tax income
+after_tax = {
+    name: salary - (lambda s: s * 0.2)(salary)
+    for name, salary in employees.items()
+}
+
+# Process with multiple functions
+def get_level(salary):
+    return 'Senior' if salary > 80000 else 'Junior'
+
+employee_info = {
+    name: {
+        'salary': salary,
+        'tax': calculate_tax(salary),
+        'level': get_level(salary),
+        'monthly': salary / 12
+    }
+    for name, salary in employees.items()
+}
+
+# Filter using lambda
+high_earners = {
+    name: salary
+    for name, salary in employees.items()
+    if (lambda s: s > 70000)(salary)
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 3: NumPy -->
+            <section>
+                <section>
+                    <h2>Part 3: NumPy Fundamentals</h2>
+                    <h3>Numerical Computing with Python</h3>
+                    <div class="info-box">
+                        <strong>The Foundation of Scientific Python:</strong><br>
+                        <em>"NumPy is the fundamental package for scientific computing in Python. It's the foundation on which nearly all higher-level tools are built."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Core Advantages</h4>
+                            <ul>
+                                <li><strong>Performance:</strong> 10-100x faster than lists</li>
+                                <li><strong>Vectorization:</strong> No explicit loops needed</li>
+                                <li><strong>Broadcasting:</strong> Smart array operations</li>
+                                <li><strong>Foundation:</strong> Powers pandas, scikit-learn</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Key Concepts</h4>
+                            <ul>
+                                <li>N-dimensional arrays (ndarray)</li>
+                                <li>Element-wise operations</li>
+                                <li>Array reshaping & indexing</li>
+                                <li>Mathematical functions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> NumPy's vectorized operations eliminate the need for explicit loops,
+                        making your code both faster and more readable - essential for machine learning computations.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Creating NumPy Arrays</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Array Creation Methods</h4>
+                            <ul>
+                                <li><strong>From lists:</strong> np.array()</li>
+                                <li><strong>Zeros/Ones:</strong> Initialize with values</li>
+                                <li><strong>Range:</strong> np.arange(), np.linspace()</li>
+                                <li><strong>Random:</strong> Various distributions</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Array Properties:</strong><br>
+                                • <strong>shape</strong> - array dimensions<br>
+                                • <strong>dtype</strong> - data type of elements<br>
+                                • <strong>size</strong> - total number of elements<br>
+                                • <strong>ndim</strong> - number of dimensions
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import numpy as np
+
+# From list
+arr1 = np.array([1, 2, 3, 4, 5])
+print(arr1)  # [1 2 3 4 5]
+
+# 2D array (matrix)
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+print(matrix.shape)  # (3, 3)
+
+# Initialize arrays
+zeros = np.zeros((3, 4))      # 3x4 matrix of zeros
+ones = np.ones((2, 3))         # 2x3 matrix of ones
+full = np.full((3, 3), 7)     # 3x3 filled with 7
+identity = np.eye(4)           # 4x4 identity matrix
+
+# Sequences
+range_arr = np.arange(0, 10, 2)  # [0 2 4 6 8]
+linear = np.linspace(0, 1, 5)    # [0. 0.25 0.5 0.75 1.]
+
+# Random arrays
+random_uniform = np.random.rand(3, 3)  # Uniform [0,1)
+random_normal = np.random.randn(3, 3)  # Normal(0,1)
+random_int = np.random.randint(0, 10, size=(3, 3))
+
+# Array properties
+print(f"Shape: {matrix.shape}")
+print(f"Data type: {matrix.dtype}")
+print(f"Size: {matrix.size}")
+print(f"Dimensions: {matrix.ndim}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Array Indexing and Slicing</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Accessing Elements</h4>
+                            <ul>
+                                <li><strong>1D:</strong> Like Python lists</li>
+                                <li><strong>2D:</strong> [row, column]</li>
+                                <li><strong>Slicing:</strong> Select subarrays</li>
+                                <li><strong>Boolean:</strong> Conditional selection</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Important:</strong><br>
+                                • Views vs copies (memory implications)<br>
+                                • Negative indexing (from end)<br>
+                                • Fancy indexing (array of indices)<br>
+                                • Broadcasting rules (shape matching)
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># 1D array indexing
+arr = np.array([10, 20, 30, 40, 50])
+print(arr[0])     # 10
+print(arr[-1])    # 50
+print(arr[1:4])   # [20 30 40]
+
+# 2D array indexing
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+print(matrix[0, 0])    # 1 (first element)
+print(matrix[1, :])    # [4 5 6] (second row)
+print(matrix[:, 2])    # [3 6 9] (third column)
+print(matrix[0:2, 1:3])  # [[2 3], [5 6]]
+
+# Boolean indexing
+arr = np.array([1, 2, 3, 4, 5])
+mask = arr > 3
+print(mask)  # [False False False True True]
+print(arr[mask])  # [4 5]
+
+# Direct boolean indexing
+matrix = np.random.randint(0, 10, (4, 4))
+print(matrix[matrix > 5])  # All elements > 5
+
+# Fancy indexing
+arr = np.array([10, 20, 30, 40, 50])
+indices = [0, 2, 4]
+print(arr[indices])  # [10 30 50]
+
+# Modify using indexing
+matrix[0, 0] = 100
+matrix[matrix < 5] = 0  # Set all values < 5 to 0</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Array Operations and Broadcasting</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Vectorized Operations</h4>
+                            <ul>
+                                <li><strong>Element-wise:</strong> +, -, *, /</li>
+                                <li><strong>Broadcasting:</strong> Different shapes</li>
+                                <li><strong>Aggregations:</strong> sum, mean, std</li>
+                                <li><strong>Matrix ops:</strong> dot product, transpose</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Broadcasting Rules:</strong><br>
+                                1. Compare shapes right to left<br>
+                                2. Dimensions are compatible if equal or 1<br>
+                                3. Arrays are broadcast to match shapes
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Element-wise operations
+a = np.array([1, 2, 3, 4])
+b = np.array([10, 20, 30, 40])
+
+print(a + b)  # [11 22 33 44]
+print(a * b)  # [10 40 90 160]
+print(b / a)  # [10. 10. 10. 10.]
+print(a ** 2)  # [1 4 9 16]
+
+# Broadcasting with scalar
+arr = np.array([[1, 2, 3],
+                [4, 5, 6]])
+print(arr * 2)  # All elements multiplied by 2
+
+# Broadcasting with different shapes
+row = np.array([1, 2, 3])     # Shape: (3,)
+col = np.array([[10], [20]])  # Shape: (2, 1)
+result = row + col  # Broadcasting!
+# [[11 12 13],
+#  [21 22 23]]
+
+# Aggregations
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+print(matrix.sum())       # 45 (all elements)
+print(matrix.sum(axis=0))  # [12 15 18] (column sums)
+print(matrix.sum(axis=1))  # [6 15 24] (row sums)
+print(matrix.mean())      # 5.0
+print(matrix.std())       # 2.58...
+
+# Matrix operations
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+print(np.dot(A, B))  # Matrix multiplication
+print(A.T)           # Transpose</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Statistical Functions</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>NumPy Statistics</h4>
+                            <ul>
+                                <li><strong>Basic:</strong> mean, median, std</li>
+                                <li><strong>Extremes:</strong> min, max, argmin, argmax</li>
+                                <li><strong>Percentiles:</strong> quantile, percentile</li>
+                                <li><strong>Correlation:</strong> corrcoef, cov</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Axis Parameter:</strong><br>
+                                • <strong>None:</strong> Entire array (flattened)<br>
+                                • <strong>0:</strong> Along columns (vertically)<br>
+                                • <strong>1:</strong> Along rows (horizontally)
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Generate sample data
+np.random.seed(42)
+data = np.random.randn(1000) * 15 + 100
+
+# Basic statistics
+print(f"Mean: {data.mean():.2f}")
+print(f"Median: {np.median(data):.2f}")
+print(f"Std Dev: {data.std():.2f}")
+print(f"Variance: {data.var():.2f}")
+
+# Min/Max and their indices
+print(f"Min: {data.min():.2f}")
+print(f"Max: {data.max():.2f}")
+print(f"Index of min: {data.argmin()}")
+print(f"Index of max: {data.argmax()}")
+
+# Percentiles
+print(f"25th percentile: {np.percentile(data, 25):.2f}")
+print(f"75th percentile: {np.percentile(data, 75):.2f}")
+
+# 2D array statistics
+matrix = np.random.randint(0, 100, (4, 5))
+print(matrix)
+
+# Statistics along axes
+print(f"Column means: {matrix.mean(axis=0)}")
+print(f"Row means: {matrix.mean(axis=1)}")
+print(f"Column max: {matrix.max(axis=0)}")
+
+# Correlation
+x = np.random.randn(100)
+y = 2 * x + np.random.randn(100) * 0.5
+correlation = np.corrcoef(x, y)[0, 1]
+print(f"Correlation: {correlation:.3f}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Why NumPy? (Performance)</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>NumPy vs Pure Python</h4>
+                            <ul>
+                                <li><strong>Vectorization:</strong> C-optimized loops</li>
+                                <li><strong>Memory:</strong> Contiguous storage</li>
+                                <li><strong>Type consistency:</strong> No type checking</li>
+                                <li><strong>Parallelization:</strong> BLAS/LAPACK</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Performance Tips:</strong><br>
+                                • Avoid Python loops - use vectorization<br>
+                                • Use vectorized operations whenever possible<br>
+                                • Preallocate arrays for known sizes<br>
+                                • Use appropriate dtypes (int32 vs int64)
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import time
+
+# Python list operation
+def python_sum_squares(n):
+    """Sum of squares using Python list"""
+    numbers = list(range(n))
+    result = []
+    for num in numbers:
+        result.append(num ** 2)
+    return sum(result)
+
+# NumPy operation
+def numpy_sum_squares(n):
+    """Sum of squares using NumPy"""
+    numbers = np.arange(n)
+    return (numbers ** 2).sum()
+
+# Timing comparison
+n = 1000000
+
+start = time.time()
+python_result = python_sum_squares(n)
+python_time = time.time() - start
+
+start = time.time()
+numpy_result = numpy_sum_squares(n)
+numpy_time = time.time() - start
+
+print(f"Python time: {python_time:.4f} seconds")
+print(f"NumPy time: {numpy_time:.4f} seconds")
+print(f"NumPy is {python_time/numpy_time:.1f}x faster")
+
+# Output (typical):
+# Python time: 0.1234 seconds
+# NumPy time: 0.0023 seconds
+# NumPy is 53.7x faster
+
+# Memory efficiency
+import sys
+py_list = list(range(1000))
+np_array = np.arange(1000)
+print(f"Python list size: {sys.getsizeof(py_list)} bytes")
+print(f"NumPy array size: {np_array.nbytes} bytes")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 4: Pandas -->
+            <section>
+                <section>
+                    <h2>Part 4: Pandas Fundamentals</h2>
+                    <h3>Powerful Data Structures for Analysis</h3>
+                    <div class="info-box">
+                        <strong>The Swiss Army Knife of Data Analysis:</strong><br>
+                        <em>"Pandas provides high-performance, easy-to-use data structures and data analysis tools that make working with structured data fast and intuitive."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Core Capabilities</h4>
+                            <ul>
+                                <li><strong>DataFrames:</strong> Tabular data structure</li>
+                                <li><strong>Missing data:</strong> Built-in handling</li>
+                                <li><strong>I/O tools:</strong> Read/write various formats</li>
+                                <li><strong>Time series:</strong> Date/time functionality</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Key Features</h4>
+                            <ul>
+                                <li>Label-based indexing</li>
+                                <li>Group by operations</li>
+                                <li>Merge, join, and concatenate</li>
+                                <li>Pivot tables and reshaping</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Pandas bridges the gap between Python and data analysis,
+                        providing Excel-like functionality with the power of programming - essential for data preprocessing in ML.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Creating DataFrames</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>DataFrame Creation</h4>
+                            <ul>
+                                <li><strong>From dict:</strong> Column-oriented</li>
+                                <li><strong>From list:</strong> Row-oriented</li>
+                                <li><strong>From CSV:</strong> pd.read_csv()</li>
+                                <li><strong>From Excel:</strong> pd.read_excel()</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>DataFrame Structure:</strong><br>
+                                • <strong>Rows:</strong> Index (0, 1, 2...)<br>
+                                • <strong>Columns:</strong> Named fields<br>
+                                • <strong>Values:</strong> Any data type
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import pandas as pd
+
+# From dictionary
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie', 'Diana'],
+    'Age': [25, 30, 35, 28],
+    'City': ['NYC', 'Paris', 'London', 'Tokyo'],
+    'Salary': [70000, 80000, 75000, 90000]
+}
+df = pd.DataFrame(data)
+
+print(df)
+# Output:
+#       Name  Age    City  Salary
+# 0    Alice   25     NYC   70000
+# 1      Bob   30   Paris   80000
+# 2  Charlie   35  London   75000
+# 3    Diana   28   Tokyo   90000
+
+# DataFrame info
+print(df.shape)  
+# Output: (4, 4)
+
+print(df.columns.tolist())
+# Output: ['Name', 'Age', 'City', 'Salary']
+
+print(df.dtypes)
+# Output:
+# Name      object
+# Age        int64
+# City      object
+# Salary     int64</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Data Selection</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Accessing DataFrame Data</h4>
+                            <ul>
+                                <li><strong>Columns:</strong> df['col'] or df[['col1', 'col2']]</li>
+                                <li><strong>Rows by position:</strong> df.iloc[index]</li>
+                                <li><strong>Rows by label:</strong> df.loc[label]</li>
+                                <li><strong>Boolean indexing:</strong> df[condition]</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Selection Methods:</strong><br>
+                                • <strong>[ ]</strong> - Column or boolean indexing<br>
+                                • <strong>iloc[ ]</strong> - Integer position based<br>
+                                • <strong>loc[ ]</strong> - Label-based access<br>
+                                • <strong>query()</strong> - String expression filtering
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Column selection
+print(df['Name'])        
+# Output: Series with names
+# 0      Alice
+# 1        Bob
+# 2    Charlie
+# 3      Diana
+
+print(df[['Name', 'Salary']])  
+# Output: DataFrame with 2 columns
+
+# Row selection
+print(df.iloc[0])        
+# Output: First row as Series
+# Name      Alice
+# Age          25
+# City        NYC
+# Salary    70000
+
+print(df.loc[0:2])       
+# Output: DataFrame with rows 0-2
+
+# Conditional selection
+print(df[df['Age'] > 30])
+# Output: Rows where Age > 30
+
+print(df[(df['Age'] > 25) & 
+         (df['Salary'] > 75000)])
+# Output: Multiple conditions
+
+# Using query
+print(df.query('Age > 30 and Salary < 80000'))
+# Output: String-based filtering</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Data Manipulation</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Modifying DataFrames</h4>
+                            <ul>
+                                <li><strong>Add columns:</strong> Direct assignment</li>
+                                <li><strong>Modify:</strong> Update in place</li>
+                                <li><strong>Sort:</strong> By values or index</li>
+                                <li><strong>Group:</strong> Split-apply-combine</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Missing Data:</strong><br>
+                                • <strong>dropna()</strong> - Remove NaN values<br>
+                                • <strong>fillna()</strong> - Replace NaN with value<br>
+                                • <strong>interpolate()</strong> - Fill gaps smartly
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Add new column
+df['Bonus'] = df['Salary'] * 0.1
+print(df['Bonus'].head(2))
+# Output: 
+# 0    7000.0
+# 1    8000.0
+
+# Modify existing column
+df['Salary'] = df['Salary'] * 1.05
+
+# Sort data
+df_sorted = df.sort_values('Salary', 
+                           ascending=False)
+print(df_sorted[['Name', 'Salary']].head(2))
+# Output:
+#     Name    Salary
+# 3  Diana  94500.00
+# 1    Bob  84000.00
+
+# Group by operations
+df_grouped = df.groupby('City')['Salary'].mean()
+print(df_grouped)
+# Output:
+# City
+# London    78750.0
+# NYC       73500.0
+# Paris     84000.0
+# Tokyo     94500.0
+
+# Handling missing data
+df_clean = df.dropna()        # Drop NaN rows
+df_filled = df.fillna(0)      # Fill with 0
+df.fillna(method='ffill')     # Forward fill</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Aggregation and Statistics</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Statistical Analysis</h4>
+                            <ul>
+                                <li><strong>describe():</strong> Summary statistics</li>
+                                <li><strong>Aggregations:</strong> mean, sum, count</li>
+                                <li><strong>Group by:</strong> Split-apply-combine</li>
+                                <li><strong>Pivot tables:</strong> Reshape data</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Aggregate Functions:</strong><br>
+                                • <strong>sum, mean, median</strong> - Basic stats<br>
+                                • <strong>min, max, std</strong> - Range & spread<br>
+                                • <strong>count, nunique</strong> - Counting<br>
+                                • Custom functions with apply()
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Basic statistics
+print(df.describe())
+# Output:
+#             Age        Salary
+# count   4.0000       4.000000
+# mean   29.5000   78750.000000
+# std     4.1231   8539.125638
+# min    25.0000   70000.000000
+# 25%    27.2500   73750.000000
+# 50%    29.0000   77500.000000
+# 75%    31.2500   82500.000000
+# max    35.0000   90000.000000
+
+# Single column stats
+print(f"Mean: {df['Salary'].mean():.2f}")
+# Output: Mean: 78750.00
+
+# Group by aggregation
+grouped = df.groupby('City').agg({
+    'Salary': ['mean', 'max', 'min'],
+    'Age': 'mean'
+})
+print(grouped)
+# Output: Multi-level column DataFrame
+
+# Value counts
+print(df['City'].value_counts())
+# Output:
+# NYC      1
+# Paris    1
+# London   1
+# Tokyo    1</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 5: Matplotlib -->
+            <section>
+                <section>
+                    <h2>Part 5: Matplotlib Basics</h2>
+                    <h3>Creating Meaningful Visual Insights</h3>
+                    <div class="info-box">
+                        <strong>A Picture is Worth a Thousand Data Points:</strong><br>
+                        <em>"Visualization gives you answers to questions you didn't know you had. It's not just about making pretty pictures, but about understanding."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Why Visualization?</h4>
+                            <ul>
+                                <li><strong>Explore:</strong> Understand your data</li>
+                                <li><strong>Communicate:</strong> Share insights</li>
+                                <li><strong>Validate:</strong> Check assumptions</li>
+                                <li><strong>Present:</strong> Publication-quality figures</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Essential Plot Types</h4>
+                            <ul>
+                                <li><strong>Scatter:</strong> Relationships & correlations</li>
+                                <li><strong>Histogram:</strong> Data distributions</li>
+                                <li><strong>Bar/Column:</strong> Category comparisons</li>
+                                <li><strong>Line:</strong> Trends over time</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Effective visualization is crucial for exploratory data analysis and communicating
+                        machine learning results - it helps you spot patterns, outliers, and validate model assumptions.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Scatter Plots</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Visualizing Relationships</h4>
+                            <ul>
+                                <li><strong>Purpose:</strong> Show correlation between variables</li>
+                                <li><strong>X-axis:</strong> Independent variable</li>
+                                <li><strong>Y-axis:</strong> Dependent variable</li>
+                                <li><strong>Patterns:</strong> Linear, non-linear, clusters</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Customization Options:</strong><br>
+                                • <strong>alpha:</strong> Transparency (0-1)<br>
+                                • <strong>c:</strong> Color (can be array)<br>
+                                • <strong>s:</strong> Size (can be array)<br>
+                                • <strong>marker:</strong> Point style (o, ^, s, etc.)
+                            </div>
+                            <img src="images/week02-matplotlib-scatter-plot.svg" style="width: 100%; margin-top: 20px;">
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import matplotlib.pyplot as plt
+import numpy as np
+
+# Generate data
+np.random.seed(42)
+x = np.random.randn(100)
+y = 2 * x + np.random.randn(100) * 0.5
+
+# Create scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(x, y, alpha=0.6, c=x, 
+            cmap='viridis', s=50)
+
+# Labels and title
+plt.xlabel('X Variable')
+plt.ylabel('Y Variable')
+plt.title('Scatter Plot Example')
+
+# Add grid
+plt.grid(True, alpha=0.3)
+
+# Add colorbar
+plt.colorbar(label='X Value')
+
+# Show plot
+plt.show()
+
+# Correlation coefficient
+corr = np.corrcoef(x, y)[0, 1]
+print(f"Correlation: {corr:.3f}")
+# Output: Correlation: 0.964</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Histograms</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Distribution Analysis</h4>
+                            <ul>
+                                <li><strong>Purpose:</strong> Show data distribution</li>
+                                <li><strong>Bins:</strong> Group continuous data</li>
+                                <li><strong>Height:</strong> Frequency or count</li>
+                                <li><strong>Shape:</strong> Normal, skewed, bimodal</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Key Statistics:</strong><br>
+                                • <strong>Mean:</strong> Central tendency<br>
+                                • <strong>Median:</strong> Middle value<br>
+                                • <strong>Std Dev:</strong> Data spread<br>
+                                • <strong>Skewness:</strong> Distribution asymmetry
+                            </div>
+                            <img src="images/week02-matplotlib-histogram.svg" style="width: 100%; margin-top: 20px;">
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Generate data
+data = np.random.normal(100, 15, 1000)
+
+# Create histogram
+plt.figure(figsize=(10, 6))
+counts, bins, patches = plt.hist(
+    data, bins=30, 
+    edgecolor='black', 
+    alpha=0.7,
+    color='steelblue'
+)
+
+# Add vertical line at mean
+mean_val = data.mean()
+plt.axvline(mean_val, color='red', 
+            linestyle='--', linewidth=2,
+            label=f'Mean: {mean_val:.1f}')
+
+# Labels and title
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Distribution of Values')
+
+# Add legend and grid
+plt.legend()
+plt.grid(True, alpha=0.3, axis='y')
+
+plt.show()
+
+# Print statistics
+print(f"Mean: {data.mean():.2f}")
+print(f"Std Dev: {data.std():.2f}")
+print(f"Min: {data.min():.2f}")
+print(f"Max: {data.max():.2f}")
+# Output:
+# Mean: 100.12
+# Std Dev: 14.87
+# Min: 52.84
+# Max: 143.56</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Bar Charts</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Categorical Comparisons</h4>
+                            <ul>
+                                <li><strong>Purpose:</strong> Compare discrete categories</li>
+                                <li><strong>Vertical:</strong> Standard comparison</li>
+                                <li><strong>Horizontal:</strong> Long category names</li>
+                                <li><strong>Grouped:</strong> Multiple series</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Best Practices:</strong><br>
+                                • Sort by value for clarity<br>
+                                • Add value labels on bars<br>
+                                • Use consistent colors<br>
+                                • Start y-axis at zero
+                            </div>
+                            <img src="images/week02-matplotlib-bar-chart.svg" style="width: 100%; margin-top: 20px;">
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Create data
+categories = ['Product A', 'Product B', 
+              'Product C', 'Product D']
+values = [23, 45, 56, 78]
+
+# Vertical bar chart
+plt.figure(figsize=(10, 6))
+bars = plt.bar(categories, values, 
+               color='coral',
+               edgecolor='black',
+               alpha=0.7)
+
+# Add value labels on bars
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2.,
+             height, f'{height}',
+             ha='center', va='bottom')
+
+# Labels and title
+plt.xlabel('Products')
+plt.ylabel('Sales (in thousands)')
+plt.title('Bar Chart Example')
+
+# Add grid
+plt.grid(True, alpha=0.3, axis='y')
+
+plt.show()
+
+# Calculate total and average
+total = sum(values)
+avg = total / len(values)
+print(f"Total Sales: {total}k")
+print(f"Average: {avg:.1f}k")
+# Output:
+# Total Sales: 202k
+# Average: 50.5k</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Multiple Subplots</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Subplot Layouts</h4>
+                            <ul>
+                                <li><strong>subplots():</strong> Create grid of axes</li>
+                                <li><strong>Indexing:</strong> axes[row, col]</li>
+                                <li><strong>tight_layout():</strong> Auto-spacing</li>
+                                <li><strong>suptitle():</strong> Overall title</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Common Patterns:</strong><br>
+                                • <strong>2x2:</strong> Four related plots<br>
+                                • <strong>1x3:</strong> Side-by-side comparison<br>
+                                • <strong>3x1:</strong> Vertical stack<br>
+                                • <strong>Custom:</strong> GridSpec for complex layouts
+                            </div>
+                            <img src="images/week02-matplotlib-multiple-subplots.svg" style="width: 100%; margin-top: 10px;">
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">fig, axes = plt.subplots(2, 2, 
+                        figsize=(12, 10))
+
+# Scatter plot (top-left)
+axes[0, 0].scatter(x, y, alpha=0.6)
+axes[0, 0].set_title('Scatter Plot')
+axes[0, 0].set_xlabel('X')
+axes[0, 0].set_ylabel('Y')
+
+# Histogram (top-right)
+axes[0, 1].hist(data, bins=20, 
+                color='green', alpha=0.7)
+axes[0, 1].set_title('Histogram')
+axes[0, 1].set_xlabel('Value')
+axes[0, 1].set_ylabel('Frequency')
+
+# Bar chart (bottom-left)
+axes[1, 0].bar(categories, values, 
+               color='orange')
+axes[1, 0].set_title('Bar Chart')
+axes[1, 0].set_xlabel('Category')
+
+# Line plot (bottom-right)
+x_line = np.linspace(0, 10, 100)
+y_line = np.sin(x_line)
+axes[1, 1].plot(x_line, y_line, 'r-')
+axes[1, 1].set_title('Line Plot')
+
+# Overall title
+plt.suptitle('Dashboard', fontsize=14)
+plt.tight_layout()
+plt.show()</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Practice Exercises -->
+            <section>
+                <h2>Practice Exercises</h2>
+                <div class="warning-box">
+                    <p><strong>Complete the Week 2 Jupyter Notebooks:</strong></p>
+                </div>
+                <ol>
+                    <li><strong>week02a-python-fundamentals.ipynb</strong>
+                        <ul>
+                            <li>Variables, operators, control flow</li>
+                            <li>Functions and comprehensions</li>
+                        </ul>
+                    </li>
+                    <li><strong>week02b-numpy-fundamentals.ipynb</strong>
+                        <ul>
+                            <li>Array creation and manipulation</li>
+                            <li>Broadcasting and vectorization</li>
+                        </ul>
+                    </li>
+                    <li><strong>week02c-pandas-fundamentals.ipynb</strong>
+                        <ul>
+                            <li>DataFrames and Series</li>
+                            <li>Data selection and aggregation</li>
+                        </ul>
+                    </li>
+                    <li><strong>week02d-matplotlib-fundamentals.ipynb</strong>
+                        <ul>
+                            <li>Creating various plot types</li>
+                            <li>Customization and styling</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- Key Takeaways -->
+            <section>
+                <h2>Key Takeaways</h2>
+                <div class="success-box">
+                    <p><strong>Essential Skills for Machine Learning:</strong></p>
+                </div>
+                <ul>
+                    <li><strong>Python Basics:</strong> Foundation for all programming tasks</li>
+                    <li><strong>Functions:</strong> Reusable code blocks and modular programming</li>
+                    <li><strong>Data Structures:</strong> Lists, tuples, dictionaries, and comprehensions</li>
+                    <li><strong>NumPy:</strong> Efficient numerical computations</li>
+                    <li><strong>Pandas:</strong> Data manipulation and analysis</li>
+                    <li><strong>Matplotlib:</strong> Data visualization</li>
+                </ul>
+                <div class="info-box" style="margin-top: 20px;">
+                    <p><strong>Remember:</strong> These tools form the foundation for all machine learning work in Python!</p>
+                </div>
+            </section>
+
+            <!-- Next Week Preview -->
+            <section>
+                <h2>Next Week: Data Preparation</h2>
+                <div class="info-box">
+                    <p><strong>Week 3 Preview:</strong></p>
+                </div>
+                <ul>
+                    <li>Data cleaning techniques</li>
+                    <li>Handling missing values</li>
+                    <li>Feature scaling and normalization</li>
+                    <li>Encoding categorical variables</li>
+                    <li>Feature engineering basics</li>
+                </ul>
+                <div class="center" style="margin-top: 50px;">
+                    <p><strong>Keep practicing with the notebooks!</strong></p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/search/search.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom,
+                RevealSearch,
+                RevealMath.KaTeX
+            ]
+        });
+    </script>
+</body>
+</html>

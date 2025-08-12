@@ -1,0 +1,2240 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 3: Data Preparation Deep Dive</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Common slide styles -->
+    <link rel="stylesheet" href="../common-slides.css">
+    
+    <!-- Page-specific styles if needed -->
+    <style>
+        /* Page-specific styles for Week 3 Data Preparation */
+        
+        /* Center alignment helper */
+        .center {
+            text-align: center !important;
+        }
+        
+        /* Small text helper */
+        .small-text {
+            font-size: 0.7em;
+        }
+        
+        /* Highlight helper */
+        .highlight {
+            background-color: rgba(243, 156, 18, 0.3);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        /* Data quality indicators */
+        .good-quality {
+            background-color: rgba(46, 204, 113, 0.2);
+            padding: 10px;
+            border-left: 4px solid #2ecc71;
+            margin: 10px 0;
+            font-size: 0.75em;
+            line-height: 1.3;
+        }
+        
+        .poor-quality {
+            background-color: rgba(231, 76, 60, 0.2);
+            padding: 10px;
+            border-left: 4px solid #e74c3c;
+            margin: 10px 0;
+            font-size: 0.75em;
+            line-height: 1.3;
+        }
+        
+        /* Box title styling using h5 */
+        .good-quality h5,
+        .poor-quality h5,
+        .success-box h5,
+        .warning-box h5,
+        .info-box h5 {
+            margin: 0 0 4px 0;
+            padding: 0;
+            font-size: 1em;
+            font-weight: bold;
+            color: inherit;
+        }
+        
+        /* Fix key-points h4 styling for better readability */
+        .key-points h4 {
+            font-size: 1.1em !important;
+            margin-bottom: 4px !important;
+        }
+        
+        /* Consistent two-column layout spacing */
+        /* When both columns have code - narrower with gap */
+        .reveal .columns .column-50.code-column {
+            flex: 0 0 47% !important;
+            max-width: 47% !important;
+            margin-right: 1.5% !important;
+        }
+        
+        /* Remove margin from last column to prevent overflow */
+        .reveal .columns .column-50.code-column:last-child {
+            margin-right: 0 !important;
+        }
+        
+        /* When only column-50 (no code-column) - slightly wider */
+        .reveal .columns .column-50:not(.code-column) {
+            flex: 0 0 48% !important;
+            max-width: 48% !important;
+            margin-right: 1% !important;
+        }
+        
+        /* Remove margin from last column */
+        .reveal .columns .column-50:not(.code-column):last-child {
+            margin-right: 0 !important;
+        }
+        
+        /* Code blocks in code-column - optimized for dense code */
+        .reveal .columns .column-50.code-column pre {
+            max-height: 578px !important;
+            font-size: 0.46em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            white-space: pre !important;
+        }
+        
+        .reveal .columns .column-50.code-column pre code {
+            max-height: 558px !important;
+            overflow-x: visible !important;
+            overflow-y: visible !important;
+            white-space: pre !important;
+        }
+        
+        /* Code blocks in standard columns - slightly larger font */
+        .reveal .columns .column-50:not(.code-column) pre {
+            max-height: 550px !important;
+            font-size: 0.48em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+        
+        /* Code blocks inside quality boxes need special handling */
+        .reveal .columns .poor-quality pre,
+        .reveal .columns .good-quality pre {
+            font-size: 0.65em !important;  /* Larger for readability in examples */
+            max-height: 400px !important;
+            margin: 5px 0 !important;
+        }
+        
+        
+        /* Ensure slide numbers are visible */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.6em;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section>
+                <h1>Data Preparation Deep Dive</h1>
+                <h3 style="border: none; text-align: center; color: #666;">From Raw Data to ML-Ready Datasets</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">The Foundation of Successful Machine Learning</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251 | Week 3</strong><br>
+                    Missing Data • Filtering • Grouping • Quality Assessment
+                </p>
+            </section>
+
+            <!-- Topic Overview Hierarchy -->
+            <section>
+                <h2>Week 3: Data Preparation - Topic Hierarchy</h2>
+                
+                <!-- Learning Path at the top -->
+                <div style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 1em; text-align: center; margin: 0; color: white; font-weight: bold;">
+                        Learning Path: Data Quality → Missing Data → Categorical Encoding → Filtering → Aggregation → Pipelines
+                    </p>
+                </div>
+                
+                <!-- Two-column ASCII tree layout -->
+                <div style="display: flex; gap: 20px; height: 450px;">
+                    <!-- Left Column -->
+                    <div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+                        <pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #e74c3c;">DATA PREPARATION: THE FOUNDATION OF ML SUCCESS</strong>
+
+<strong style="color: #3498db;">📚 Learning Objectives</strong>
+├── Identify Data Quality Issues
+├── Handle Missing Data Effectively
+├── Encode Categorical Variables
+├── Apply Filtering & Outlier Detection
+├── Use Grouping for Aggregation
+├── Make Drop vs Impute Decisions
+└── Create Quality Assessment Reports
+
+<strong style="color: #9b59b6;">🔍 Part 1: Data Quality Issues</strong>
+├── Hidden Challenges
+│   ├── Real-World Messiness
+│   ├── Collection Errors
+│   └── System Limitations
+├── Quality Assessment
+│   ├── Completeness Check
+│   ├── Consistency Validation
+│   ├── Accuracy Verification
+│   └── Duplicate Detection
+├── Types of Problems
+│   ├── Missing Values
+│   ├── Outliers & Anomalies
+│   ├── Inconsistent Formats
+│   └── Data Type Mismatches
+└── ML Impact
+    ├── Model Performance ↓
+    ├── Biased Predictions
+    ├── Training Failures
+    └── Poor Generalization
+
+<strong style="color: #e67e22;">🔧 Part 2: Missing Data Strategies</strong>
+├── Understanding Missing Types
+│   ├── MCAR (Completely Random)
+│   ├── MAR (At Random)
+│   └── MNAR (Not at Random)
+├── Decision Framework
+│   ├── <span style="background: #fff3cd; padding: 1px;">⚠️ <5%: Drop Rows</span>
+│   ├── 5-30%: Impute
+│   ├── 30-50%: Impute Carefully
+│   └── >50%: Drop Column
+├── Imputation Techniques
+│   ├── Simple: Mean/Median/Mode
+│   ├── Forward/Backward Fill
+│   ├── KNN Imputation
+│   └── Iterative (MICE)
+└── Practical Guidelines
+    ├── Consider Data Type
+    ├── Preserve Distributions
+    ├── Document Decisions
+    └── Validate Impact
+                        </pre>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+                        <pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #16a085;">🔤 Categorical Encoding</strong>
+├── Why Encode?
+│   ├── ML Needs Numbers
+│   ├── Preserve Information
+│   └── Enable Computation
+├── Encoding Methods
+│   ├── Label (Ordinal)
+│   ├── One-Hot (Nominal)
+│   ├── Dummy (n-1 columns)
+│   └── Target Encoding
+├── <span style="background: #fff3cd; padding: 1px;">⚠️ Dummy Variable Trap</span>
+│   ├── Perfect Multicollinearity
+│   └── Use drop_first=True
+└── High Cardinality
+    ├── Frequency Encoding
+    ├── Binning/Grouping
+    └── Feature Hashing
+
+<strong style="color: #d35400;">🎯 Part 3: Filtering & Selection</strong>
+├── Boolean Filtering
+│   ├── Single Conditions
+│   ├── Multiple Conditions (&, |)
+│   ├── .isin() Method
+│   └── .query() Method
+├── Outlier Detection
+│   ├── Z-Score (|z| > 3)
+│   ├── IQR Method
+│   ├── Isolation Forest
+│   └── Domain Knowledge
+└── Smart Strategies
+    ├── Time-Based Filtering
+    ├── Quality Thresholds
+    ├── Business Rules
+    └── Statistical Criteria
+
+<strong style="color: #27ae60;">📊 Part 4: Grouping & Aggregation</strong>
+├── Basic Operations
+│   ├── .groupby() Mechanics
+│   ├── Common Aggregations
+│   ├── Multiple Functions
+│   └── Custom Aggregations
+├── Advanced Techniques
+│   ├── Multi-level Grouping
+│   ├── Transform vs Agg
+│   ├── Window Functions
+│   └── Pivot Tables
+└── Time-Based Grouping
+    ├── Resampling
+    ├── Rolling Windows
+    ├── Period Grouping
+    └── Seasonal Patterns
+
+<strong style="color: #c0392b;">🚀 Part 5: Practical Implementation</strong>
+├── Building Pipelines
+│   ├── sklearn.pipeline
+│   ├── ColumnTransformer
+│   ├── Sequential Steps
+│   └── Error Handling
+├── Decision Trees
+│   ├── Missing → Impute?
+│   ├── Outliers → Remove?
+│   ├── Scale → When?
+│   └── Encode → How?
+├── Common Pitfalls
+│   ├── Data Leakage
+│   ├── Overfitting in Prep
+│   ├── Lost Information
+│   └── Inconsistent Processing
+└── Key Takeaways
+    ├── 80% Time on Data Prep
+    ├── Document Everything
+    ├── Validate Assumptions
+    └── Next: Linear Regression
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Overview -->
+            <section>
+                <h2>Learning Objectives</h2>
+                <div class="info-box">
+                    <p><strong>By the end of this week, you will be able to:</strong></p>
+                </div>
+                <ul>
+                    <li>Identify common data quality issues and their impact</li>
+                    <li>Implement strategies for handling missing data effectively</li>
+                    <li>Apply data filtering and outlier detection techniques</li>
+                    <li>Use grouping operations for data aggregation and insights</li>
+                    <li>Make informed decisions between dropping vs imputing data</li>
+                    <li>Create data quality assessment reports</li>
+                    <li>Build robust data preparation pipelines</li>
+                </ul>
+            </section>
+
+            <!-- Part 1: Understanding Data Quality -->
+            <section>
+                <section>
+                    <h2>Part 1: Understanding Data Quality Issues</h2>
+                    <h3>The Hidden Challenges in Real-World Data</h3>
+                    <div class="info-box">
+                        <strong>Data Quality Reality:</strong><br>
+                        <em>"Garbage in, garbage out. 80% of data science work is data preparation, and poor quality data will doom even the best machine learning models."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Common Quality Issues</h4>
+                            <ul>
+                                <li><strong>Missing values:</strong> NaN, null, empty strings</li>
+                                <li><strong>Duplicates:</strong> Identical or near-identical records</li>
+                                <li><strong>Inconsistencies:</strong> Format variations, typos</li>
+                                <li><strong>Outliers:</strong> Extreme or erroneous values</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Impact on ML Models</h4>
+                            <ul>
+                                <li>Biased training data</li>
+                                <li>Reduced model accuracy</li>
+                                <li>Algorithm failures (NaN intolerance)</li>
+                                <li>Misleading performance metrics</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Investing time in data quality assessment and preparation 
+                        pays dividends in model performance and reliability.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Data Quality Assessment</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Assessment Checklist</h4>
+                            <ul>
+                                <li><strong>Completeness:</strong> Missing value patterns</li>
+                                <li><strong>Consistency:</strong> Format uniformity</li>
+                                <li><strong>Accuracy:</strong> Value validity</li>
+                                <li><strong>Uniqueness:</strong> Duplicate identification</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Red Flags:</strong><br>
+                                • >30% missing values in key columns<br>
+                                • Inconsistent categorical values<br>
+                                • Extreme outliers without explanation<br>
+                                • Duplicate records with conflicting info
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import pandas as pd
+import numpy as np
+
+# Load sample dataset
+df = pd.read_csv('customer_data.csv')
+
+# Basic quality assessment
+print("Dataset Shape:", df.shape)
+print("\nColumn Data Types:")
+print(df.dtypes)
+
+# Missing value analysis
+print("\nMissing Values:")
+missing_stats = pd.DataFrame({
+    'Column': df.columns,
+    'Missing_Count': df.isnull().sum(),
+    'Missing_Percent': (df.isnull().sum() / len(df)) * 100
+})
+missing_stats = missing_stats[missing_stats['Missing_Count'] > 0]
+print(missing_stats.sort_values('Missing_Percent', ascending=False))
+
+# Duplicate analysis
+print(f"\nDuplicate Rows: {df.duplicated().sum()}")
+
+# Basic statistics
+print("\nNumeric Columns Summary:")
+print(df.describe())
+
+# Check for inconsistent categories
+for col in df.select_dtypes(include='object').columns:
+    unique_count = df[col].nunique()
+    if unique_count < 20:  # Show if manageable number
+        print(f"\n{col} unique values: {sorted(df[col].unique())}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Types of Data Problems</h2>
+                    <div class="columns">
+                        <div class="column-50">
+                            <div class="poor-quality">
+                                <h4>❌ Poor Quality Examples</h4>
+                                <pre><code class="text">Customer Data Issues:
+ID    Name       Age    Income    City
+1     Alice      25     50000     NYC
+2     Bob        30     NULL      new york  
+3     Alice      25     50000     NYC       # Duplicate
+4     Charlie    999    75000     N.Y.      # Invalid age
+5     Diana      28     -10000    NULL      # Negative income
+6                35     60000     Boston    # Missing name</code></pre>
+                            </div>
+                        </div>
+                        <div class="column-50">
+                            <div class="good-quality">
+                                <h4>✅ Clean Quality Examples</h4>
+                                <pre><code class="text">After Data Cleaning:
+ID    Name       Age    Income    City
+1     Alice      25     50000     New York
+2     Bob        30     65000     New York  # Imputed income
+4     Charlie    35     75000     New York  # Fixed age
+5     Diana      28     60000     Boston    # Fixed income</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Common Fixes Applied:</strong> Removed duplicates, imputed missing values, 
+                        standardized city names, corrected obvious data entry errors</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Impact on Machine Learning</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>How Data Quality Affects Models</h4>
+                            <ul>
+                                <li><strong>Missing Data:</strong> Reduces sample size, creates bias</li>
+                                <li><strong>Outliers:</strong> Skew model parameters</li>
+                                <li><strong>Inconsistencies:</strong> Create artificial categories</li>
+                                <li><strong>Duplicates:</strong> Overweight certain patterns</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Algorithm Impacts:</strong><br>
+                                • Linear models: Sensitive to outliers<br>
+                                • Tree-based: Handle missing values differently<br>
+                                • Neural networks: Require complete data<br>
+                                • Some algorithms crash on NaN values
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Demonstrate impact of data quality
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+
+# Create sample data with quality issues
+np.random.seed(42)
+X_clean = np.random.randn(100, 1)
+y_clean = 2 * X_clean.ravel() + np.random.randn(100) * 0.1
+
+# Add outliers and missing values
+X_dirty = X_clean.copy()
+y_dirty = y_clean.copy()
+
+# Add outliers
+X_dirty[95] = 10  # Extreme outlier
+y_dirty[95] = -20
+
+# Add missing values (simulate)
+missing_idx = np.random.choice(100, 10, replace=False)
+
+# Train models
+model_clean = LinearRegression()
+model_clean.fit(X_clean, y_clean)
+
+# For dirty data, remove missing values first
+clean_idx = ~np.isin(range(100), missing_idx)
+X_dirty_clean = X_dirty[clean_idx]
+y_dirty_clean = y_dirty[clean_idx]
+
+model_dirty = LinearRegression()
+model_dirty.fit(X_dirty_clean, y_dirty_clean)
+
+# Compare performance
+y_pred_clean = model_clean.predict(X_clean)
+y_pred_dirty = model_dirty.predict(X_clean)
+
+print(f"Clean data MSE: {mean_squared_error(y_clean, y_pred_clean):.4f}")
+print(f"Dirty data MSE: {mean_squared_error(y_clean, y_pred_dirty):.4f}")
+print(f"Performance degradation: {(mean_squared_error(y_clean, y_pred_dirty) / mean_squared_error(y_clean, y_pred_clean) - 1) * 100:.1f}%")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 2: Missing Data Strategies -->
+            <section>
+                <section>
+                    <h2>Part 2: Missing Data Strategies</h2>
+                    <h3>Drop, Impute, or Engineer?</h3>
+                    <div class="info-box">
+                        <strong>Missing Data Philosophy:</strong><br>
+                        <em>"Understanding why data is missing is often more important than the missing values themselves. The pattern tells a story."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Types of Missingness</h4>
+                            <ul>
+                                <li><strong>MCAR:</strong> Missing Completely At Random</li>
+                                <li><strong>MAR:</strong> Missing At Random</li>
+                                <li><strong>MNAR:</strong> Missing Not At Random</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Response Strategies</h4>
+                            <ul>
+                                <li>Complete case deletion</li>
+                                <li>Single imputation methods</li>
+                                <li>Multiple imputation</li>
+                                <li>Model-based approaches</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> The best strategy depends on the amount, pattern, 
+                        and mechanism of missing data - one size doesn't fit all.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Understanding Missing Data Types</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Missingness Mechanisms</h4>
+                            <ul>
+                                <li><strong>MCAR:</strong> Truly random, no pattern</li>
+                                <li><strong>MAR:</strong> Depends on observed variables</li>
+                                <li><strong>MNAR:</strong> Depends on missing value itself</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Real-world Examples:</strong><br>
+                                • <strong>MCAR:</strong> Survey responses lost due to technical error<br>
+                                • <strong>MAR:</strong> Income missing more often for younger people<br>
+                                • <strong>MNAR:</strong> High earners refuse to report income
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Analyze missing data patterns
+import missingno as msno
+
+# Visualize missing data patterns
+fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+
+# Matrix plot - shows missing data pattern
+msno.matrix(df, ax=axes[0,0])
+axes[0,0].set_title('Missing Data Matrix')
+
+# Bar plot - count of missing values per column
+msno.bar(df, ax=axes[0,1])
+axes[0,1].set_title('Missing Data Count')
+
+# Heatmap - correlation of missing data between columns
+msno.heatmap(df, ax=axes[1,0])
+axes[1,0].set_title('Missing Data Correlation')
+
+# Dendrogram - hierarchical clustering of missing patterns
+msno.dendrogram(df, ax=axes[1,1])
+axes[1,1].set_title('Missing Data Clustering')
+
+plt.tight_layout()
+plt.show()
+
+# Test for MCAR using Little's test (conceptual)
+def analyze_missingness(df):
+    """Analyze patterns in missing data"""
+    missing_by_column = df.isnull().sum()
+    missing_patterns = df.isnull().value_counts()
+    
+    print("Missing values by column:")
+    print(missing_by_column[missing_by_column > 0])
+    print(f"\nMost common missing patterns:")
+    print(missing_patterns.head())
+    
+    return missing_by_column, missing_patterns</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Decision Framework: Drop vs Impute</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>When to Drop Data</h4>
+                            <div class="poor-quality">
+                                <h5>Drop Columns When:</h5>
+                                • <strong>>50% missing</strong> in a column<br>
+                                • <strong>MCAR</strong> with no business importance<br>
+                                • <strong>Irrelevant</strong> to the prediction task<br>
+                                • <strong>High cardinality</strong> (>50 categories)
+                            </div>
+                            <div class="poor-quality" style="margin-top: 10px;">
+                                <h5>Drop Rows When:</h5>
+                                • <strong><5% of total rows</strong> affected<br>
+                                • <strong>Large dataset</strong> (>10,000 rows)<br>
+                                • <strong>MCAR</strong> missing pattern<br>
+                                • <strong>Multiple key columns</strong> missing
+                            </div>
+                            <div class="warning-box">
+                                <h5>Dropping Risks:</h5>
+                                • Reduces sample size & statistical power<br>
+                                • May introduce selection bias<br>
+                                • Loses potentially useful information<br>
+                                • Not feasible with small datasets
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <h4>When to Impute Data</h4>
+                            <div class="good-quality">
+                                <h5>Impute When:</h5>
+                                • <strong>10-50% missing</strong> in important columns<br>
+                                • <strong>MAR/MNAR</strong> missing patterns<br>
+                                • <strong>Small datasets</strong> (<10,000 rows)<br>
+                                • <strong>Key features</strong> for the model<br>
+                                • <strong>Predictable patterns</strong> in missingness
+                            </div>
+                            <div class="success-box">
+                                <h5>Imputation Benefits:</h5>
+                                • Preserves sample size & power<br>
+                                • Maintains statistical relationships<br>
+                                • Enables use of all features<br>
+                                • Can improve model performance<br>
+                                • Handles systematic missingness
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box" style="margin-top: 20px;">
+                        <p><strong>Clear Decision Rules:</strong></p>
+                        <ul style="margin: 5px 0; font-size: 0.9em;">
+                            <li><strong>Drop columns:</strong> >50% missing OR irrelevant to task</li>
+                            <li><strong>Drop rows:</strong> <5% affected AND large dataset (>10k rows) AND MCAR</li>
+                            <li><strong>Impute:</strong> 10-50% missing in important columns, especially MAR/MNAR</li>
+                            <li><strong>Gray area (5-10% missing):</strong> Consider dataset size, importance, and missing pattern</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Imputation Techniques</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Simple Imputation Methods</h4>
+                            <ul>
+                                <li><strong>Mean/Median:</strong> Numeric variables</li>
+                                <li><strong>Mode:</strong> Categorical variables</li>
+                                <li><strong>Forward/Backward Fill:</strong> Time series</li>
+                                <li><strong>Constant:</strong> Domain-specific values</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Advanced Methods:</strong><br>
+                                • <strong>KNN Imputation:</strong> Uses K-Nearest Neighbors (ML technique we'll cover later)<br>
+                                • <strong>Iterative:</strong> Model-based prediction<br>
+                                • <strong>Multiple:</strong> Account for uncertainty<br>
+                                • <strong>Domain-specific:</strong> Business rules
+                            </div>
+                            <div class="success-box" style="margin-top: 10px;">
+                                <strong>ML-Powered Imputation:</strong><br>
+                                KNN demonstrates how machine learning can improve imputation by finding similar observations to predict missing values - a preview of the modeling techniques ahead!
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn.impute import SimpleImputer, KNNImputer
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+
+# Create sample data with missing values
+data = {
+    'age': [25, 30, np.nan, 35, 40, np.nan, 45],
+    'income': [50000, np.nan, 60000, 70000, np.nan, 80000, 90000],
+    'city': ['NYC', 'LA', np.nan, 'Chicago', 'NYC', 'LA', 'Chicago']
+}
+df = pd.DataFrame(data)
+
+print("Original data:")
+print(df)
+
+# Simple imputation - numeric
+numeric_imputer = SimpleImputer(strategy='median')
+df['age_imputed'] = numeric_imputer.fit_transform(df[['age']]).ravel()
+
+# Simple imputation - categorical
+cat_imputer = SimpleImputer(strategy='most_frequent')
+df['city_imputed'] = cat_imputer.fit_transform(df[['city']]).ravel()
+
+# KNN imputation (numeric only)
+# Note: KNN is a machine learning technique we'll study later
+# This shows how ML can improve imputation beyond simple statistics
+knn_imputer = KNNImputer(n_neighbors=3)
+numeric_cols = ['age', 'income']
+df_numeric = df[numeric_cols].copy()
+df_knn = pd.DataFrame(
+    knn_imputer.fit_transform(df_numeric),
+    columns=[col + '_knn' for col in numeric_cols]
+)
+
+# Iterative imputation
+iter_imputer = IterativeImputer(random_state=42)
+df_iter = pd.DataFrame(
+    iter_imputer.fit_transform(df_numeric),
+    columns=[col + '_iter' for col in numeric_cols]
+)
+
+# Combine results
+result = pd.concat([df, df_knn, df_iter], axis=1)
+print("\nAfter imputation:")
+print(result.round(0))</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Practical Imputation Guidelines</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li><strong>Analyze first:</strong> Understand missingness pattern</li>
+                                <li><strong>Domain knowledge:</strong> Use business context</li>
+                                <li><strong>Validate impact:</strong> Test model performance</li>
+                                <li><strong>Document decisions:</strong> Track imputation choices</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Common Mistakes:</strong><br>
+                                • Using mean for skewed data<br>
+                                • Ignoring missingness patterns<br>
+                                • Over-complicating simple problems<br>
+                                • Not validating imputation quality
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Comprehensive imputation workflow
+def smart_impute(df, numeric_strategy='median', 
+                 categorical_strategy='most_frequent'):
+    """
+    Smart imputation based on data characteristics
+    """
+    df_imputed = df.copy()
+    
+    for column in df.columns:
+        missing_pct = df[column].isnull().sum() / len(df) * 100
+        
+        print(f"{column}: {missing_pct:.1f}% missing")
+        
+        if missing_pct == 0:
+            print(f"  → No missing values")
+            continue
+        elif missing_pct > 50:
+            print(f"  → Consider dropping column")
+            continue
+            
+        if df[column].dtype in ['object', 'category']:
+            # Categorical variable
+            if df[column].nunique() < 10:
+                imputer = SimpleImputer(strategy=categorical_strategy)
+                df_imputed[column] = imputer.fit_transform(
+                    df[[column]]).ravel()
+                print(f"  → Imputed with {categorical_strategy}")
+            else:
+                print(f"  → Too many categories, consider dropping")
+        else:
+            # Numeric variable
+            if df[column].skew() > 1:  # Highly skewed
+                imputer = SimpleImputer(strategy='median')
+                print(f"  → Skewed data, using median")
+            else:
+                imputer = SimpleImputer(strategy=numeric_strategy)
+                print(f"  → Using {numeric_strategy}")
+            
+            df_imputed[column] = imputer.fit_transform(
+                df[[column]]).ravel()
+    
+    return df_imputed
+
+# Apply smart imputation
+df_smart = smart_impute(df)
+print("\nImputation complete!")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 2.5: Categorical Variable Encoding -->
+            <section>
+                <section>
+                    <h2>Categorical Variable Encoding</h2>
+                    <h3>Converting Text to Numbers for Machine Learning</h3>
+                    <div class="info-box">
+                        <strong>The Challenge:</strong><br>
+                        <em>"Machine learning algorithms work with numbers, but real-world data is full of categories. Proper encoding is the bridge between human-readable labels and machine-processable features."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Why Encode?</h4>
+                            <ul>
+                                <li>ML algorithms require numeric input</li>
+                                <li>Categories have no inherent mathematical meaning</li>
+                                <li>Different encoding methods preserve different information</li>
+                                <li>Wrong encoding can hurt model performance</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Common Categorical Types</h4>
+                            <ul>
+                                <li><strong>Nominal:</strong> No order (colors, cities)</li>
+                                <li><strong>Ordinal:</strong> Natural order (low/medium/high)</li>
+                                <li><strong>Binary:</strong> Two categories (yes/no)</li>
+                                <li><strong>High Cardinality:</strong> Many unique values</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Encoding Methods Overview</h2>
+                    <div class="columns">
+                        <div class="column-50">
+                            <table class="comparison-table">
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Use Case</th>
+                                    <th>Pros/Cons</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>Label Encoding</strong></td>
+                                    <td>Ordinal data</td>
+                                    <td>✅ Simple, memory efficient<br>❌ Implies order</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>One-Hot Encoding</strong></td>
+                                    <td>Nominal data (low cardinality)</td>
+                                    <td>✅ No false order<br>❌ High dimensionality</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dummy Encoding</strong></td>
+                                    <td>Nominal + avoid multicollinearity</td>
+                                    <td>✅ Prevents dummy trap<br>❌ Reference category</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Target Encoding</strong></td>
+                                    <td>High cardinality</td>
+                                    <td>✅ Compact<br>❌ Risk of overfitting</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="column-50">
+                            <div class="warning-box">
+                                <h5>The Dummy Variable Trap</h5>
+                                <p>When using one-hot encoding with linear models, you must drop one category to avoid perfect multicollinearity!</p>
+                                <p><strong>Example:</strong> For "color" with [red, blue, green], use only 2 columns:</p>
+                                <ul style="font-size: 0.8em;">
+                                    <li>is_red: [1, 0, 0]</li>
+                                    <li>is_blue: [0, 1, 0]</li>
+                                    <li>(green is implied when both are 0)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Label Encoding for Ordinal Data</h2>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# Ordinal data example
+education = ['High School', 'Bachelor', 'Master', 
+             'PhD', 'Bachelor', 'High School']
+
+# Manual ordinal encoding (preserves order)
+education_order = {
+    'High School': 1,
+    'Bachelor': 2,
+    'Master': 3,
+    'PhD': 4
+}
+education_encoded = [education_order[e] for e in education]
+print("Manual ordinal:", education_encoded)
+
+# Using LabelEncoder (alphabetical, loses meaning!)
+le = LabelEncoder()
+education_wrong = le.fit_transform(education)
+print("LabelEncoder:", education_wrong)
+print("⚠️ Note: LabelEncoder uses alphabetical order!")
+
+# Better: Use OrdinalEncoder with specified order
+from sklearn.preprocessing import OrdinalEncoder
+oe = OrdinalEncoder(categories=[
+    ['High School', 'Bachelor', 'Master', 'PhD']
+])
+education_correct = oe.fit_transform(
+    pd.DataFrame(education, columns=['education'])
+)
+print("OrdinalEncoder:", education_correct.ravel())</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>When to Use Label/Ordinal Encoding</h4>
+                            <div class="success-box">
+                                <ul>
+                                    <li>✅ Tree-based models (can handle ordinal)</li>
+                                    <li>✅ Natural ordering exists</li>
+                                    <li>✅ Memory constraints</li>
+                                </ul>
+                            </div>
+                            <div class="warning-box">
+                                <ul>
+                                    <li>❌ Nominal categories (no order)</li>
+                                    <li>❌ Linear models with nominal data</li>
+                                    <li>❌ Distance-based algorithms (KNN, K-means)</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h5>Best Practice</h5>
+                                <p>Always specify the order explicitly for ordinal data. Don't rely on alphabetical ordering!</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>One-Hot Encoding for Nominal Data</h2>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">import pandas as pd
+from sklearn.preprocessing import OneHotEncoder
+
+# Sample data
+df = pd.DataFrame({
+    'color': ['red', 'blue', 'green', 'red', 'green'],
+    'size': ['S', 'M', 'L', 'M', 'S'],
+    'price': [10, 15, 20, 12, 11]
+})
+
+# Method 1: pd.get_dummies (simple)
+df_encoded = pd.get_dummies(df, columns=['color', 'size'])
+print("With get_dummies:")
+print(df_encoded.head())
+
+# Method 2: pd.get_dummies with drop_first (avoid dummy trap)
+df_dummy = pd.get_dummies(df, columns=['color', 'size'], 
+                          drop_first=True)
+print("\nWith drop_first (for linear models):")
+print(df_dummy.head())
+
+# Method 3: sklearn OneHotEncoder (more control)
+from sklearn.compose import ColumnTransformer
+ct = ColumnTransformer([
+    ('onehot', OneHotEncoder(drop='first', sparse=False), 
+     ['color', 'size'])
+], remainder='passthrough')
+
+df_sklearn = ct.fit_transform(df)
+feature_names = (ct.named_transformers_['onehot']
+                   .get_feature_names_out(['color', 'size'])
+                   .tolist() + ['price'])
+df_sklearn = pd.DataFrame(df_sklearn, columns=feature_names)
+print("\nWith sklearn OneHotEncoder:")
+print(df_sklearn.head())</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>One-Hot Encoding Visualization</h4>
+                            <div style="background: #f9f9f9; padding: 10px; border-radius: 5px;">
+                                <strong>Original:</strong> color = ['red', 'blue', 'green']<br><br>
+                                <strong>One-Hot Encoded:</strong><br>
+                                <table style="font-size: 0.8em; margin: 10px 0;">
+                                    <tr><th>color_red</th><th>color_blue</th><th>color_green</th></tr>
+                                    <tr><td>1</td><td>0</td><td>0</td></tr>
+                                    <tr><td>0</td><td>1</td><td>0</td></tr>
+                                    <tr><td>0</td><td>0</td><td>1</td></tr>
+                                </table>
+                                <strong>Dummy Encoded (drop_first):</strong><br>
+                                <table style="font-size: 0.8em; margin: 10px 0;">
+                                    <tr><th>color_green</th><th>color_red</th></tr>
+                                    <tr><td>0</td><td>1</td></tr>
+                                    <tr><td>0</td><td>0</td></tr>
+                                    <tr><td>1</td><td>0</td></tr>
+                                </table>
+                            </div>
+                            <div class="info-box">
+                                <h5>Memory Consideration</h5>
+                                <p>Categories × Samples = New Features</p>
+                                <p>100 categories → 100 new columns!</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Handling High Cardinality</h2>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># High cardinality example: ZIP codes, product IDs
+import numpy as np
+
+# Simulated high cardinality feature
+np.random.seed(42)
+df = pd.DataFrame({
+    'product_id': np.random.choice(range(1000), 10000),
+    'sales': np.random.randint(100, 1000, 10000)
+})
+
+# Strategy 1: Frequency Encoding
+freq_encoding = df['product_id'].value_counts().to_dict()
+df['product_freq'] = df['product_id'].map(freq_encoding)
+
+# Strategy 2: Target Encoding (mean of target)
+target_means = df.groupby('product_id')['sales'].mean()
+df['product_target_enc'] = df['product_id'].map(target_means)
+
+# Strategy 3: Binning rare categories
+threshold = 50  # minimum frequency
+value_counts = df['product_id'].value_counts()
+rare_products = value_counts[value_counts < threshold].index
+df['product_grouped'] = df['product_id'].apply(
+    lambda x: 'rare' if x in rare_products else str(x)
+)
+
+print(f"Original unique values: {df['product_id'].nunique()}")
+print(f"After grouping rare: {df['product_grouped'].nunique()}")
+
+# Strategy 4: Feature hashing (for very high cardinality)
+from sklearn.feature_extraction import FeatureHasher
+hasher = FeatureHasher(n_features=32, input_type='string')
+hashed = hasher.transform(
+    df['product_id'].astype(str).apply(lambda x: [x])
+)
+print(f"Hashed to {hashed.shape[1]} features")</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>High Cardinality Strategies</h4>
+                            <table class="comparison-table" style="font-size: 0.75em;">
+                                <tr>
+                                    <th>Method</th>
+                                    <th>When to Use</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>Frequency Encoding</strong></td>
+                                    <td>Frequency correlates with target</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Target Encoding</strong></td>
+                                    <td>Strong relationship with target</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Binning/Grouping</strong></td>
+                                    <td>Many rare categories</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Feature Hashing</strong></td>
+                                    <td>Extremely high cardinality</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Embeddings</strong></td>
+                                    <td>Deep learning models</td>
+                                </tr>
+                            </table>
+                            <div class="warning-box">
+                                <h5>⚠️ Target Encoding Pitfall</h5>
+                                <p>Always use cross-validation or separate encoding fit on training data only to avoid data leakage!</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Practical Pipeline Integration</h2>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
+
+# Sample mixed data
+df = pd.DataFrame({
+    'age': [25, 30, np.nan, 45, 22],
+    'income': [50000, 60000, 75000, np.nan, 45000],
+    'city': ['NYC', 'LA', 'Chicago', 'NYC', None],
+    'education': ['Bachelor', 'Master', 'PhD', 'Bachelor', 'Master'],
+    'purchased': [0, 1, 1, 0, 1]
+})
+
+X = df.drop('purchased', axis=1)
+y = df['purchased']
+
+# Define column groups
+numeric_features = ['age', 'income']
+categorical_features = ['city', 'education']
+
+# Create preprocessing pipelines for each type
+numeric_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
+
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='constant', 
+                              fill_value='missing')),
+    ('onehot', OneHotEncoder(drop='first', 
+                             handle_unknown='ignore'))
+])
+
+# Combine preprocessors
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)
+    ])
+
+# Create full pipeline
+clf_pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('classifier', LogisticRegression())
+])
+
+# Fit the entire pipeline
+clf_pipeline.fit(X, y)
+print("Pipeline fitted successfully!")
+print(f"Model score: {clf_pipeline.score(X, y):.2f}")</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Best Practices for Production</h4>
+                            <div class="success-box">
+                                <h5>✅ DO:</h5>
+                                <ul style="font-size: 0.85em;">
+                                    <li>Use pipelines to prevent data leakage</li>
+                                    <li>Handle unknown categories in test data</li>
+                                    <li>Consider memory constraints</li>
+                                    <li>Document encoding decisions</li>
+                                    <li>Save encoders with models</li>
+                                </ul>
+                            </div>
+                            <div class="warning-box">
+                                <h5>❌ DON'T:</h5>
+                                <ul style="font-size: 0.85em;">
+                                    <li>Fit encoders on test data</li>
+                                    <li>Use label encoding for nominal data</li>
+                                    <li>Ignore the dummy variable trap</li>
+                                    <li>One-hot encode high cardinality blindly</li>
+                                    <li>Forget to handle missing categories</li>
+                                </ul>
+                            </div>
+                            <div class="info-box">
+                                <h5>Memory Formula</h5>
+                                <p style="font-size: 0.85em;">New features = Σ(unique_values - 1)<br>
+                                1000 samples × 50 categories = 50,000 new values!</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 3: Data Filtering and Selection -->
+            <section>
+                <section>
+                    <h2>Part 3: Data Filtering and Selection</h2>
+                    <h3>Focusing on What Matters</h3>
+                    <div class="info-box">
+                        <strong>Filtering Philosophy:</strong><br>
+                        <em>"Not all data is created equal. Strategic filtering can improve model performance by removing noise and focusing on signal."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Filtering Objectives</h4>
+                            <ul>
+                                <li><strong>Remove outliers:</strong> Extreme or erroneous values</li>
+                                <li><strong>Select relevant:</strong> Time periods, categories</li>
+                                <li><strong>Reduce noise:</strong> Focus on meaningful patterns</li>
+                                <li><strong>Balance datasets:</strong> Address class imbalance</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Filtering Methods</h4>
+                            <ul>
+                                <li>Boolean indexing and conditions</li>
+                                <li>Statistical outlier detection</li>
+                                <li>Domain-specific rules</li>
+                                <li>Sample selection strategies</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Effective filtering requires balancing between removing noise 
+                        and preserving important patterns - domain expertise is crucial.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Boolean Filtering Techniques</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Filtering Strategies</h4>
+                            <ul>
+                                <li><strong>Single conditions:</strong> Basic comparisons</li>
+                                <li><strong>Multiple conditions:</strong> AND/OR logic</li>
+                                <li><strong>String operations:</strong> Text-based filtering</li>
+                                <li><strong>Date/time filters:</strong> Time period selection</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>Pandas Operators:</strong><br>
+                                • <strong>&</strong> - AND logic<br>
+                                • <strong>|</strong> - OR logic<br>
+                                • <strong>~</strong> - NOT logic<br>
+                                • <strong>isin()</strong> - Membership testing
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Create sample customer dataset
+np.random.seed(42)
+customers = pd.DataFrame({
+    'customer_id': range(1, 1001),
+    'age': np.random.randint(18, 80, 1000),
+    'income': np.random.normal(50000, 20000, 1000),
+    'purchase_amount': np.random.exponential(100, 1000),
+    'city': np.random.choice(['NYC', 'LA', 'Chicago', 'Miami'], 1000),
+    'signup_date': pd.date_range('2020-01-01', '2023-12-31', periods=1000)
+})
+
+print(f"Original dataset: {len(customers)} customers")
+
+# Single condition filtering
+young_customers = customers[customers['age'] < 30]
+print(f"Young customers (age < 30): {len(young_customers)}")
+
+# Multiple conditions with AND
+high_value = customers[
+    (customers['age'] >= 30) & 
+    (customers['income'] > 60000) &
+    (customers['purchase_amount'] > 150)
+]
+print(f"High-value customers: {len(high_value)}")
+
+# OR conditions
+target_cities = customers[
+    (customers['city'] == 'NYC') | 
+    (customers['city'] == 'LA')
+]
+print(f"NYC or LA customers: {len(target_cities)}")
+
+# Using isin() for multiple values
+major_cities = customers[customers['city'].isin(['NYC', 'LA', 'Chicago'])]
+print(f"Major city customers: {len(major_cities)}")
+
+# String filtering
+customers['email'] = [f"user{i}@{'gmail' if i%2 else 'yahoo'}.com" 
+                     for i in range(1, 1001)]
+gmail_users = customers[customers['email'].str.contains('gmail')]
+print(f"Gmail users: {len(gmail_users)}")
+
+# Date filtering
+recent_signups = customers[customers['signup_date'] >= '2023-01-01']
+print(f"Recent signups (2023+): {len(recent_signups)}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Outlier Detection Methods</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Statistical Approaches</h4>
+                            <ul>
+                                <li><strong>Z-score:</strong> Standard deviations from mean</li>
+                                <li><strong>IQR method:</strong> Interquartile range</li>
+                                <li><strong>Modified Z-score:</strong> Using median</li>
+                                <li><strong>Percentile-based:</strong> Top/bottom percentages</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Outlier Considerations:</strong><br>
+                                • Are they errors or valid extreme values?<br>
+                                • Do they represent important edge cases?<br>
+                                • Will removing them introduce bias?<br>
+                                • Consider domain context before removal
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from scipy import stats
+
+def detect_outliers_zscore(df, column, threshold=3):
+    """Detect outliers using Z-score method"""
+    z_scores = np.abs(stats.zscore(df[column]))
+    return df[z_scores > threshold]
+
+def detect_outliers_iqr(df, column, multiplier=1.5):
+    """Detect outliers using IQR method"""
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+    
+    lower_bound = Q1 - multiplier * IQR
+    upper_bound = Q3 + multiplier * IQR
+    
+    outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+    return outliers, lower_bound, upper_bound
+
+def detect_outliers_percentile(df, column, lower=5, upper=95):
+    """Detect outliers using percentile method"""
+    lower_bound = df[column].quantile(lower / 100)
+    upper_bound = df[column].quantile(upper / 100)
+    
+    outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+    return outliers, lower_bound, upper_bound
+
+# Apply outlier detection to income
+print("Outlier Detection for Income:")
+
+# Z-score method
+income_outliers_z = detect_outliers_zscore(customers, 'income')
+print(f"Z-score outliers: {len(income_outliers_z)}")
+
+# IQR method
+income_outliers_iqr, lower_iqr, upper_iqr = detect_outliers_iqr(customers, 'income')
+print(f"IQR outliers: {len(income_outliers_iqr)}")
+print(f"  IQR bounds: [{lower_iqr:.0f}, {upper_iqr:.0f}]")
+
+# Percentile method
+income_outliers_pct, lower_pct, upper_pct = detect_outliers_percentile(
+    customers, 'income', 2.5, 97.5)
+print(f"Percentile outliers: {len(income_outliers_pct)}")
+print(f"  Percentile bounds: [{lower_pct:.0f}, {upper_pct:.0f}]")
+
+# Visualize outliers
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 3, 1)
+plt.boxplot(customers['income'])
+plt.title('Income Distribution\n(with outliers)')
+
+plt.subplot(1, 3, 2)
+customers['income'].hist(bins=50, alpha=0.7)
+plt.title('Income Histogram')
+
+plt.subplot(1, 3, 3)
+# Remove IQR outliers
+clean_income = customers[~customers.index.isin(income_outliers_iqr.index)]
+clean_income['income'].hist(bins=50, alpha=0.7, color='green')
+plt.title('Income After Outlier Removal')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Smart Filtering Strategies</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Advanced Filtering</h4>
+                            <ul>
+                                <li><strong>Conditional logic:</strong> Business rule-based</li>
+                                <li><strong>Progressive filtering:</strong> Multi-stage approach</li>
+                                <li><strong>Sample balancing:</strong> Address class imbalance</li>
+                                <li><strong>Quality scores:</strong> Data reliability metrics</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Filtering Workflow:</strong><br>
+                                1. Analyze data distribution<br>
+                                2. Define filtering criteria<br>
+                                3. Apply filters progressively<br>
+                                4. Validate impact on target variable<br>
+                                5. Document filtering decisions
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Smart filtering workflow
+def smart_filter(df, target_col=None):
+    """
+    Apply progressive filtering with validation
+    """
+    print(f"Starting with {len(df)} records")
+    df_filtered = df.copy()
+    
+    # Step 1: Remove obvious errors
+    if 'age' in df.columns:
+        df_filtered = df_filtered[
+            (df_filtered['age'] >= 0) & 
+            (df_filtered['age'] <= 120)
+        ]
+        print(f"After age validation: {len(df_filtered)} records")
+    
+    # Step 2: Remove statistical outliers (income)
+    if 'income' in df.columns:
+        Q1 = df_filtered['income'].quantile(0.25)
+        Q3 = df_filtered['income'].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 3 * IQR  # More conservative
+        upper_bound = Q3 + 3 * IQR
+        
+        df_filtered = df_filtered[
+            (df_filtered['income'] >= lower_bound) & 
+            (df_filtered['income'] <= upper_bound)
+        ]
+        print(f"After income outlier removal: {len(df_filtered)} records")
+    
+    # Step 3: Remove low-quality records
+    if 'purchase_amount' in df.columns:
+        # Remove very small purchases (potential test data)
+        df_filtered = df_filtered[df_filtered['purchase_amount'] >= 10]
+        print(f"After minimum purchase filter: {len(df_filtered)} records")
+    
+    # Step 4: Validate impact on target (if provided)
+    if target_col and target_col in df.columns:
+        original_dist = df[target_col].describe()
+        filtered_dist = df_filtered[target_col].describe()
+        
+        print("\nTarget variable distribution:")
+        print("Original vs Filtered:")
+        comparison = pd.DataFrame({
+            'Original': original_dist,
+            'Filtered': filtered_dist
+        })
+        print(comparison.round(2))
+    
+    return df_filtered
+
+# Apply smart filtering
+customers_clean = smart_filter(customers, 'purchase_amount')
+
+# Create quality score
+customers_clean['data_quality_score'] = 0
+customers_clean['data_quality_score'] += (~customers_clean['age'].isnull()).astype(int)
+customers_clean['data_quality_score'] += (~customers_clean['income'].isnull()).astype(int)
+customers_clean['data_quality_score'] += (~customers_clean['city'].isnull()).astype(int)
+
+print(f"\nData Quality Score Distribution:")
+print(customers_clean['data_quality_score'].value_counts().sort_index())</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 4: Data Grouping and Aggregation -->
+            <section>
+                <section>
+                    <h2>Part 4: Data Grouping and Aggregation</h2>
+                    <h3>Extracting Insights Through Summarization</h3>
+                    <div class="info-box">
+                        <strong>Grouping Power:</strong><br>
+                        <em>"The magic happens when you group data by meaningful categories. Patterns emerge that were invisible in individual records."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Grouping Applications</h4>
+                            <ul>
+                                <li><strong>Customer segments:</strong> Behavioral patterns</li>
+                                <li><strong>Time periods:</strong> Trends and seasonality</li>
+                                <li><strong>Geographic regions:</strong> Location-based insights</li>
+                                <li><strong>Product categories:</strong> Performance comparison</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Aggregation Functions</h4>
+                            <ul>
+                                <li>Count, sum, mean, median</li>
+                                <li>Min, max, std, variance</li>
+                                <li>Percentiles and quantiles</li>
+                                <li>Custom aggregation functions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Grouping transforms individual data points into actionable insights
+                        and can create powerful features for machine learning models.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Basic Grouping Operations</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>GroupBy Fundamentals</h4>
+                            <ul>
+                                <li><strong>Single column:</strong> Basic grouping</li>
+                                <li><strong>Multiple columns:</strong> Hierarchical grouping</li>
+                                <li><strong>Aggregation:</strong> Summary statistics</li>
+                                <li><strong>Transformation:</strong> Group-wise operations</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>GroupBy Workflow:</strong><br>
+                                • <strong>Split:</strong> Divide data by groups<br>
+                                • <strong>Apply:</strong> Function to each group<br>
+                                • <strong>Combine:</strong> Results into output structure
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Basic grouping operations
+print("Customer Analysis by City:")
+
+# Single column grouping
+city_stats = customers_clean.groupby('city').agg({
+    'age': ['mean', 'median', 'std'],
+    'income': ['mean', 'median', 'count'],
+    'purchase_amount': ['sum', 'mean', 'max']
+}).round(2)
+
+print(city_stats)
+
+# Flatten column names
+city_stats.columns = ['_'.join(col).strip() for col in city_stats.columns]
+city_stats = city_stats.reset_index()
+
+print("\nFlattened column names:")
+print(city_stats.head())
+
+# Multiple column grouping
+customers_clean['age_group'] = pd.cut(
+    customers_clean['age'], 
+    bins=[0, 30, 50, 100], 
+    labels=['Young', 'Middle', 'Senior']
+)
+
+age_city_stats = customers_clean.groupby(['age_group', 'city']).agg({
+    'income': 'mean',
+    'purchase_amount': 'mean',
+    'customer_id': 'count'
+}).round(2)
+
+age_city_stats.columns = ['avg_income', 'avg_purchase', 'customer_count']
+print("\nAge Group & City Analysis:")
+print(age_city_stats)
+
+# Percentage analysis
+city_pcts = customers_clean.groupby('city').size()
+city_pcts_norm = (city_pcts / city_pcts.sum() * 100).round(1)
+print(f"\nCustomer Distribution by City:")
+for city, pct in city_pcts_norm.items():
+    print(f"{city}: {pct}%")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Advanced Aggregation Techniques</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Custom Aggregations</h4>
+                            <ul>
+                                <li><strong>Named aggregations:</strong> Clear column names</li>
+                                <li><strong>Custom functions:</strong> Domain-specific metrics</li>
+                                <li><strong>Multiple metrics:</strong> Comprehensive summaries</li>
+                                <li><strong>Conditional aggregation:</strong> Filtered calculations</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Performance Tips:</strong><br>
+                                • Use built-in functions when possible<br>
+                                • Avoid complex lambdas in aggregation<br>
+                                • Consider memory usage with large groups<br>
+                                • Use appropriate data types
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Advanced aggregation techniques
+
+# Custom aggregation functions
+def coefficient_of_variation(series):
+    """Calculate coefficient of variation (std/mean)"""
+    return series.std() / series.mean() if series.mean() != 0 else 0
+
+def percentile_95(series):
+    """Calculate 95th percentile"""
+    return series.quantile(0.95)
+
+def outlier_count(series):
+    """Count outliers using IQR method"""
+    Q1, Q3 = series.quantile([0.25, 0.75])
+    IQR = Q3 - Q1
+    outliers = series[(series < Q1 - 1.5*IQR) | (series > Q3 + 1.5*IQR)]
+    return len(outliers)
+
+# Named aggregations with custom functions
+advanced_stats = customers_clean.groupby('city').agg(
+    avg_income=('income', 'mean'),
+    median_income=('income', 'median'),
+    income_cv=('income', coefficient_of_variation),
+    high_income_95pct=('income', percentile_95),
+    income_outliers=('income', outlier_count),
+    
+    total_purchases=('purchase_amount', 'sum'),
+    avg_purchase=('purchase_amount', 'mean'),
+    purchase_cv=('purchase_amount', coefficient_of_variation),
+    
+    customer_count=('customer_id', 'count'),
+    age_range=('age', lambda x: x.max() - x.min())
+).round(2)
+
+print("Advanced City Statistics:")
+print(advanced_stats)
+
+# Conditional aggregations
+def high_value_customers(group):
+    """Calculate metrics for high-value customers only"""
+    high_value = group[group['purchase_amount'] > group['purchase_amount'].median()]
+    return pd.Series({
+        'high_value_count': len(high_value),
+        'high_value_avg_income': high_value['income'].mean(),
+        'high_value_avg_purchase': high_value['purchase_amount'].mean()
+    })
+
+high_value_stats = customers_clean.groupby('city').apply(high_value_customers).round(2)
+print("\nHigh-Value Customer Analysis:")
+print(high_value_stats)</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Time-Based Grouping</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Temporal Analysis</h4>
+                            <ul>
+                                <li><strong>Date extraction:</strong> Year, month, quarter</li>
+                                <li><strong>Resampling:</strong> Time period aggregation</li>
+                                <li><strong>Rolling windows:</strong> Moving averages</li>
+                                <li><strong>Seasonal patterns:</strong> Cyclic behavior</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Time Features:</strong><br>
+                                • Year, month, day of week<br>
+                                • Quarter, season<br>
+                                • Holiday indicators<br>
+                                • Days since/until events
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Time-based analysis
+customers_clean['signup_year'] = customers_clean['signup_date'].dt.year
+customers_clean['signup_month'] = customers_clean['signup_date'].dt.month
+customers_clean['signup_quarter'] = customers_clean['signup_date'].dt.quarter
+customers_clean['signup_day_name'] = customers_clean['signup_date'].dt.day_name()
+
+# Yearly trends
+yearly_trends = customers_clean.groupby('signup_year').agg({
+    'customer_id': 'count',
+    'age': 'mean',
+    'income': 'mean',
+    'purchase_amount': 'mean'
+}).round(2)
+
+yearly_trends.columns = ['new_customers', 'avg_age', 'avg_income', 'avg_purchase']
+print("Yearly Signup Trends:")
+print(yearly_trends)
+
+# Monthly seasonality
+monthly_patterns = customers_clean.groupby('signup_month').agg({
+    'customer_id': 'count',
+    'purchase_amount': 'mean'
+}).round(2)
+
+monthly_patterns.columns = ['signup_count', 'avg_purchase']
+monthly_patterns.index.name = 'month'
+print("\nMonthly Signup Patterns:")
+print(monthly_patterns)
+
+# Day of week analysis
+dow_patterns = customers_clean.groupby('signup_day_name').agg({
+    'customer_id': 'count',
+    'purchase_amount': 'mean'
+}).round(2)
+
+# Reorder by day of week
+day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+dow_patterns = dow_patterns.reindex(day_order)
+dow_patterns.columns = ['signup_count', 'avg_purchase']
+print("\nDay of Week Patterns:")
+print(dow_patterns)
+
+# Create time-based features for ML
+customers_clean['days_since_signup'] = (
+    pd.Timestamp.now() - customers_clean['signup_date']
+).dt.days
+
+customers_clean['is_weekend_signup'] = customers_clean['signup_day_name'].isin(['Saturday', 'Sunday'])
+customers_clean['is_q4_signup'] = customers_clean['signup_quarter'] == 4
+
+print(f"\nTime-based features created:")
+print(f"Average days since signup: {customers_clean['days_since_signup'].mean():.0f}")
+print(f"Weekend signups: {customers_clean['is_weekend_signup'].sum()}")
+print(f"Q4 signups: {customers_clean['is_q4_signup'].sum()}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 5: Practical Implementation -->
+            <section>
+                <section>
+                    <h2>Part 5: Practical Implementation</h2>
+                    <h3>Building Robust Data Preparation Pipelines</h3>
+                    <div class="info-box">
+                        <strong>Pipeline Philosophy:</strong><br>
+                        <em>"A good data preparation pipeline is reproducible, scalable, and handles edge cases gracefully. It's the bridge between raw data and machine learning success."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Pipeline Components</h4>
+                            <ul>
+                                <li><strong>Quality assessment:</strong> Data profiling</li>
+                                <li><strong>Cleaning steps:</strong> Missing data, outliers</li>
+                                <li><strong>Transformation:</strong> Scaling, encoding</li>
+                                <li><strong>Validation:</strong> Quality checks</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Modular, reusable functions</li>
+                                <li>Comprehensive logging</li>
+                                <li>Error handling</li>
+                                <li>Performance monitoring</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success-box">
+                        <strong>Key Insight:</strong> Invest time in building robust pipelines that can handle 
+                        various data scenarios - it pays dividends in production environments.
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Data Preparation Pipeline</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Pipeline Architecture</h4>
+                            <ul>
+                                <li><strong>Input validation:</strong> Schema checking</li>
+                                <li><strong>Quality assessment:</strong> Automated profiling</li>
+                                <li><strong>Cleaning operations:</strong> Standardized processes</li>
+                                <li><strong>Output validation:</strong> Quality assurance</li>
+                            </ul>
+                            <div class="info-box">
+                                <h5>Pipeline Benefits:</h5>
+                                • Consistency across projects<br>
+                                • Reduced manual errors<br>
+                                • Easy to maintain and update<br>
+                                • Scalable to larger datasets
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python">class DataPreparationPipeline:
+    """
+    Comprehensive data preparation pipeline
+    """
+    def __init__(self, config=None):
+        self.config = config or {
+            'missing_threshold': 0.5,  # 50% threshold for dropping columns
+            'outlier_method': 'iqr',
+            'outlier_multiplier': 1.5
+        }
+        self.transformations = []
+        self.quality_report = {}
+    
+    def assess_quality(self, df):
+        """Generate comprehensive data quality report"""
+        report = {
+            'shape': df.shape,
+            'missing_data': {},
+            'duplicates': df.duplicated().sum(),
+            'data_types': df.dtypes.to_dict(),
+            'numeric_stats': {},
+            'categorical_stats': {}
+        }
+        
+        # Missing data analysis
+        for col in df.columns:
+            missing_count = df[col].isnull().sum()
+            missing_pct = missing_count / len(df)
+            report['missing_data'][col] = {
+                'count': missing_count,
+                'percentage': missing_pct
+            }
+        
+        # Numeric statistics
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        for col in numeric_cols:
+            report['numeric_stats'][col] = {
+                'mean': df[col].mean(),
+                'std': df[col].std(),
+                'min': df[col].min(),
+                'max': df[col].max(),
+                'outliers_iqr': self._count_outliers_iqr(df[col])
+            }
+        
+        # Categorical statistics
+        cat_cols = df.select_dtypes(include=['object', 'category']).columns
+        for col in cat_cols:
+            report['categorical_stats'][col] = {
+                'unique_count': df[col].nunique(),
+                'top_value': df[col].mode().iloc[0] if len(df[col].mode()) > 0 else None,
+                'value_counts': df[col].value_counts().head().to_dict()
+            }
+        
+        self.quality_report = report
+        return report
+    
+    def _count_outliers_iqr(self, series):
+        """Count outliers using IQR method"""
+        Q1 = series.quantile(0.25)
+        Q3 = series.quantile(0.75)
+        IQR = Q3 - Q1
+        multiplier = self.config['outlier_multiplier']
+        
+        lower_bound = Q1 - multiplier * IQR
+        upper_bound = Q3 + multiplier * IQR
+        
+        outliers = series[(series < lower_bound) | (series > upper_bound)]
+        return len(outliers)
+    
+    def handle_missing_data(self, df):
+        """Handle missing data based on configuration"""
+        df_clean = df.copy()
+        
+        for col in df.columns:
+            missing_pct = df[col].isnull().sum() / len(df)
+            
+            if missing_pct > self.config['missing_threshold']:
+                print(f"Dropping column {col} (>{self.config['missing_threshold']*100:.0f}% missing)")
+                df_clean = df_clean.drop(columns=[col])
+            elif missing_pct > 0:
+                if df[col].dtype in ['object', 'category']:
+                    # Categorical: use mode
+                    mode_value = df[col].mode().iloc[0] if len(df[col].mode()) > 0 else 'Unknown'
+                    df_clean[col] = df_clean[col].fillna(mode_value)
+                    print(f"Imputed {col} with mode: {mode_value}")
+                else:
+                    # Numeric: use median
+                    median_value = df[col].median()
+                    df_clean[col] = df_clean[col].fillna(median_value)
+                    print(f"Imputed {col} with median: {median_value}")
+        
+        return df_clean
+    
+    def handle_outliers(self, df):
+        """Handle outliers in numeric columns"""
+        df_clean = df.copy()
+        numeric_cols = df_clean.select_dtypes(include=[np.number]).columns
+        
+        for col in numeric_cols:
+            outliers_before = self._count_outliers_iqr(df_clean[col])
+            
+            if outliers_before > 0:
+                Q1 = df_clean[col].quantile(0.25)
+                Q3 = df_clean[col].quantile(0.75)
+                IQR = Q3 - Q1
+                multiplier = self.config['outlier_multiplier']
+                
+                lower_bound = Q1 - multiplier * IQR
+                upper_bound = Q3 + multiplier * IQR
+                
+                # Cap outliers instead of removing
+                df_clean[col] = df_clean[col].clip(lower_bound, upper_bound)
+                
+                outliers_after = self._count_outliers_iqr(df_clean[col])
+                print(f"Capped {outliers_before - outliers_after} outliers in {col}")
+        
+        return df_clean
+    
+    def remove_duplicates(self, df):
+        """Remove duplicate records"""
+        initial_count = len(df)
+        df_clean = df.drop_duplicates()
+        duplicates_removed = initial_count - len(df_clean)
+        
+        if duplicates_removed > 0:
+            print(f"Removed {duplicates_removed} duplicate records")
+        
+        return df_clean
+    
+    def fit_transform(self, df):
+        """Apply full preparation pipeline"""
+        print("Starting data preparation pipeline...")
+        print(f"Initial dataset shape: {df.shape}")
+        
+        # Step 1: Quality assessment
+        print("\n1. Assessing data quality...")
+        self.assess_quality(df)
+        
+        # Step 2: Remove duplicates
+        print("\n2. Removing duplicates...")
+        df_clean = self.remove_duplicates(df)
+        
+        # Step 3: Handle missing data
+        print("\n3. Handling missing data...")
+        df_clean = self.handle_missing_data(df_clean)
+        
+        # Step 4: Handle outliers
+        print("\n4. Handling outliers...")
+        df_clean = self.handle_outliers(df_clean)
+        
+        print(f"\nFinal dataset shape: {df_clean.shape}")
+        print("Data preparation pipeline completed!")
+        
+        return df_clean
+
+# Apply the pipeline
+pipeline = DataPreparationPipeline()
+customers_final = pipeline.fit_transform(customers)
+
+print("\nQuality Report Summary:")
+print(f"Original duplicates: {pipeline.quality_report['duplicates']}")
+print(f"Columns with missing data: {sum(1 for col, stats in pipeline.quality_report['missing_data'].items() if stats['count'] > 0)}")
+print(f"Numeric columns: {len(pipeline.quality_report['numeric_stats'])}")
+print(f"Categorical columns: {len(pipeline.quality_report['categorical_stats'])}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Decision Trees for Data Preparation</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Decision Framework</h4>
+                            <ul>
+                                <li><strong>Missing data:</strong> Percentage-based decisions</li>
+                                <li><strong>Outliers:</strong> Context-dependent treatment</li>
+                                <li><strong>Categorical variables:</strong> Cardinality considerations</li>
+                                <li><strong>Sample size:</strong> Statistical power requirements</li>
+                            </ul>
+                            <div class="success-box">
+                                <strong>Decision Guidelines:</strong><br>
+                                • Document all decisions and rationale<br>
+                                • Consider business context<br>
+                                • Validate impact on target variable<br>
+                                • Be consistent across similar projects
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="text">Data Preparation Decision Tree:
+
+MISSING DATA COLUMNS:
+├── > 50% missing?
+│   ├── YES → DROP COLUMN
+│   └── NO → Continue
+├── Irrelevant to prediction task?
+│   ├── YES → DROP COLUMN
+│   └── NO → Continue
+├── 10-50% missing in important column?
+│   ├── YES → IMPUTE
+│   │   ├── Categorical → MODE imputation
+│   │   └── Numeric →
+│   │       ├── Skewed → MEDIAN imputation
+│   │       ├── Normal → MEAN imputation
+│   │       └── Complex → KNN/Iterative imputation
+│   └── NO → Continue to row analysis
+
+MISSING DATA ROWS:
+├── < 5% of rows affected?
+│   ├── YES → 
+│   │   ├── Large dataset (>10k) + MCAR → DROP ROWS
+│   │   └── Small dataset OR MAR/MNAR → IMPUTE
+│   └── NO → 
+├── 5-10% of rows affected (GRAY AREA)?
+│   ├── Consider: Dataset size, column importance, pattern
+│   └── Default → IMPUTE if important columns
+├── > 10% of rows affected?
+│   ├── YES → MUST IMPUTE (dropping loses too much data)
+
+OUTLIERS:
+├── Obviously incorrect (age=999, negative prices)?
+│   ├── YES → CORRECT or REMOVE
+│   └── NO → Continue
+├── Valid but extreme (high earner, rare event)?
+│   ├── YES → KEEP (valuable information)
+│   └── NO → Continue
+├── Dataset size < 1000 rows?
+│   ├── YES → CAP outliers (preserve sample size)
+│   └── NO → REMOVE or CAP based on impact
+
+CATEGORICAL VARIABLES:
+├── > 50 unique values?
+│   ├── YES → Consider DROP or GROUP rare categories
+│   └── NO → Continue
+├── 10-50 unique values?
+│   ├── YES → Frequency/Target encoding
+│   └── NO → One-hot encoding (if < 10 categories)
+
+FINAL VALIDATION:
+✓ Target variable distribution preserved?
+✓ Key statistical relationships maintained?
+✓ Sufficient sample size for modeling?
+✓ Business logic and domain knowledge satisfied?</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Common Pitfalls and Solutions</h2>
+                    <div class="columns">
+                        <div class="column-50 key-points">
+                            <h4>Frequent Mistakes</h4>
+                            <ul>
+                                <li><strong>Data leakage:</strong> Future info in training</li>
+                                <li><strong>Inconsistent preprocessing:</strong> Train vs test</li>
+                                <li><strong>Over-preprocessing:</strong> Removing signal</li>
+                                <li><strong>Ignoring domain knowledge:</strong> Statistical only</li>
+                            </ul>
+                            <div class="warning-box">
+                                <strong>Red Flags:</strong><br>
+                                • Perfect model performance (check leakage)<br>
+                                • Dramatic performance drop in production<br>
+                                • Unrealistic feature distributions<br>
+                                • Missing values appearing differently
+                            </div>
+                        </div>
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Common pitfalls and solutions
+
+# PITFALL 1: Data leakage
+# BAD: Including future information
+def bad_feature_engineering(df):
+    # This creates leakage!
+    df['future_purchases'] = df.groupby('customer_id')['purchase_amount'].cumsum()
+    return df
+
+# GOOD: Only use past information
+def good_feature_engineering(df):
+    df_sorted = df.sort_values(['customer_id', 'purchase_date'])
+    df_sorted['past_purchases'] = df_sorted.groupby('customer_id')['purchase_amount'].cumsum().shift(1)
+    return df_sorted
+
+# PITFALL 2: Inconsistent preprocessing
+# BAD: Different preprocessing for train/test
+def bad_preprocessing():
+    # Train set
+    train_mean = train_data['income'].mean()
+    train_data['income_scaled'] = train_data['income'] / train_mean
+    
+    # Test set (WRONG!)
+    test_mean = test_data['income'].mean()  # Should use train_mean!
+    test_data['income_scaled'] = test_data['income'] / test_mean
+
+# GOOD: Consistent preprocessing
+def good_preprocessing():
+    # Fit on training data
+    scaler = StandardScaler()
+    scaler.fit(train_data[['income']])
+    
+    # Apply to both train and test
+    train_data['income_scaled'] = scaler.transform(train_data[['income']])
+    test_data['income_scaled'] = scaler.transform(test_data[['income']])
+
+# PITFALL 3: Over-preprocessing
+# BAD: Removing too much variation
+def over_processed(df):
+    # Removing all outliers might remove important patterns
+    for col in df.select_dtypes(include=[np.number]).columns:
+        Q1, Q3 = df[col].quantile([0.25, 0.75])
+        IQR = Q3 - Q1
+        # Too aggressive - removes 25% of data
+        df = df[(df[col] >= Q1 - 0.5*IQR) & (df[col] <= Q3 + 0.5*IQR)]
+    return df
+
+# GOOD: Conservative outlier handling
+def conservative_processing(df):
+    for col in df.select_dtypes(include=[np.number]).columns:
+        # Cap extreme outliers (99.5th percentile)
+        upper_cap = df[col].quantile(0.995)
+        lower_cap = df[col].quantile(0.005)
+        df[col] = df[col].clip(lower_cap, upper_cap)
+    return df
+
+# PITFALL 4: Ignoring business context
+# BAD: Statistical-only approach
+def statistics_only(df):
+    # Age of 999 is clearly an error, but statistical methods might miss it
+    return df[np.abs(stats.zscore(df['age'])) < 3]  # Might keep age=999
+
+# GOOD: Business rules + statistics
+def business_informed(df):
+    # Apply business logic first
+    df = df[(df['age'] >= 0) & (df['age'] <= 120)]  # Reasonable age range
+    df = df[df['income'] >= 0]  # No negative income
+    
+    # Then apply statistical methods
+    for col in ['income', 'purchase_amount']:
+        if col in df.columns:
+            Q1, Q3 = df[col].quantile([0.25, 0.75])
+            IQR = Q3 - Q1
+            df = df[(df[col] >= Q1 - 1.5*IQR) & (df[col] <= Q3 + 1.5*IQR)]
+    
+    return df
+
+print("Data preparation pitfalls and solutions demonstrated!")
+print("Remember: Always validate your preprocessing steps!")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Practice Exercises -->
+            <section>
+                <h2>Practice Exercises</h2>
+                <div class="warning-box">
+                    <p><strong>Week 3 Assignment: Data Wrangling and Imputation Logic</strong></p>
+                </div>
+                <ol>
+                    <li><strong>Data Quality Assessment</strong>
+                        <ul>
+                            <li>Analyze a messy dataset for quality issues</li>
+                            <li>Create comprehensive quality reports</li>
+                            <li>Identify patterns in missing data</li>
+                        </ul>
+                    </li>
+                    <li><strong>Missing Data Strategies</strong>
+                        <ul>
+                            <li>Apply different imputation techniques</li>
+                            <li>Compare impact on model performance</li>
+                            <li>Document decision rationale</li>
+                        </ul>
+                    </li>
+                    <li><strong>Outlier Detection and Treatment</strong>
+                        <ul>
+                            <li>Implement multiple outlier detection methods</li>
+                            <li>Apply business rules for data validation</li>
+                            <li>Balance between noise reduction and signal preservation</li>
+                        </ul>
+                    </li>
+                    <li><strong>Data Preparation Pipeline</strong>
+                        <ul>
+                            <li>Build reusable data preparation functions</li>
+                            <li>Create automated quality checks</li>
+                            <li>Validate preprocessing consistency</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- Key Takeaways -->
+            <section>
+                <h2>Key Takeaways</h2>
+                <div class="success-box">
+                    <p><strong>Essential Data Preparation Skills:</strong></p>
+                </div>
+                <ul>
+                    <li><strong>Quality Assessment:</strong> Systematic evaluation of data quality issues</li>
+                    <li><strong>Missing Data:</strong> Strategic decisions between dropping and imputing</li>
+                    <li><strong>Outlier Handling:</strong> Context-aware detection and treatment methods</li>
+                    <li><strong>Filtering Strategies:</strong> Smart data selection and noise reduction</li>
+                    <li><strong>Grouping Operations:</strong> Extract insights through aggregation</li>
+                    <li><strong>Pipeline Development:</strong> Robust, reproducible preparation workflows</li>
+                </ul>
+                <div class="info-box" style="margin-top: 20px;">
+                    <p><strong>Remember:</strong> Quality data preparation is the foundation of successful machine learning projects!</p>
+                </div>
+            </section>
+
+            <!-- Next Week Preview -->
+            <section>
+                <h2>Next Week: Linear Regression</h2>
+                <div class="info-box">
+                    <p><strong>Week 4 Preview:</strong></p>
+                </div>
+                <ul>
+                    <li>Linear regression fundamentals</li>
+                    <li>Model training and evaluation metrics</li>
+                    <li>Feature scaling and normalization</li>
+                    <li>Assumptions and diagnostics</li>
+                    <li>Overfitting and regularization introduction</li>
+                </ul>
+                <div class="center" style="margin-top: 50px;">
+                    <p><strong>Clean data is the foundation of good models!</strong></p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/search/search.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom,
+                RevealSearch,
+                RevealMath.KaTeX
+            ]
+        });
+    </script>
+</body>
+</html>

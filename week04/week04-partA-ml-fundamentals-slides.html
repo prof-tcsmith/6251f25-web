@@ -191,6 +191,158 @@
                 </section>
             </section>
 
+            <!-- What is a Model? -->
+            <section>
+                <section>
+                    <h2>What is a Machine Learning Model?</h2>
+                    <h3>A Pattern-Finding Machine</h3>
+                    
+                    <div class="info-box">
+                        <p><strong>A model is a mathematical function that learns patterns from data to make predictions</strong></p>
+                    </div>
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>What Models Do</h4>
+                            <ul>
+                                <li>Find patterns in training data</li>
+                                <li>Create decision boundaries</li>
+                                <li>Map inputs to outputs</li>
+                                <li>Generalize to new examples</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>The Learning Process</h4>
+                            <ol>
+                                <li>Observe training examples</li>
+                                <li>Identify patterns</li>
+                                <li>Create rules/functions</li>
+                                <li>Apply to new data</li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box" style="margin-top: 30px;">
+                        <strong>Key Insight:</strong> Different models find different types of patterns. The art is choosing the right model for your data!
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Models: Different Ways to Draw Boundaries</h2>
+                    <h3>Same Data, Different Approaches</h3>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <p style="text-align: center; margin: 0;"><strong>Task:</strong> Separate blue dots (Class A) from red dots (Class B)</p>
+                    </div>
+                    
+                    <div class="columns">
+                        <div class="column" style="flex: 1;">
+                            <h4>Linear Model</h4>
+                            <div style="background: white; border: 2px solid #3498db; border-radius: 5px; padding: 10px; height: 200px; position: relative;">
+                                <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+                                    <!-- Grid -->
+                                    <g stroke="#e0e0e0" stroke-width="0.5">
+                                        <line x1="0" y1="50" x2="200" y2="50"/>
+                                        <line x1="0" y1="100" x2="200" y2="100"/>
+                                        <line x1="0" y1="150" x2="200" y2="150"/>
+                                        <line x1="50" y1="0" x2="50" y2="200"/>
+                                        <line x1="100" y1="0" x2="100" y2="200"/>
+                                        <line x1="150" y1="0" x2="150" y2="200"/>
+                                    </g>
+                                    <!-- Linear boundary -->
+                                    <line x1="20" y1="180" x2="180" y2="20" stroke="#2ecc71" stroke-width="3"/>
+                                    <!-- Data points -->
+                                    <circle cx="30" cy="40" r="5" fill="#3498db"/>
+                                    <circle cx="60" cy="30" r="5" fill="#3498db"/>
+                                    <circle cx="40" cy="80" r="5" fill="#3498db"/>
+                                    <circle cx="80" cy="60" r="5" fill="#3498db"/>
+                                    <circle cx="140" cy="120" r="5" fill="#e74c3c"/>
+                                    <circle cx="160" cy="140" r="5" fill="#e74c3c"/>
+                                    <circle cx="120" cy="160" r="5" fill="#e74c3c"/>
+                                    <circle cx="170" cy="170" r="5" fill="#e74c3c"/>
+                                </svg>
+                            </div>
+                            <p style="font-size: 0.9em; margin-top: 10px;">
+                                <strong>Straight line boundary</strong><br>
+                                Simple, interpretable<br>
+                                y = mx + b
+                            </p>
+                        </div>
+                        
+                        <div class="column" style="flex: 1;">
+                            <h4>Decision Tree</h4>
+                            <div style="background: white; border: 2px solid #f39c12; border-radius: 5px; padding: 10px; height: 200px; position: relative;">
+                                <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+                                    <!-- Grid -->
+                                    <g stroke="#e0e0e0" stroke-width="0.5">
+                                        <line x1="0" y1="50" x2="200" y2="50"/>
+                                        <line x1="0" y1="100" x2="200" y2="100"/>
+                                        <line x1="0" y1="150" x2="200" y2="150"/>
+                                        <line x1="50" y1="0" x2="50" y2="200"/>
+                                        <line x1="100" y1="0" x2="100" y2="200"/>
+                                        <line x1="150" y1="0" x2="150" y2="200"/>
+                                    </g>
+                                    <!-- Decision tree boundaries (rectangles) -->
+                                    <line x1="100" y1="0" x2="100" y2="200" stroke="#f39c12" stroke-width="3"/>
+                                    <line x1="0" y1="100" x2="100" y2="100" stroke="#f39c12" stroke-width="3"/>
+                                    <!-- Data points -->
+                                    <circle cx="30" cy="40" r="5" fill="#3498db"/>
+                                    <circle cx="60" cy="30" r="5" fill="#3498db"/>
+                                    <circle cx="40" cy="140" r="5" fill="#3498db"/>
+                                    <circle cx="80" cy="160" r="5" fill="#3498db"/>
+                                    <circle cx="140" cy="60" r="5" fill="#e74c3c"/>
+                                    <circle cx="160" cy="80" r="5" fill="#e74c3c"/>
+                                    <circle cx="120" cy="140" r="5" fill="#e74c3c"/>
+                                    <circle cx="170" cy="170" r="5" fill="#e74c3c"/>
+                                </svg>
+                            </div>
+                            <p style="font-size: 0.9em; margin-top: 10px;">
+                                <strong>Rectangular regions</strong><br>
+                                If-then rules<br>
+                                if x > 100 then...
+                            </p>
+                        </div>
+                        
+                        <div class="column" style="flex: 1;">
+                            <h4>Non-Linear Model (SVM/Neural Net)</h4>
+                            <div style="background: white; border: 2px solid #9b59b6; border-radius: 5px; padding: 10px; height: 200px; position: relative;">
+                                <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+                                    <!-- Grid -->
+                                    <g stroke="#e0e0e0" stroke-width="0.5">
+                                        <line x1="0" y1="50" x2="200" y2="50"/>
+                                        <line x1="0" y1="100" x2="200" y2="100"/>
+                                        <line x1="0" y1="150" x2="200" y2="150"/>
+                                        <line x1="50" y1="0" x2="50" y2="200"/>
+                                        <line x1="100" y1="0" x2="100" y2="200"/>
+                                        <line x1="150" y1="0" x2="150" y2="200"/>
+                                    </g>
+                                    <!-- Non-linear boundary (curve) -->
+                                    <path d="M 20 150 Q 60 80, 100 70 T 180 30" stroke="#9b59b6" stroke-width="3" fill="none"/>
+                                    <!-- Data points -->
+                                    <circle cx="30" cy="120" r="5" fill="#3498db"/>
+                                    <circle cx="60" cy="100" r="5" fill="#3498db"/>
+                                    <circle cx="40" cy="160" r="5" fill="#3498db"/>
+                                    <circle cx="90" cy="110" r="5" fill="#3498db"/>
+                                    <circle cx="140" cy="40" r="5" fill="#e74c3c"/>
+                                    <circle cx="160" cy="20" r="5" fill="#e74c3c"/>
+                                    <circle cx="120" cy="60" r="5" fill="#e74c3c"/>
+                                    <circle cx="170" cy="50" r="5" fill="#e74c3c"/>
+                                </svg>
+                            </div>
+                            <p style="font-size: 0.9em; margin-top: 10px;">
+                                <strong>Curved boundary</strong><br>
+                                Complex patterns<br>
+                                Can fit any shape
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>The Challenge:</strong> More complex models can fit the training data better, but might not work well on new data. This is what we'll explore today!
+                    </div>
+                </section>
+            </section>
+
             <!-- PART 1: THE PROBLEM -->
             <section>
                 <section>

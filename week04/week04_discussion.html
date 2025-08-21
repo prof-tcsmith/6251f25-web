@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Week 4 Discussion: The Power and Peril of Predictive Models in Society</title>
+<title>Week 4 Discussion: When Predictive Models Cross the Line – Ethics in the Age of Inference</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2143,7 +2143,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Week 4 Discussion: The Power and Peril of Predictive Models in Society</h1>
+<h1 class="title">Week 4 Discussion: When Predictive Models Cross the Line – Ethics in the Age of Inference</h1>
 </div>
 
 
@@ -2164,23 +2164,23 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
 <p>By the end of this discussion, you should be able to:</p>
 <ul>
-<li>Critically evaluate the use of linear regression models in high-stakes societal decisions</li>
-<li>Analyze the tension between model simplicity and real-world complexity</li>
-<li>Discuss the implications of treating correlation as causation in policy-making</li>
-<li>Propose frameworks for responsible deployment of predictive models</li>
+<li>Critically evaluate the ethical boundaries of predictive modeling</li>
+<li>Analyze the tension between predictive accuracy and personal privacy</li>
+<li>Discuss the implications of models that reveal unvolunteered information</li>
+<li>Propose frameworks for responsible use of predictive analytics</li>
 </ul>
 </section>
 <section id="context" class="level2">
 <h2 class="anchored" data-anchor-id="context">Context</h2>
-<p>This week you learned about <strong>linear regression</strong>, <strong>overfitting/underfitting</strong>, and <strong>model evaluation</strong>. While these seem like technical concepts, linear models drive countless decisions that shape our society: insurance premiums, housing prices, salary determinations, risk assessments, and resource allocation.</p>
-<section id="the-double-edged-sword" class="level3">
-<h3 class="anchored" data-anchor-id="the-double-edged-sword">🎯 The Double-Edged Sword</h3>
-<p>Linear regression’s <strong>interpretability</strong> makes it attractive for high-stakes decisions, but its <strong>simplicity</strong> can reduce complex human realities to mere numbers. When a linear model says your home value, insurance rate, or jail sentence should be X, who benefits from this reduction of complexity?</p>
+<p>This week you learned about <strong>linear regression</strong>, <strong>overfitting/underfitting</strong>, and <strong>model evaluation</strong>. While we focus on technical accuracy, predictive models raise profound ethical questions: Just because we <em>can</em> predict something, does that mean we <em>should</em>? When do predictions cross from helpful to harmful?</p>
+<section id="the-prediction-paradox" class="level3">
+<h3 class="anchored" data-anchor-id="the-prediction-paradox">🎯 The Prediction Paradox</h3>
+<p>Modern predictive models can infer deeply personal information from seemingly innocuous data. Your shopping habits might reveal pregnancy, your typing patterns might indicate Parkinson’s disease, and your social media likes might expose your political views. Linear regression models, despite their simplicity, can be powerful tools for such inference.</p>
 </section>
 <section id="required-reading" class="level3">
 <h3 class="anchored" data-anchor-id="required-reading">📚 Required Reading</h3>
-<p><strong>Harvard Business Review</strong> – <a href="https://hbr.org/2021/11/the-problem-with-predictive-policing">The Problem with Predictive Policing</a></p>
-<p>Key insight: Predictive models often <strong>perpetuate historical patterns</strong> rather than improve outcomes.</p>
+<p><strong>Harvard Business Review</strong> – <a href="https://hbr.org/2020/10/when-does-predictive-technology-become-unethical">When Does Predictive Technology Become Unethical?</a></p>
+<p>Key insight: Predictive technologies can reveal sensitive, unvolunteered information about individuals, raising serious ethical concerns about privacy, consent, and potential discrimination.</p>
 <hr>
 </section>
 </section>
@@ -2189,66 +2189,88 @@ vertical-align: -.125em;
 <section id="instructions" class="level3">
 <h3 class="anchored" data-anchor-id="instructions">📝 Instructions</h3>
 <p>For your initial post, <strong>select and respond to only one</strong> of the three prompts below.<br>
-You must <strong>clearly indicate the prompt number and title</strong> (e.g., “Prompt 2: The Redlining 2.0 Problem”) at the top of your response.</p>
+You must <strong>clearly indicate the prompt number and title</strong> (e.g., “Prompt 2: The Target Problem”) at the top of your response.</p>
 <hr>
 </section>
-<section id="prompt-1-when-models-become-policy" class="level3">
-<h3 class="anchored" data-anchor-id="prompt-1-when-models-become-policy">📊 Prompt 1: When Models Become Policy</h3>
-<p>Linear regression models increasingly influence public policy, from education funding formulas to healthcare resource allocation. Consider a specific case:</p>
-<ul>
-<li><strong>Teacher value-added models</strong> determining pay and termination</li>
-<li><strong>Hospital readmission predictions</strong> affecting Medicare reimbursements<br>
-</li>
-<li><strong>Crime prediction models</strong> directing police patrol routes</li>
-<li><strong>Climate models</strong> informing trillion-dollar policy decisions</li>
-</ul>
+<section id="prompt-1-the-unvolunteered-truth-problem" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-1-the-unvolunteered-truth-problem">🔍 Prompt 1: The Unvolunteered Truth Problem</h3>
+<p>The article discusses how predictive models can reveal information people never intended to share—from pregnancy to sexual orientation to job departure likelihood. Even simple linear models can make such inferences.</p>
 <p><strong>In your response:</strong></p>
 <ol type="1">
-<li>Choose one domain and explain how linear models are currently used</li>
-<li>Analyze what gets <strong>lost</strong> when complex social phenomena are reduced to linear relationships</li>
-<li>Discuss who has <strong>power</strong> in defining the variables and target metrics</li>
-<li>Evaluate whether the benefits of “data-driven” policy outweigh the risks</li>
-</ol>
-<p>Support your argument with specific examples and consider multiple stakeholder perspectives.</p>
-<hr>
-</section>
-<section id="prompt-2-the-redlining-2.0-problem" class="level3">
-<h3 class="anchored" data-anchor-id="prompt-2-the-redlining-2.0-problem">🏠 Prompt 2: The Redlining 2.0 Problem</h3>
-<p>Historical redlining used maps to deny services to minority neighborhoods. Today’s predictive models may perpetuate similar discrimination through “objective” algorithms. Consider how linear regression models in housing and lending might encode bias:</p>
+<li>Choose a specific domain where predictive models might reveal sensitive information:
 <ul>
-<li>Using <strong>zip code</strong> as a predictor (proxy for race)</li>
-<li>Including <strong>credit history</strong> (reflects historical discrimination)</li>
-<li>Weighting <strong>neighborhood crime rates</strong> (influenced by policing patterns)</li>
-<li>Incorporating <strong>school quality metrics</strong> (tied to property tax funding)</li>
-</ul>
-<p><strong>In your response:</strong></p>
-<ol type="1">
-<li>Explain how seemingly “neutral” variables in linear models can perpetuate discrimination</li>
-<li>Discuss the challenge of achieving fairness when historical data reflects unfair systems</li>
-<li>Analyze whether removing sensitive variables (race, gender) actually reduces bias</li>
-<li>Propose alternative approaches to fair lending/housing models</li>
-</ol>
-<p>Reference historical context and current regulatory debates (e.g., disparate impact theory).</p>
-<hr>
-</section>
-<section id="prompt-3-the-accountability-gap" class="level3">
-<h3 class="anchored" data-anchor-id="prompt-3-the-accountability-gap">⚖️ Prompt 3: The Accountability Gap</h3>
-<p>When a linear regression model makes a consequential error—denying a loan, misdiagnosing risk, or misallocating resources—who is accountable?</p>
-<p><strong>In your response:</strong></p>
-<ol type="1">
-<li>Choose a specific domain where linear models make consequential decisions</li>
-<li>Analyze the <strong>chain of responsibility</strong>: data collectors → model builders → decision makers → affected individuals</li>
-<li>Discuss how model errors differentially impact vulnerable populations</li>
-<li>Propose an <strong>accountability framework</strong> that includes:
-<ul>
-<li>Audit requirements</li>
-<li>Appeals processes<br>
-</li>
-<li>Liability structures</li>
-<li>Transparency standards</li>
+<li>Healthcare (predicting conditions from behavior)</li>
+<li>Employment (predicting performance or retention)</li>
+<li>Finance (predicting life events from spending)</li>
+<li>Education (predicting dropout risk)</li>
 </ul></li>
+<li>Analyze the <strong>ethical tensions</strong>:
+<ul>
+<li>Benefits vs. privacy invasion</li>
+<li>Individual autonomy vs. organizational efficiency</li>
+<li>Helping vs. harming vulnerable populations</li>
+</ul></li>
+<li>Discuss who has the <strong>right to know</strong> predicted information:
+<ul>
+<li>Should Target tell customers they’re likely pregnant?</li>
+<li>Should employers act on “flight risk” scores?</li>
+<li>Should insurers use lifestyle predictions?</li>
+</ul></li>
+<li>Propose <strong>ethical guidelines</strong> for handling unvolunteered predictions</li>
 </ol>
-<p>Consider both legal precedents and ethical principles in your framework.</p>
+<p>Include consideration of power dynamics between predictors and subjects.</p>
+<hr>
+</section>
+<section id="prompt-2-the-target-problem" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-2-the-target-problem">🎭 Prompt 2: The Target Problem</h3>
+<p>The article’s Target example—predicting pregnancy from purchasing patterns—illustrates how accurate predictions can become ethically problematic. Consider how linear regression on transaction data could reveal life changes.</p>
+<p><strong>In your response:</strong></p>
+<ol type="1">
+<li>Explain why the Target case is ethically troubling despite being “just marketing”</li>
+<li>Analyze the <strong>progression of inference</strong>:
+<ul>
+<li>From purchases to life events</li>
+<li>From life events to targeted influence</li>
+<li>From influence to manipulation</li>
+</ul></li>
+<li>Discuss the <strong>consent paradox</strong>:
+<ul>
+<li>Users agree to data collection but not specific inferences</li>
+<li>How informed can consent really be?</li>
+<li>Should there be limits on derived insights?</li>
+</ul></li>
+<li>Evaluate whether companies should <strong>self-limit</strong> their predictive capabilities</li>
+</ol>
+<p>Consider both business incentives and social responsibilities.</p>
+<hr>
+</section>
+<section id="prompt-3-when-accuracy-becomes-oppression" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-3-when-accuracy-becomes-oppression">⚖️ Prompt 3: When Accuracy Becomes Oppression</h3>
+<p>The article mentions how predictive technology can enable discrimination, citing China’s use of facial recognition to track Uighurs. But subtler forms of algorithmic oppression exist everywhere.</p>
+<p><strong>In your response:</strong></p>
+<ol type="1">
+<li>Choose a context where accurate predictions could enable discrimination:
+<ul>
+<li>Predicting race from names (shown in Google ad study)</li>
+<li>Predicting income from zip codes</li>
+<li>Predicting health from lifestyle data</li>
+<li>Predicting criminality from facial features</li>
+</ul></li>
+<li>Explain how <strong>linear regression’s simplicity</strong> might mask discrimination:
+<ul>
+<li>“Objective” math hiding subjective choices</li>
+<li>Proxy variables encoding protected characteristics</li>
+<li>Historical data perpetuating past discrimination</li>
+</ul></li>
+<li>Discuss the <strong>accuracy paradox</strong>:
+<ul>
+<li>More accurate models might be more discriminatory</li>
+<li>Should we sacrifice accuracy for fairness?</li>
+<li>Who decides these trade-offs?</li>
+</ul></li>
+<li>Propose <strong>regulatory approaches</strong> to prevent predictive oppression</li>
+</ol>
+<p>Reference specific examples from the article or current events.</p>
 <hr>
 </section>
 </section>
@@ -2256,12 +2278,12 @@ You must <strong>clearly indicate the prompt number and title</strong> (e.g., �
 <h2 class="anchored" data-anchor-id="peer-engagement-requirement">Peer Engagement Requirement</h2>
 <p>Respond to at least one classmate’s post by:</p>
 <ul>
-<li>Offering a perspective from a <strong>different stakeholder</strong> affected by the models discussed</li>
-<li>Sharing a <strong>historical parallel</strong> that illuminates current challenges</li>
-<li>Proposing <strong>specific technical safeguards</strong> that could address their concerns</li>
-<li>Discussing <strong>international approaches</strong> to similar problems</li>
+<li>Sharing a <strong>personal experience</strong> with predictive technology (as subject or practitioner)</li>
+<li>Offering a <strong>counter-perspective</strong> on the ethics of prediction</li>
+<li>Proposing <strong>technical safeguards</strong> that could address their concerns</li>
+<li>Discussing <strong>international differences</strong> in privacy expectations and regulations</li>
 </ul>
-<p>Ground your response in evidence and acknowledge the complexity of the issues.</p>
+<p>Ground your response in both the article and course concepts about linear regression.</p>
 <hr>
 </section>
 <section id="submission-guidelines" class="level2">
@@ -2277,7 +2299,8 @@ You must <strong>clearly indicate the prompt number and title</strong> (e.g., �
 </li>
 <li>Clearly indicate which prompt you’re responding to<br>
 </li>
-<li>Include at least <strong>two credible sources</strong> (academic papers, reputable news outlets, government reports)</li>
+<li>Reference specific examples from the HBR article</li>
+<li>Include at least <strong>one additional source</strong> (news article, research paper, or case study)</li>
 </ul>
 </section>
 <section id="peer-response" class="level3">
@@ -2287,8 +2310,8 @@ You must <strong>clearly indicate the prompt number and title</strong> (e.g., �
 </li>
 <li><strong>Length:</strong> 150-200 words<br>
 </li>
-<li>Provide substantive engagement with ideas, not just agreement/disagreement</li>
-<li>Include at least one additional source or example</li>
+<li>Provide substantive engagement with ethical dimensions</li>
+<li>Connect to technical concepts from the week’s material</li>
 </ul>
 <hr>
 </section>
@@ -2312,12 +2335,12 @@ You must <strong>clearly indicate the prompt number and title</strong> (e.g., �
 <tr class="odd">
 <td><strong>Initial Post</strong></td>
 <td>1.0 pt</td>
-<td>Demonstrates critical analysis, uses evidence, connects technical concepts to societal impacts</td>
+<td>Demonstrates critical thinking about predictive ethics, uses evidence, connects to course concepts</td>
 </tr>
 <tr class="even">
 <td><strong>Peer Response</strong></td>
 <td>1.0 pt</td>
-<td>Advances discussion meaningfully, shows respectful engagement with complex issues</td>
+<td>Advances discussion meaningfully, shows understanding of ethical complexities</td>
 </tr>
 <tr class="odd">
 <td><strong>Late Submissions</strong></td>
@@ -2331,22 +2354,36 @@ You must <strong>clearly indicate the prompt number and title</strong> (e.g., �
 <section id="tips-for-success" class="level2">
 <h2 class="anchored" data-anchor-id="tips-for-success">✅ Tips for Success</h2>
 <ul>
-<li>Remember that behind every data point is a <strong>human story</strong></li>
-<li>Question who decides what to optimize for (profit? efficiency? equity?)</li>
-<li>Consider <strong>long-term societal effects</strong>, not just immediate accuracy metrics</li>
-<li>Examine how models can <strong>lock in</strong> current inequalities as “optimal”</li>
-<li>Use specific cases rather than hypothetical scenarios</li>
-<li>Acknowledge legitimate uses while critiquing problematic applications</li>
+<li>Remember that even simple linear regression can reveal sensitive patterns</li>
+<li>Consider the difference between <strong>correlation and causation</strong> in ethical terms</li>
+<li>Think about <strong>data minimization</strong>—should we collect data just because we can?</li>
+<li>Examine how <strong>feature selection</strong> in linear models embeds ethical choices</li>
+<li>Use specific examples rather than abstract discussions</li>
+<li>Acknowledge legitimate uses while identifying boundaries</li>
 </ul>
 <hr>
 </section>
-<section id="deeper-questions-to-consider" class="level2">
-<h2 class="anchored" data-anchor-id="deeper-questions-to-consider">🤔 Deeper Questions to Consider</h2>
+<section id="critical-questions-to-consider" class="level2">
+<h2 class="anchored" data-anchor-id="critical-questions-to-consider">🤔 Critical Questions to Consider</h2>
 <ul>
-<li>If a model perfectly predicts current patterns, is it helping create a better future or cementing an unjust present?</li>
-<li>How do we balance the benefits of standardization with the need for human judgment?</li>
-<li>What would “algorithmic reparations” look like for communities harmed by biased models?</li>
-<li>Can we have “objective” models in a society with systemic inequalities?</li>
+<li>If a model predicts something true about you, do you have a right to that prediction?</li>
+<li>Should there be “unpredictable zones” in human life?</li>
+<li>How do we balance the benefits of prediction with human dignity?</li>
+<li>Can consent ever truly cover all possible inferences from data?</li>
+<li>What’s the difference between prediction and surveillance?</li>
+<li>Should some predictions be illegal, even if technically possible?</li>
+</ul>
+<hr>
+</section>
+<section id="connecting-to-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="connecting-to-linear-regression">💡 Connecting to Linear Regression</h2>
+<p>Consider how this week’s technical concepts relate to ethical issues:</p>
+<ul>
+<li><strong>Feature engineering</strong>: Each variable choice has ethical implications</li>
+<li><strong>Model interpretability</strong>: Linear models show exactly how predictions are made</li>
+<li><strong>Overfitting</strong>: Models that memorize individual patterns raise privacy concerns</li>
+<li><strong>R² and accuracy</strong>: Higher accuracy might mean deeper privacy invasion</li>
+<li><strong>Residuals</strong>: Who are the “outliers” that models fail to predict?</li>
 </ul>
 </section>
 

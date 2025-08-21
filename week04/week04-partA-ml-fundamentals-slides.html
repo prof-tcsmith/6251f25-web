@@ -103,6 +103,26 @@
             color: #e74c3c;
             font-weight: bold;
         }
+        
+        /* Transition slide styling */
+        .transition-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .transition-slide h3 {
+            color: white !important;
+            border: none !important;
+            margin-bottom: 30px;
+        }
+        
+        .transition-slide p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -113,43 +133,32 @@
             <section>
                 <h1>Machine Learning Fundamentals</h1>
                 <h3 style="border: none; text-align: center; color: #666;">Week 4 Part A: Core Concepts</h3>
-                <p style="text-align: center; font-style: italic; color: #888;">Bias-Variance Tradeoff • Overfitting • Train/Test Split</p>
+                <p style="text-align: center; font-style: italic; color: #888;">The Challenge of Generalization</p>
                 <p style="text-align: center; margin-top: 50px;">
                     <strong>ISM6251 | Week 4</strong><br>
-                    Understanding the Foundations of Predictive Modeling
+                    Overfitting • Train/Test Split • Validation • Cross-Validation
                 </p>
             </section>
 
             <!-- Introduction Section -->
             <section>
                 <section>
-                    <h2>Introduction: Machine Learning Fundamentals</h2>
-                    <h3>Setting the Context and Expectations</h3>
-                    <div class="info-box">
-                        <strong>Focus Today:</strong><br>
-                        <em>"We'll explore the fundamental concepts that underpin all machine learning algorithms, not just linear regression."</em>
+                    <h2>Today's Journey</h2>
+                    <h3>From Problem to Solution</h3>
+                    
+                    <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 10px;">
+                        <h4>Our Learning Path:</h4>
+                        <ol style="font-size: 1.1em; line-height: 1.8;">
+                            <li><strong>The Problem:</strong> Why do ML models fail?</li>
+                            <li><strong>First Solution:</strong> Train/Test Split</li>
+                            <li><strong>New Problem:</strong> Data leakage in model selection</li>
+                            <li><strong>Better Solution:</strong> Train/Validation/Test Split</li>
+                            <li><strong>Advanced Technique:</strong> Cross-Validation</li>
+                        </ol>
                     </div>
-                    <div class="columns" style="margin-top: 30px;">
-                        <div class="column">
-                            <h4>What We'll Cover</h4>
-                            <ul>
-                                <li>Prerequisites and expectations</li>
-                                <li>ML vs. statistical perspective</li>
-                                <li>When to use different models</li>
-                                <li>Train/test split fundamentals</li>
-                                <li>Overfitting and underfitting</li>
-                            </ul>
-                        </div>
-                        <div class="column">
-                            <h4>Learning Outcomes</h4>
-                            <ul>
-                                <li>Understand pragmatic ML approach</li>
-                                <li>Recognize model selection trade-offs</li>
-                                <li>Apply systematic validation methods</li>
-                                <li>Make data-driven decisions</li>
-                                <li>Connect theory to practice</li>
-                            </ul>
-                        </div>
+                    
+                    <div class="info-box" style="margin-top: 30px;">
+                        <strong>Key Theme:</strong> How do we ensure our models work on data they've never seen?
                     </div>
                 </section>
 
@@ -157,142 +166,68 @@
                     <h2>Prerequisites & Context</h2>
                     <h3>Setting Expectations for Machine Learning</h3>
                     <div class="warning-box">
-                        <strong>Important:</strong> This lecture assumes you are already familiar with basic statistics, including linear regression from your statistics courses.
+                        <strong>Important:</strong> This lecture assumes familiarity with basic statistics and regression concepts.
                     </div>
                     <div class="columns" style="margin-top: 30px;">
                         <div class="column">
-                            <h4>What You Should Already Know</h4>
+                            <h4>Traditional Statistics Focus</h4>
                             <ul>
-                                <li>Basic statistics (mean, variance, correlation)</li>
-                                <li>Hypothesis testing concepts</li>
-                                <li>Simple linear regression basics</li>
-                                <li>Interpretation of coefficients</li>
-                                <li><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup></math> and p-values</li>
+                                <li>Understanding relationships</li>
+                                <li>Hypothesis testing</li>
+                                <li>P-values and significance</li>
+                                <li>Inference about parameters</li>
                             </ul>
                         </div>
                         <div class="column">
-                            <h4>What We'll Focus On Today</h4>
+                            <h4>Machine Learning Focus</h4>
                             <ul>
-                                <li>Machine learning perspective</li>
-                                <li>Implementation in Python</li>
-                                <li>Predictive performance evaluation</li>
-                                <li>Feature engineering techniques</li>
-                                <li>Practical business applications</li>
+                                <li>Prediction accuracy</li>
+                                <li>Generalization to new data</li>
+                                <li>Model selection</li>
+                                <li>Avoiding overfitting</li>
                             </ul>
                         </div>
                     </div>
                 </section>
+            </section>
 
-                <section>
-                    <h2>The Machine Learning Perspective</h2>
-                    <h3>A Pragmatic Approach to Modeling</h3>
-                    
-                    <div class="info-box">
-                        <strong>Key Insight:</strong> Machine learning requires you to "bring a theory" to the analysis
-                    </div>
-                    
-                    <div class="columns" style="margin-top: 20px;">
-                        <div class="column">
-                            <h4>Traditional Statistics View</h4>
-                            <ul>
-                                <li>Focus on inference and hypothesis testing</li>
-                                <li>Emphasis on p-values and significance</li>
-                                <li>Assumptions must be strictly met</li>
-                                <li>Goal: Understand relationships</li>
-                                <li>Question: "Is X significantly related to Y?"</li>
-                            </ul>
-                        </div>
-                        <div class="column">
-                            <h4>Machine Learning View</h4>
-                            <ul>
-                                <li>Focus on prediction accuracy</li>
-                                <li>Emphasis on generalization to new data</li>
-                                <li>Pragmatic about assumptions</li>
-                                <li>Goal: Predict unseen values</li>
-                                <li>Question: "How well will this predict future data?"</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="warning-box" style="margin-top: 30px;">
-                        <strong>Remember:</strong> Machine learning only tunes the parameters of your theory—it doesn't tell you what a good theory would be!
-                    </div>
-                </section>
-
-                <section>
-                    <h2>Model Selection in the ML Toolkit</h2>
-                    <h3>When to Use Different Approaches</h3>
-                    
-                    <div class="columns">
-                        <div class="column">
-                            <h4>Linear Models (Week 4-5)</h4>
-                            <div class="success-box">
-                                <ul>
-                                    <li><strong>Interpretability:</strong> Clear coefficient meanings</li>
-                                    <li><strong>Speed:</strong> Fast training and prediction</li>
-                                    <li><strong>Theory-driven:</strong> When you have domain knowledge</li>
-                                    <li><strong>Baseline:</strong> Good first model to try</li>
-                                    <li><strong>Small data:</strong> Works with fewer samples</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <h4>When to Consider Alternatives</h4>
-                            <div class="warning-box">
-                                <ul>
-                                    <li><strong>Complex patterns:</strong> → Neural Networks (Week 10)</li>
-                                    <li><strong>Non-linear relationships:</strong> → KNN, SVM (Week 6-7)</li>
-                                    <li><strong>High dimensions:</strong> → Regularization, PCA</li>
-                                    <li><strong>Interactions:</strong> → Tree-based models (Week 8-9)</li>
-                                    <li><strong>No theory:</strong> → Ensemble methods (Week 9)</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="info-box" style="margin-top: 30px;">
-                        <strong>The Pragmatic ML Approach:</strong><br>
-                        • Try multiple models and compare performance<br>
-                        • Use train/validate/test splits to avoid overfitting<br>
-                        • Let the data tell you which model works best<br>
-                        • Focus on generalization, not just training accuracy
-                    </div>
-                    
-                    <p style="text-align: center; margin-top: 30px; font-style: italic; color: #666;">
-                        "In machine learning, we care less about whether assumptions are perfectly met and more about whether the model predicts well on unseen data."
-                    </p>
-                </section>
-
+            <!-- PART 1: THE PROBLEM -->
+            <section>
                 <section>
                     <h2>The Fundamental ML Challenge</h2>
-                    <h3>Underfitting vs Overfitting</h3>
+                    <h3>Why Do Models Fail?</h3>
+                    
                     <div class="columns">
                         <div class="column">
-                            <h4>The Problem</h4>
+                            <h4>The Scenario</h4>
+                            <div class="info-box">
+                                <p>You build a model that achieves 99% accuracy on your data...</p>
+                                <p style="margin-top: 15px;"><strong>But it fails miserably in production!</strong></p>
+                            </div>
+                            
+                            <h4 style="margin-top: 30px;">What Went Wrong?</h4>
                             <ul>
-                                <li><strong>Underfitting:</strong> Model is too simple to capture patterns</li>
-                                <li><strong>Overfitting:</strong> Model memorizes training data, fails on new data</li>
-                                <li><strong>Goal:</strong> Find the sweet spot - good generalization</li>
-                            </ul>
-                            <h4>Why This Happens</h4>
-                            <ul>
-                                <li>More complex models can fit training data better</li>
-                                <li>But they may learn noise, not true patterns</li>
-                                <li>Need systematic way to detect and prevent this</li>
+                                <li>Model memorized the training data</li>
+                                <li>Learned noise instead of patterns</li>
+                                <li>Too complex for the true relationship</li>
                             </ul>
                         </div>
                         <div class="column">
-                            <h4>The Key Insight</h4>
-                            <div class="info-box">
-                                <p><strong>True relationship:</strong> 3rd order polynomial with noise</p>
-                                <p>y = 0.5x³ - 2x² + x + 2 + noise</p>
+                            <h4>The Two Extremes</h4>
+                            <div class="warning-box">
+                                <h5>Underfitting</h5>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Model too simple</li>
+                                    <li>Can't capture true patterns</li>
+                                    <li>Poor performance everywhere</li>
+                                </ul>
                             </div>
                             <div class="warning-box" style="margin-top: 20px;">
-                                <p><strong>The Challenge:</strong></p>
-                                <ul style="margin: 10px 0;">
-                                    <li>We don't know the true relationship</li>
-                                    <li>We only have noisy samples</li>
-                                    <li>Must choose model complexity wisely</li>
+                                <h5>Overfitting</h5>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Model too complex</li>
+                                    <li>Memorizes training data</li>
+                                    <li>Great on training, terrible on new data</li>
                                 </ul>
                             </div>
                         </div>
@@ -300,10 +235,41 @@
                 </section>
 
                 <section>
-                    <h2>Visualizing Under/Overfitting</h2>
-                    <h3>Polynomial Fits of Different Degrees</h3>
+                    <h2>Visualizing the Problem</h2>
+                    <h3>A Concrete Example</h3>
                     
-                    <img src="../images/week04-polynomial-degrees.svg" alt="Polynomial regression degrees showing underfitting and overfitting" style="width: 85%; margin: 20px auto; display: block;">
+                    <div class="info-box">
+                        <p><strong>Hidden Truth:</strong> The data comes from a 3rd-order polynomial with noise</p>
+                        <p style="font-family: monospace;">y = 0.5x³ - 2x² + x + 2 + random_noise</p>
+                    </div>
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>The Challenge</h4>
+                            <ul>
+                                <li>We don't know the true relationship</li>
+                                <li>We only have noisy samples</li>
+                                <li>Must choose model complexity</li>
+                                <li>Too simple → misses patterns</li>
+                                <li>Too complex → fits noise</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>The Question</h4>
+                            <div class="warning-box">
+                                <p style="font-size: 1.1em; text-align: center;">
+                                    How do we find the right complexity without knowing the truth?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Different Model Complexities</h2>
+                    <h3>Fitting Polynomials of Various Degrees</h3>
+                    
+                    <img src="../images/week04-polynomial-degrees.svg" alt="Polynomial fits of different degrees" style="width: 80%; margin: 20px auto; display: block;">
                     
                     <div class="columns" style="margin-top: 20px;">
                         <div class="column">
@@ -311,9 +277,8 @@
                                 <h4>Degree 1 (Linear)</h4>
                                 <p><strong style="color: #e74c3c;">Underfitting</strong></p>
                                 <ul style="font-size: 0.9em;">
-                                    <li>Too simple</li>
                                     <li>Can't capture curves</li>
-                                    <li>High bias, low variance</li>
+                                    <li>High bias</li>
                                 </ul>
                             </div>
                         </div>
@@ -322,9 +287,8 @@
                                 <h4>Degree 2-3</h4>
                                 <p><strong style="color: #27ae60;">Just Right</strong></p>
                                 <ul style="font-size: 0.9em;">
-                                    <li>Captures true pattern</li>
+                                    <li>Captures pattern</li>
                                     <li>Ignores noise</li>
-                                    <li>Good generalization</li>
                                 </ul>
                             </div>
                         </div>
@@ -333,9 +297,8 @@
                                 <h4>Degree 20</h4>
                                 <p><strong style="color: #f39c12;">Overfitting</strong></p>
                                 <ul style="font-size: 0.9em;">
-                                    <li>Too complex</li>
-                                    <li>Fits noise</li>
-                                    <li>Low bias, high variance</li>
+                                    <li>Fits all noise</li>
+                                    <li>High variance</li>
                                 </ul>
                             </div>
                         </div>
@@ -343,143 +306,100 @@
                 </section>
 
                 <section>
-                    <h2>Examples of Model Fitting</h2>
-                    <h3>Visual Comparison of Different Complexities</h3>
+                    <h2>Visual Examples</h2>
+                    <h3>What Overfitting Looks Like</h3>
                     
                     <div class="columns">
                         <div class="column" style="flex: 1;">
-                            <h4>Underfitting (Degree 1)</h4>
-                            <img src="../images/week04-underfitting.png" alt="Underfitting example" style="width: 100%; border: 2px solid #e74c3c;">
-                            <p style="font-size: 0.8em; margin-top: 10px;">Linear model can't capture the curved pattern</p>
+                            <h4>Underfitting</h4>
+                            <img src="../images/week04-underfitting.png" alt="Underfitting" style="width: 100%; border: 2px solid #e74c3c;">
+                            <p style="font-size: 0.8em;">Too simple to capture the pattern</p>
                         </div>
                         <div class="column" style="flex: 1;">
-                            <h4>Good Fit (Degree 3)</h4>
-                            <img src="../images/week04-good-fit.png" alt="Good fit example" style="width: 100%; border: 2px solid #27ae60;">
-                            <p style="font-size: 0.8em; margin-top: 10px;">Captures the true pattern, ignores noise</p>
+                            <h4>Good Fit</h4>
+                            <img src="../images/week04-good-fit.png" alt="Good fit" style="width: 100%; border: 2px solid #27ae60;">
+                            <p style="font-size: 0.8em;">Captures pattern, ignores noise</p>
                         </div>
                         <div class="column" style="flex: 1;">
-                            <h4>Overfitting (Degree 20)</h4>
-                            <img src="../images/week04-overfitting.png" alt="Overfitting example" style="width: 100%; border: 2px solid #f39c12;">
-                            <p style="font-size: 0.8em; margin-top: 10px;">Fits every data point, including noise</p>
+                            <h4>Overfitting</h4>
+                            <img src="../images/week04-overfitting.png" alt="Overfitting" style="width: 100%; border: 2px solid #f39c12;">
+                            <p style="font-size: 0.8em;">Memorizes every data point</p>
                         </div>
                     </div>
                     
-                    <div class="info-box" style="margin-top: 20px;">
-                        <strong>Key Observation:</strong> The overfitted model passes through every training point perfectly but will fail catastrophically on new data!
+                    <div class="warning-box" style="margin-top: 20px;">
+                        <strong>Key Insight:</strong> The overfitted model has 0% error on training data but will fail catastrophically on new data!
                     </div>
                 </section>
+            </section>
 
+            <!-- PART 2: FIRST SOLUTION - TRAIN/TEST SPLIT -->
+            <section>
                 <section>
-                    <h2>Model Complexity and Error</h2>
-                    <h3>The Bias-Variance Tradeoff</h3>
+                    <h2>The First Solution: Train/Test Split</h2>
+                    <h3>Simulating Real-World Performance</h3>
                     
-                    <img src="../images/week04-bias-variance-tradeoff.svg" alt="Bias-variance tradeoff curve" style="width: 80%; margin: 0 auto; display: block;">
-                    
-                    <div class="info-box" style="margin-top: 30px;">
-                        <strong>Key Insights:</strong><br>
-                        • Training error always decreases with complexity<br>
-                        • Test error first decreases, then increases (U-shape)<br>
-                        • Optimal complexity minimizes test error, not training error<br>
-                        • This is why we need separate test data!
+                    <div class="success-box">
+                        <h4>The Big Idea</h4>
+                        <p>Don't use all your data for training! Hold some back to test if your model actually works.</p>
                     </div>
-                    
-                    <img src="images/week04-biasvariance.png" alt="Bias-Variance Tradeoff Visualization" style="width: 52.5%; margin: 20px auto 0; display: block;">
-                </section>
-
-                <section>
-                    <h2>Train/Validate/Test Split</h2>
-                    <h3>The Foundation of ML Model Development</h3>
-                    
-                    <img src="../images/week04-train-val-test-split.svg" alt="Train/validation/test split visualization" style="width: 90%; margin: 0 auto; display: block;">
                     
                     <div class="columns" style="margin-top: 30px;">
                         <div class="column">
-                            <h4>Purpose of Each Set</h4>
-                            <ul>
-                                <li><strong>Training (60%):</strong> Fit model parameters</li>
-                                <li><strong>Validation (20%):</strong> Tune hyperparameters, select model</li>
-                                <li><strong>Test (20%):</strong> Final unbiased performance estimate</li>
-                            </ul>
+                            <h4>The Process</h4>
+                            <ol>
+                                <li>Split data into two parts</li>
+                                <li>Train model on training set</li>
+                                <li>Evaluate on test set</li>
+                                <li>Test performance estimates real-world performance</li>
+                            </ol>
                         </div>
                         <div class="column">
-                            <h4>Critical Rules</h4>
-                            <div class="warning-box">
-                                <ul>
-                                    <li><strong>Never</strong> use test data for model selection</li>
-                                    <li>Test set is used <strong>once</strong> at the very end</li>
-                                    <li>Validation helps prevent overfitting to training data</li>
-                                    <li>Keep test set "locked away" until final evaluation</li>
-                                </ul>
-                            </div>
+                            <h4>Why This Works</h4>
+                            <ul>
+                                <li>Test data is "unseen" by model</li>
+                                <li>Simulates deployment scenario</li>
+                                <li>Reveals overfitting immediately</li>
+                                <li>Honest performance estimate</li>
+                            </ul>
                         </div>
                     </div>
                     
-                    <div class="info-box" style="margin-top: 20px;">
-                        <h5>Important Note:</h5>
-                        <p>The suggested 60/20/20 split is <strong>not a hard rule</strong>. It should be adjusted based on your data size and context. We will discuss different splitting strategies and their trade-offs in later lectures.</p>
-                    </div>
+                    <img src="../images/week04-train-test-split.svg" alt="Train/test split visualization" style="width: 70%; margin: 20px auto; display: block;">
                 </section>
 
                 <section>
-                    <h2>Cross-Validation</h2>
-                    <h3>When Data is Limited</h3>
+                    <h2>Train/Test Split in Action</h2>
+                    <h3>Detecting Overfitting</h3>
                     
-                    <img src="../images/week04-cross-validation.svg" alt="5-fold cross-validation visualization" style="width: 80%; margin: 0 auto; display: block;">
-                    
-                    <div class="columns" style="margin-top: 30px;">
-                        <div class="column">
-                            <h4>How It Works</h4>
-                            <ul>
-                                <li>Split data into k folds (typically 5 or 10)</li>
-                                <li>Train on k-1 folds, validate on 1 fold</li>
-                                <li>Repeat k times, each fold as validation once</li>
-                                <li>Average results across all folds</li>
-                            </ul>
-                        </div>
-                        <div class="column">
-                            <h4>Benefits</h4>
-                            <div class="success-box">
-                                <ul>
-                                    <li>Uses all data for both training and validation</li>
-                                    <li>More robust performance estimate</li>
-                                    <li>Reduces variance in model evaluation</li>
-                                    <li>Essential for small datasets</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section>
-                    <h2>Practical Implementation</h2>
-                    <h3>Train/Test Split in Python</h3>
                     <div class="columns">
                         <div class="column-50 code-column">
+                            <h4>Implementation</h4>
                             <pre><code class="python">from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
 import numpy as np
 
-# Generate sample data
+# Generate data with hidden 3rd order relationship
 np.random.seed(42)
-X = np.random.uniform(-3, 3, 100).reshape(-1, 1)
-y = 0.5 * X.ravel()**2 - X.ravel() + 2 + \
-    np.random.normal(0, 0.5, 100)
+X = np.random.uniform(-3, 3, 200).reshape(-1, 1)
+y_true = 0.5*X**3 - 2*X**2 + X + 2
+y = y_true.ravel() + np.random.normal(0, 1, 200)
 
-# Split data
+# Split the data (70% train, 30% test)
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=42
 )
 
 # Try different polynomial degrees
-degrees = [1, 2, 3, 20]
+degrees = [1, 3, 20]
 for degree in degrees:
     # Create polynomial features
-    poly = PolynomialFeatures(degree=degree)
+    poly = PolynomialFeatures(degree)
     X_train_poly = poly.fit_transform(X_train)
     X_test_poly = poly.transform(X_test)
     
-    # Fit model
+    # Train model
     model = LinearRegression()
     model.fit(X_train_poly, y_train)
     
@@ -487,46 +407,540 @@ for degree in degrees:
     train_score = model.score(X_train_poly, y_train)
     test_score = model.score(X_test_poly, y_test)
     
-    print(f"Degree {degree}:")
-    print(f"  Train R²: {train_score:.3f}")
-    print(f"  Test R²: {test_score:.3f}")</code></pre>
+    print(f"Degree {degree:2d}: Train={train_score:.3f}, Test={test_score:.3f}")</code></pre>
                         </div>
                         <div class="column-50">
-                            <h4>Output Interpretation</h4>
-                            <pre style="background-color: #f8f8f8; padding: 15px; font-size: 0.75em;">
-Degree 1:
-  Train R²: 0.412
-  Test R²: 0.385   ← Underfitting
+                            <h4>Results Reveal the Truth</h4>
+                            <pre style="background: #f8f8f8; padding: 15px; font-size: 0.8em;">
+Degree  1: Train=0.412, Test=0.385
+           ↑ Both low = Underfitting
 
-Degree 2:
-  Train R²: 0.892
-  Test R²: 0.871   ← Good fit!
+Degree  3: Train=0.895, Test=0.871
+           ↑ Both high & close = Good!
 
-Degree 3:
-  Train R²: 0.895
-  Test R²: 0.869   ← Still good
-
-Degree 20:
-  Train R²: 0.998
-  Test R²: -2.451  ← Severe overfitting!</pre>
-
-                            <div class="warning-box" style="margin-top: 20px;">
-                                <h5>Warning Signs of Overfitting:</h5>
+Degree 20: Train=0.998, Test=-2.451
+           ↑ Huge gap = Overfitting!</pre>
+                            
+                            <div class="info-box" style="margin-top: 20px;">
+                                <h5>What We Learn:</h5>
                                 <ul>
-                                    <li>Train score much higher than test score</li>
-                                    <li>Negative test <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup></math> (worse than predicting mean)</li>
-                                    <li>Test error increases with model complexity</li>
+                                    <li><strong>Underfitting:</strong> Both scores low</li>
+                                    <li><strong>Good fit:</strong> Both scores high & similar</li>
+                                    <li><strong>Overfitting:</strong> Train >> Test</li>
                                 </ul>
                             </div>
+                            
+                            <div class="warning-box" style="margin-top: 15px;">
+                                <strong>Without test set:</strong> We'd think degree 20 is best (99.8% accuracy)!
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                            <div class="success-box" style="margin-top: 15px;">
-                                <h5>Best Practices:</h5>
+                <section>
+                    <h2>Common Split Ratios</h2>
+                    <h3>How Much Data for Testing?</h3>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Typical Splits</h4>
+                            <ul>
+                                <li><strong>80/20:</strong> Most common default</li>
+                                <li><strong>70/30:</strong> More conservative testing</li>
+                                <li><strong>90/10:</strong> When data is scarce</li>
+                            </ul>
+                            
+                            <h4 style="margin-top: 30px;">Considerations</h4>
+                            <ul>
+                                <li>More training data → Better model</li>
+                                <li>More test data → Better evaluation</li>
+                                <li>Need enough test data for reliable metrics</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>The Trade-off</h4>
+                            <img src="../images/week04-train-test-split-bar.png" alt="Train/test split ratios" style="width: 100%;">
+                            
+                            <div class="info-box" style="margin-top: 20px;">
+                                <strong>Rule of thumb:</strong> Start with 80/20, adjust based on data size and problem complexity
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- PART 3: THE HIDDEN PROBLEM -->
+            <section>
+                <section data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+                    <div class="transition-slide">
+                        <h2 style="color: white;">⚠️ But Wait... There's a Problem!</h2>
+                        <h3>The Hidden Danger of Train/Test Split</h3>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 10px; margin: 30px 0;">
+                            <p style="font-size: 1.2em; margin-bottom: 20px;">
+                                <strong>The Scenario:</strong> You're choosing between models...
+                            </p>
+                            <ol style="text-align: left; font-size: 1.1em; line-height: 1.8;">
+                                <li>Try Model A → Test score: 0.82</li>
+                                <li>Try Model B → Test score: 0.85</li>
+                                <li>Try Model C → Test score: 0.83</li>
+                                <li>Choose Model B (best test score)</li>
+                            </ol>
+                        </div>
+                        
+                        <div style="background: rgba(255,100,100,0.2); padding: 20px; border-radius: 10px;">
+                            <p style="font-size: 1.3em; margin: 0;">
+                                <strong>The Problem:</strong><br>
+                                You just used your test set to make a decision!<br>
+                                <span style="font-size: 0.9em;">Your test set is no longer "unseen" - it influenced your choice!</span>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Data Leakage</h2>
+                    <h3>When Test Data Influences Decisions</h3>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>What is Data Leakage?</h4>
+                            <div class="warning-box">
+                                <p>Information from test set "leaks" into the training process through model selection decisions</p>
+                            </div>
+                            
+                            <h4 style="margin-top: 30px;">How It Happens</h4>
+                            <ol>
+                                <li>Evaluate multiple models on test set</li>
+                                <li>Choose best performing model</li>
+                                <li>Test set guided your choice</li>
+                                <li>Final test score is optimistically biased</li>
+                            </ol>
+                        </div>
+                        <div class="column">
+                            <h4>The Consequence</h4>
+                            <div class="info-box">
+                                <p><strong>You lose your unbiased performance estimate!</strong></p>
+                                <p style="margin-top: 15px;">The test set is no longer representative of truly unseen data</p>
+                            </div>
+                            
+                            <h4 style="margin-top: 30px;">Real Impact</h4>
+                            <ul>
+                                <li>Overestimate model performance</li>
+                                <li>False confidence in production</li>
+                                <li>Unexpected failures when deployed</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- PART 4: BETTER SOLUTION - TRAIN/VAL/TEST -->
+            <section>
+                <section>
+                    <h2>The Better Solution</h2>
+                    <h3>Train / Validation / Test Split</h3>
+                    
+                    <div class="success-box">
+                        <h4>The Three-Way Split</h4>
+                        <p>Add a middle dataset specifically for model selection!</p>
+                    </div>
+                    
+                    <img src="../images/week04-train-val-test-split.svg" alt="Train/validation/test split" style="width: 85%; margin: 20px auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>🔵 Training Set (60%)</h4>
+                            <ul>
+                                <li>Train model parameters</li>
+                                <li>Fit the data</li>
+                                <li>Used repeatedly</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>🟡 Validation Set (20%)</h4>
+                            <ul>
+                                <li>Choose between models</li>
+                                <li>Tune hyperparameters</li>
+                                <li>Make decisions</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>🔴 Test Set (20%)</h4>
+                            <ul>
+                                <li>Final evaluation only</li>
+                                <li>Used ONCE at the end</li>
+                                <li>Never influences choices</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Sacred Test Set</h2>
+                    <h3>Protecting Against Self-Deception</h3>
+                    
+                    <div class="warning-box">
+                        <h4>🔒 The Golden Rule</h4>
+                        <p style="font-size: 1.2em;">The test set is locked away until the very end!</p>
+                    </div>
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>The Workflow</h4>
+                            <ol>
+                                <li><strong>Train</strong> many models on training set</li>
+                                <li><strong>Evaluate</strong> all on validation set</li>
+                                <li><strong>Select</strong> best based on validation</li>
+                                <li><strong>Retrain</strong> on train+validation</li>
+                                <li><strong>Test</strong> final model ONCE</li>
+                            </ol>
+                        </div>
+                        <div class="column">
+                            <h4>Why This Works</h4>
+                            <div class="success-box">
                                 <ul>
-                                    <li>Always check both train AND test performance</li>
-                                    <li>Use validation set for model selection</li>
-                                    <li>Simple models often generalize better</li>
+                                    <li>Validation set absorbs selection bias</li>
+                                    <li>Test set remains truly unseen</li>
+                                    <li>Final test score is unbiased</li>
+                                    <li>Realistic performance estimate</li>
                                 </ul>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>Think of it this way:</strong> Training is learning, Validation is practice exams, Test is the final exam you can't retake!
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Implementation Example</h2>
+                    <h3>Proper Model Selection</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># First split: separate test set
+X_temp, X_test, y_temp, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Second split: separate train and validation
+X_train, X_val, y_train, y_val = train_test_split(
+    X_temp, y_temp, test_size=0.25, random_state=42
+)  # 0.25 of 0.8 = 0.2 of total
+
+print(f"Train: {len(X_train)} samples")
+print(f"Val:   {len(X_val)} samples")  
+print(f"Test:  {len(X_test)} samples")
+
+# Try different models
+models = {
+    'Linear': LinearRegression(),
+    'Poly-2': make_pipeline(PolynomialFeatures(2), LinearRegression()),
+    'Poly-3': make_pipeline(PolynomialFeatures(3), LinearRegression()),
+    'Poly-5': make_pipeline(PolynomialFeatures(5), LinearRegression())
+}
+
+# Evaluate on VALIDATION set
+best_model = None
+best_score = -float('inf')
+
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    val_score = model.score(X_val, y_val)
+    print(f"{name}: Validation R² = {val_score:.3f}")
+    
+    if val_score > best_score:
+        best_score = val_score
+        best_model = (name, model)
+
+print(f"\nBest model: {best_model[0]}")
+
+# ONLY NOW evaluate on test set
+test_score = best_model[1].score(X_test, y_test)
+print(f"Final test R² = {test_score:.3f}")</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Output</h4>
+                            <pre style="background: #f8f8f8; padding: 15px; font-size: 0.75em;">
+Train: 120 samples
+Val:   40 samples  
+Test:  40 samples
+
+Linear: Validation R² = 0.401
+Poly-2: Validation R² = 0.823
+Poly-3: Validation R² = 0.891  ← Best!
+Poly-5: Validation R² = 0.885
+
+Best model: Poly-3
+Final test R² = 0.878</pre>
+                            
+                            <div class="info-box" style="margin-top: 20px;">
+                                <h5>Key Points:</h5>
+                                <ul>
+                                    <li>Used validation to choose Poly-3</li>
+                                    <li>Test set untouched until end</li>
+                                    <li>Final score is unbiased estimate</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="warning-box" style="margin-top: 15px;">
+                                <strong>Never go back!</strong> Once you've looked at test performance, don't adjust your model!
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- PART 5: CROSS-VALIDATION -->
+            <section>
+                <section>
+                    <h2>When Data is Precious</h2>
+                    <h3>The Problem with Fixed Splits</h3>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>The Dilemma</h4>
+                            <div class="warning-box">
+                                <p>Small dataset (e.g., 500 samples)</p>
+                                <p>60/20/20 split gives:</p>
+                                <ul style="margin-top: 10px;">
+                                    <li>Training: 300 samples</li>
+                                    <li>Validation: 100 samples</li>
+                                    <li>Test: 100 samples</li>
+                                </ul>
+                                <p style="margin-top: 10px;"><strong>Problem:</strong> Not enough data for reliable training!</p>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <h4>Additional Issues</h4>
+                            <ul>
+                                <li>Validation score depends on specific split</li>
+                                <li>Lucky/unlucky splits can mislead</li>
+                                <li>Wasting valuable training data</li>
+                                <li>High variance in performance estimates</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 30px;">
+                        <strong>The Question:</strong> Can we use data more efficiently while still getting reliable performance estimates?
+                    </div>
+                </section>
+
+                <section>
+                    <h2>K-Fold Cross-Validation</h2>
+                    <h3>Using All Data for Training AND Validation</h3>
+                    
+                    <img src="../images/week04-cross-validation.svg" alt="5-fold cross-validation" style="width: 85%; margin: 20px auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>How It Works</h4>
+                            <ol>
+                                <li>Split data into K equal folds</li>
+                                <li>For each fold k:
+                                    <ul>
+                                        <li>Use fold k as validation</li>
+                                        <li>Use other k-1 folds for training</li>
+                                        <li>Record validation score</li>
+                                    </ul>
+                                </li>
+                                <li>Average all K scores</li>
+                            </ol>
+                        </div>
+                        <div class="column">
+                            <h4>The Magic</h4>
+                            <div class="success-box">
+                                <ul>
+                                    <li>Every sample used for training</li>
+                                    <li>Every sample used for validation</li>
+                                    <li>K different performance estimates</li>
+                                    <li>More robust than single split</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Cross-Validation in Practice</h2>
+                    <h3>Robust Model Selection</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import KFold
+
+# Separate test set first (sacred!)
+X_work, X_test, y_work, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Define cross-validation strategy
+kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+
+# Try different models
+models = {
+    'Linear': LinearRegression(),
+    'Poly-2': make_pipeline(PolynomialFeatures(2), 
+                           LinearRegression()),
+    'Poly-3': make_pipeline(PolynomialFeatures(3), 
+                           LinearRegression()),
+    'Poly-5': make_pipeline(PolynomialFeatures(5), 
+                           LinearRegression())
+}
+
+# Evaluate each model with cross-validation
+for name, model in models.items():
+    # Get 5 validation scores
+    scores = cross_val_score(model, X_work, y_work, 
+                            cv=kfold, 
+                            scoring='r2')
+    
+    print(f"{name}:")
+    print(f"  Scores: {scores}")
+    print(f"  Mean:   {scores.mean():.3f}")
+    print(f"  Std:    {scores.std():.3f}")
+    print()
+
+# Choose best model based on mean CV score
+# Then retrain on all work data and test once!</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Results Show Stability</h4>
+                            <pre style="background: #f8f8f8; padding: 15px; font-size: 0.7em;">
+Linear:
+  Scores: [0.39, 0.41, 0.43, 0.38, 0.40]
+  Mean:   0.402
+  Std:    0.019  ← Low variance
+
+Poly-2:
+  Scores: [0.81, 0.84, 0.82, 0.79, 0.83]
+  Mean:   0.818
+  Std:    0.019  ← Consistent
+
+Poly-3:
+  Scores: [0.88, 0.91, 0.89, 0.87, 0.90]
+  Mean:   0.890  ← Best mean!
+  Std:    0.015  ← Very stable
+
+Poly-5:
+  Scores: [0.86, 0.89, 0.84, 0.91, 0.88]
+  Mean:   0.876
+  Std:    0.027  ← Higher variance</pre>
+                            
+                            <div class="info-box" style="margin-top: 15px;">
+                                <h5>What CV Tells Us:</h5>
+                                <ul>
+                                    <li><strong>Mean:</strong> Expected performance</li>
+                                    <li><strong>Std:</strong> Reliability of estimate</li>
+                                    <li>Multiple estimates → confidence</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Choosing K in K-Fold</h2>
+                    <h3>Common Choices and Trade-offs</h3>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Common Values</h4>
+                            <ul>
+                                <li><strong>K=5:</strong> Good balance, common default</li>
+                                <li><strong>K=10:</strong> More robust, standard in research</li>
+                                <li><strong>K=3:</strong> Faster, good for large datasets</li>
+                                <li><strong>K=N (LOOCV):</strong> Leave-one-out, for tiny datasets</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Trade-offs</h4>
+                            <div class="info-box">
+                                <p><strong>Larger K:</strong></p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>✓ More training data per fold</li>
+                                    <li>✓ Less biased estimate</li>
+                                    <li>✗ More computation</li>
+                                    <li>✗ Higher variance between folds</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box" style="margin-top: 30px;">
+                        <strong>Remember:</strong> Cross-validation is for model selection. You still need a separate test set for final evaluation!
+                    </div>
+                </section>
+            </section>
+
+            <!-- PART 6: ADVANCED TOPICS -->
+            <section>
+                <section>
+                    <h2>The Bias-Variance Tradeoff</h2>
+                    <h3>The Mathematical Foundation</h3>
+                    
+                    <img src="../images/week04-bias-variance-tradeoff.svg" alt="Bias-variance tradeoff" style="width: 75%; margin: 20px auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>Bias (Underfitting)</h4>
+                            <ul>
+                                <li>Systematic error</li>
+                                <li>Model too simple</li>
+                                <li>Can't capture patterns</li>
+                                <li>Error even with infinite data</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Variance (Overfitting)</h4>
+                            <ul>
+                                <li>Sensitivity to training data</li>
+                                <li>Model too flexible</li>
+                                <li>Different data → different model</li>
+                                <li>Fits noise and outliers</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <img src="images/week04-biasvariance.png" alt="Bias-Variance visualization" style="width: 45%; margin: 20px auto; display: block;">
+                </section>
+
+                <section>
+                    <h2>Stratified Splits</h2>
+                    <h3>Maintaining Class Balance</h3>
+                    
+                    <div class="warning-box">
+                        <h4>The Problem</h4>
+                        <p>Random splits might create unbalanced sets, especially with imbalanced classes</p>
+                    </div>
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>Example: Fraud Detection</h4>
+                            <ul>
+                                <li>95% legitimate transactions</li>
+                                <li>5% fraudulent transactions</li>
+                                <li>Random split might give test set with 2% or 8% fraud</li>
+                                <li>Misleading performance metrics</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Solution: Stratification</h4>
+                            <pre><code class="python"># Stratified split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, 
+    test_size=0.2,
+    stratify=y,  # Maintain class proportions
+    random_state=42
+)
+
+# Stratified K-Fold
+from sklearn.model_selection import StratifiedKFold
+skf = StratifiedKFold(n_splits=5)</code></pre>
                         </div>
                     </div>
                 </section>
@@ -534,32 +948,44 @@ Degree 20:
 
             <!-- Summary -->
             <section>
-                <h2>Summary: ML Fundamentals</h2>
-                <div class="columns">
+                <h2>Summary: The Complete Picture</h2>
+                <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 10px;">
+                    <h3>Our Journey Today</h3>
+                    <ol style="font-size: 1.1em; line-height: 1.8;">
+                        <li><strong>Problem:</strong> Models that memorize instead of learn (overfitting)</li>
+                        <li><strong>Solution 1:</strong> Train/Test split to detect overfitting</li>
+                        <li><strong>Problem 2:</strong> Test data influences model selection (leakage)</li>
+                        <li><strong>Solution 2:</strong> Train/Validation/Test split for honest evaluation</li>
+                        <li><strong>Enhancement:</strong> Cross-validation for robust estimates with limited data</li>
+                    </ol>
+                </div>
+                
+                <div class="columns" style="margin-top: 30px;">
                     <div class="column">
-                        <h4>Key Concepts</h4>
+                        <h4>Key Takeaways</h4>
                         <ul>
-                            <li>ML focuses on prediction over inference</li>
-                            <li>Bias-variance tradeoff is fundamental</li>
-                            <li>Overfitting is the enemy of generalization</li>
-                            <li>Train/validate/test split is essential</li>
-                            <li>Cross-validation for robust evaluation</li>
+                            <li>Never train on test data</li>
+                            <li>Validation ≠ Test</li>
+                            <li>Test set is sacred (use once!)</li>
+                            <li>Cross-validation for small data</li>
+                            <li>Monitor train vs validation performance</li>
                         </ul>
                     </div>
                     <div class="column">
                         <h4>Best Practices</h4>
                         <ul>
-                            <li>Always use separate test data</li>
-                            <li>Start with simple models</li>
-                            <li>Monitor both training and test error</li>
-                            <li>Use validation for model selection</li>
-                            <li>Be pragmatic about assumptions</li>
+                            <li>Start simple, increase complexity</li>
+                            <li>Use stratification for imbalanced data</li>
+                            <li>Set random seeds for reproducibility</li>
+                            <li>Document your split strategy</li>
+                            <li>Never "peek" at the test set</li>
                         </ul>
                     </div>
                 </div>
+                
                 <div class="info-box" style="margin-top: 30px;">
-                    <strong>Next: Part B - Linear Regression Deep Dive</strong><br>
-                    We'll apply these fundamental concepts to linear regression, exploring mathematical foundations, implementation, and evaluation.
+                    <strong>Next: Part B - Linear Regression</strong><br>
+                    We'll apply these concepts to build, evaluate, and optimize linear regression models.
                 </div>
             </section>
 

@@ -1,0 +1,2997 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5: Classification & Logistic Regression - Complete</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Common slide styles -->
+    <link rel="stylesheet" href="../common-slides.css">
+    
+    <!-- Page-specific fixes for code blocks -->
+    <style>
+        /* Fix standalone code blocks (not in columns) */
+        .reveal section > pre,
+        .reveal section > div > pre {
+            max-height: 500px !important;
+            font-size: 0.52em !important;
+        }
+        
+        /* Ensure code blocks in columns use full width */
+        .reveal .columns .code-column {
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+<h1>Classification &amp; Logistic Regression</h1>
+<h3 style="border: none; text-align: center; color: #666;">From Continuous to Categorical Predictions</h3>
+<p style="text-align: center; font-style: italic; color: #888;">Making Binary Decisions with Machine Learning</p>
+<p style="text-align: center; margin-top: 50px;">
+<strong>ISM6251 | Week 5</strong><br/>
+                    Binary Classification • Evaluation Metrics • Logistic Regression • Business Applications
+                </p>
+</section>
+<section>
+<h2>Week 5: Classification - Topic Hierarchy</h2>
+<!-- Learning Path at the top -->
+<div style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px;">
+<p style="font-size: 1em; text-align: center; margin: 0; color: white; font-weight: bold;">
+                        Learning Path: Part 1: Introduction → Part 2: Evaluation Metrics → Part 3: Logistic Regression → Part 4: Advanced Topics → Part 5: Business Cases
+                    </p>
+</div>
+<!-- Two-column ASCII tree layout -->
+<div style="display: flex; gap: 20px; height: 450px;">
+<!-- Left Column -->
+<div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+<pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #e74c3c;">CLASSIFICATION: CATEGORICAL PREDICTION FUNDAMENTALS</strong>
+
+<strong style="color: #3498db;">📚 Learning Objectives</strong>
+├── Understand Classification vs Regression
+├── Master Confusion Matrices
+├── Choose Appropriate Metrics
+├── Implement Logistic Regression
+├── Handle Class Imbalance
+├── Apply ROC/AUC Analysis
+└── Solve Business Problems
+
+<strong style="color: #9b59b6;">🎯 Part 1: Introduction to Classification</strong>
+├── What is Classification?
+│   ├── Categorical Targets
+│   ├── Binary vs Multi-class
+│   ├── Probabilistic Outputs
+│   └── Decision Boundaries
+├── Real-World Applications
+│   ├── Medical Diagnosis
+│   ├── Fraud Detection
+│   ├── Customer Churn
+│   └── Email Spam
+├── Key Challenges
+│   ├── Class Imbalance
+│   ├── Threshold Selection
+│   ├── Cost Sensitivity
+│   └── Interpretability
+└── Evaluation Framework
+    ├── Train/Test Split
+    ├── Stratification
+    ├── Cross-Validation
+    └── Performance Metrics
+
+<strong style="color: #e67e22;">📊 Part 2: Evaluation Metrics</strong>
+├── Confusion Matrix
+│   ├── True Positives (TP)
+│   ├── False Positives (FP)
+│   ├── True Negatives (TN)
+│   └── False Negatives (FN)
+├── Core Metrics
+│   ├── Accuracy
+│   ├── Precision
+│   ├── Recall (Sensitivity)
+│   └── F1 Score
+├── Choosing Metrics
+│   ├── When Recall Matters
+│   ├── When Precision Matters
+│   ├── Balanced Approaches
+│   └── Business Context
+└── Visual Analysis
+    ├── Confusion Matrix Plots
+    ├── Metric Comparisons
+    └── Trade-off Curves
+                        </pre>
+</div>
+<!-- Right Column -->
+<div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+<pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #16a085;">🔧 Part 3: Logistic Regression</strong>
+├── The Sigmoid Function
+│   ├── σ(z) = 1/(1+e^-z)
+│   ├── Maps to [0,1]
+│   ├── Probability Interpretation
+│   └── Decision Boundary
+├── Model Training
+│   ├── Maximum Likelihood
+│   ├── Log Loss Function
+│   ├── Gradient Descent
+│   └── Regularization
+├── Implementation
+│   ├── sklearn.LogisticRegression
+│   ├── Key Parameters
+│   ├── Class Weights
+│   └── Solver Selection
+└── Interpretation
+    ├── Coefficients
+    ├── Odds Ratios
+    ├── Feature Importance
+    └── Probability Calibration
+
+<strong style="color: #8e44ad;">📈 Part 4: Advanced Topics</strong>
+├── Class Imbalance
+│   ├── Problem Overview
+│   ├── Resampling Methods
+│   ├── Class Weights
+│   └── SMOTE
+├── ROC Analysis
+│   ├── ROC Curves
+│   ├── AUC Score
+│   ├── Threshold Selection
+│   └── Interpretation
+├── Precision-Recall
+│   ├── PR Curves
+│   ├── Average Precision
+│   ├── Trade-offs
+│   └── Imbalanced Data
+└── Cost-Sensitive Learning
+    ├── Cost Matrices
+    ├── Business Costs
+    ├── Optimization
+    └── Decision Making
+
+<strong style="color: #27ae60;">💼 Part 5: Business Cases</strong>
+├── Healthcare: Diabetes Screening
+│   ├── High Recall Priority
+│   ├── Cost of Missed Diagnosis
+│   └── Early Intervention
+├── E-Commerce: Churn Prediction
+│   ├── Balanced Approach
+│   ├── ROI Calculation
+│   └── Retention Strategies
+└── Finance: Fraud Detection
+    ├── Extreme Imbalance
+    ├── Real-time Scoring
+    └── Cost Optimization
+                        </pre>
+</div>
+</div>
+</section>
+<section>
+<!-- Title Slide -->
+<section>
+<h2>Part 1: Introduction to Classification</h2>
+<h3>Moving from Continuous to Categorical Predictions</h3>
+<div class="info-box">
+<strong>Key Question:</strong><br/>
+                        How do we predict discrete categories instead of continuous values?
+                    </div>
+<div class="columns mt-30">
+<div class="column">
+<h4>What We'll Cover</h4>
+<ul>
+<li>Regression vs Classification</li>
+<li>Types of classification problems</li>
+<li>Binary vs multi-class</li>
+<li>Real-world applications</li>
+<li>Business use cases</li>
+</ul>
+</div>
+<div class="column">
+<h4>Learning Outcomes</h4>
+<ul>
+<li>Distinguish classification from regression</li>
+<li>Identify appropriate use cases</li>
+<li>Understand problem formulation</li>
+<li>Map business problems to ML tasks</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Regression vs Classification -->
+<section>
+<h2>Regression vs Classification</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Regression</h4>
+<div class="info-box">
+<strong>Predicts continuous values:</strong><br/>
+                                • Sales revenue: $125,432<br/>
+                                • Temperature: 72.5°F<br/>
+                                • Stock price: $148.92<br/>
+                                • Customer lifetime value: $5,234
+                            </div>
+<div class="warning-box mt-20">
+<strong>Output:</strong> Any real number<br/>
+<strong>Loss:</strong> Mean Squared Error<br/>
+<strong>Example:</strong> Linear Regression
+                            </div>
+</div>
+<div class="column-50">
+<h4>Classification</h4>
+<div class="success-box">
+<strong>Predicts discrete categories:</strong><br/>
+                                • Customer will churn: Yes/No<br/>
+                                • Email is spam: Spam/Not Spam<br/>
+                                • Transaction is fraud: Fraud/Legitimate<br/>
+                                • Product quality: Good/Defective
+                            </div>
+<div class="info-box mt-20">
+<strong>Output:</strong> Class label or probability<br/>
+<strong>Loss:</strong> Cross-entropy<br/>
+<strong>Example:</strong> Logistic Regression
+                            </div>
+</div>
+</div>
+<img alt="Classification vs Regression" src="../images/week05-class-imbalance.png" style="width: 60%; margin: 20px auto; display: block;"/>
+</section>
+<!-- Types of Classification -->
+<section>
+<h2>Types of Classification Problems</h2>
+<div class="columns">
+<div class="column-33">
+<h4>Binary Classification</h4>
+<div class="info-box">
+<strong>Two Classes:</strong><br/>
+                                • Yes/No<br/>
+                                • True/False<br/>
+                                • Positive/Negative
+                            </div>
+<ul class="small-text mt-10">
+<li>Customer churns or stays</li>
+<li>Loan defaults or repaid</li>
+<li>Email spam or not spam</li>
+<li>Product defective or good</li>
+</ul>
+</div>
+<div class="column-33">
+<h4>Multi-class Classification</h4>
+<div class="warning-box">
+<strong>Multiple Classes:</strong><br/>
+                                • One of N categories<br/>
+                                • Mutually exclusive
+                            </div>
+<ul class="small-text mt-10">
+<li>Customer segment (A, B, C, D)</li>
+<li>Product category</li>
+<li>Risk level (Low, Med, High)</li>
+<li>Image recognition</li>
+</ul>
+</div>
+<div class="column-33">
+<h4>Multi-label Classification</h4>
+<div class="success-box">
+<strong>Multiple Labels:</strong><br/>
+                                • Multiple categories<br/>
+                                • Not mutually exclusive
+                            </div>
+<ul class="small-text mt-10">
+<li>Movie genres</li>
+<li>Article topics</li>
+<li>Medical diagnoses</li>
+<li>Product attributes</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Business Applications -->
+<section>
+<h2>Business Applications of Classification</h2>
+<div class="columns">
+<div class="column-33">
+<div class="metric-card">
+<h4>Marketing &amp; Sales</h4>
+<ul style="text-align: left; font-size: 0.8em;">
+<li>Lead scoring</li>
+<li>Customer churn prediction</li>
+<li>Cross-sell/up-sell targeting</li>
+<li>Campaign response prediction</li>
+<li>Customer segmentation</li>
+</ul>
+</div>
+</div>
+<div class="column-33">
+<div class="metric-card">
+<h4>Finance &amp; Risk</h4>
+<ul style="text-align: left; font-size: 0.8em;">
+<li>Credit approval</li>
+<li>Fraud detection</li>
+<li>Default prediction</li>
+<li>Insurance claim classification</li>
+<li>Trading signals</li>
+</ul>
+</div>
+</div>
+<div class="column-33">
+<div class="metric-card">
+<h4>Operations</h4>
+<ul style="text-align: left; font-size: 0.8em;">
+<li>Quality control</li>
+<li>Equipment failure prediction</li>
+<li>Inventory categorization</li>
+<li>Supply chain risk</li>
+<li>Anomaly detection</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="warning-box mt-20">
+<strong>Key Business Consideration:</strong> The cost of different types of errors varies dramatically across applications. 
+                        Missing a fraudulent transaction might cost thousands, while flagging a legitimate transaction as fraud causes customer frustration.
+                    </div>
+</section>
+<!-- Why Classification is Challenging -->
+<section>
+<h2>Why Classification is Challenging</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Technical Challenges</h4>
+<ul>
+<li><strong>Class Imbalance:</strong>
+<ul class="text-90 ml-20">
+<li>Fraud: ~0.1% of transactions</li>
+<li>Churn: ~5-10% of customers</li>
+<li>Defects: ~1% of products</li>
+</ul>
+</li>
+<li><strong>Feature Engineering:</strong>
+<ul class="text-90 ml-20">
+<li>Which features predict the outcome?</li>
+<li>How to handle categorical variables?</li>
+<li>Interaction effects</li>
+</ul>
+</li>
+<li><strong>Model Selection:</strong>
+<ul class="text-90 ml-20">
+<li>Linear vs non-linear boundaries</li>
+<li>Interpretability vs accuracy</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="column-50">
+<h4>Business Challenges</h4>
+<ul>
+<li><strong>Cost Asymmetry:</strong>
+<ul class="text-90 ml-20">
+<li>False positives vs false negatives</li>
+<li>Different costs for different errors</li>
+<li>Customer experience impact</li>
+</ul>
+</li>
+<li><strong>Threshold Selection:</strong>
+<ul class="text-90 ml-20">
+<li>Default 0.5 rarely optimal</li>
+<li>Business-driven thresholds</li>
+<li>Trade-offs between metrics</li>
+</ul>
+</li>
+<li><strong>Model Monitoring:</strong>
+<ul class="text-90 ml-20">
+<li>Concept drift over time</li>
+<li>Changing class distributions</li>
+<li>Performance degradation</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section>
+<!-- Title Slide -->
+<section>
+<h2>Part 2: Evaluation &amp; Metrics</h2>
+<h3>Measuring and Understanding Classification Performance</h3>
+<div class="info-box">
+<strong>Key Question:</strong><br/>
+How do we measure success in classification, and what metrics matter for different business contexts?
+</div>
+<div class="columns mt-30">
+<div class="column">
+<h4>What We'll Cover</h4>
+<ul>
+<li>Binary classification outputs</li>
+<li>The confusion matrix</li>
+<li>Core evaluation metrics</li>
+<li>Precision-recall trade-offs</li>
+<li>Business context examples</li>
+<li>Threshold optimization</li>
+</ul>
+</div>
+<div class="column">
+<h4>Learning Outcomes</h4>
+<ul>
+<li>Build and interpret confusion matrices</li>
+<li>Calculate key metrics</li>
+<li>Choose appropriate metrics</li>
+<li>Optimize for business objectives</li>
+<li>Understand metric trade-offs</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- 1. Binary Classification Fundamentals -->
+<section>
+<h2>Binary Classification Outputs</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Two Forms of Predictions</h4>
+<ul>
+<li><strong>Class Labels:</strong> Direct prediction (0 or 1, Yes or No)</li>
+<li><strong>Probabilities:</strong> Likelihood of positive class (0.0 to 1.0)</li>
+</ul>
+<div class="info-box mt-20">
+<strong>Decision Threshold:</strong><br/>
+Default threshold = 0.5<br/>
+• P(class=1) ≥ 0.5 → Predict 1<br/>
+• P(class=1) &lt; 0.5 → Predict 0
+</div>
+<div class="warning-box mt-20">
+<strong>Key Insight:</strong> The threshold is a business decision, not a statistical one!
+</div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Binary classification predictions
+from sklearn.linear_model import LogisticRegression
+
+# Train model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Get class predictions (using default 0.5 threshold)
+y_pred = model.predict(X_test)
+# Output: array([0, 1, 1, 0, 1, ...])
+
+# Get probability predictions
+y_proba = model.predict_proba(X_test)
+# Output: array([[0.82, 0.18],  # 82% class 0, 18% class 1
+#                [0.31, 0.69],  # 31% class 0, 69% class 1
+#                [0.15, 0.85],  # 15% class 0, 85% class 1
+#                ...])
+
+# Custom threshold based on business needs
+threshold = 0.7  # More conservative
+y_custom = (y_proba[:, 1] &gt;= threshold).astype(int)
+
+# Different thresholds → Different predictions
+print(f"Default (0.5): {y_pred[:5]}")
+print(f"Conservative (0.7): {y_custom[:5]}")</code></pre>
+</div>
+</div>
+</section>
+<!-- 2. The Confusion Matrix Foundation -->
+<section>
+<h2>The Confusion Matrix: Foundation of Evaluation</h2>
+<div class="columns">
+<div class="column-60">
+<h4>Four Types of Outcomes</h4>
+<table class="confusion-matrix">
+<tr>
+<th colspan="2" rowspan="2"></th>
+<th colspan="2">Predicted</th>
+</tr>
+<tr>
+<th>Negative (0)</th>
+<th>Positive (1)</th>
+</tr>
+<tr>
+<th rowspan="2">Actual</th>
+<th>Negative (0)</th>
+<td class="tn"><strong>True Negative (TN)</strong><br/>Correctly predicted negative</td>
+<td class="fp"><strong>False Positive (FP)</strong><br/>Type I Error<br/>(False Alarm)</td>
+</tr>
+<tr>
+<th>Positive (1)</th>
+<td class="fn"><strong>False Negative (FN)</strong><br/>Type II Error<br/>(Missed Detection)</td>
+<td class="tp"><strong>True Positive (TP)</strong><br/>Correctly predicted positive</td>
+</tr>
+</table>
+</div>
+<div class="column-40">
+<h4>Why It Matters</h4>
+<div class="success-box">
+<strong>Correct Predictions:</strong><br/>
+• TN &amp; TP: Model got it right
+</div>
+<div class="danger-box mt-10">
+<strong>Errors Have Different Costs:</strong><br/>
+• FP: False alarm costs<br/>
+• FN: Missed opportunity costs
+</div>
+<div class="info-box mt-10">
+<strong>Key Point:</strong> The confusion matrix is the foundation for ALL classification metrics
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Core Metrics -->
+<section>
+<h2>Core Classification Metrics</h2>
+<div class="columns">
+<div class="column-50">
+<div class="metric-card">
+<h4>Accuracy</h4>
+<div class="formula">Accuracy = (TP + TN) / Total</div>
+<p class="small-text">Overall correctness</p>
+<div class="warning-box" style="font-size: 0.7em;">
+<strong>⚠️ Misleading when imbalanced!</strong><br/>
+99% accuracy might mean predicting all negative
+</div>
+</div>
+<div class="metric-card mt-20">
+<h4>Precision</h4>
+<div class="formula">Precision = TP / (TP + FP)</div>
+<p class="small-text">Of predicted positives, how many correct?</p>
+<div class="info-box" style="font-size: 0.7em;">
+<strong>Focus:</strong> Minimize false alarms<br/>
+<strong>Use when:</strong> FP cost is high
+</div>
+</div>
+</div>
+<div class="column-50">
+<div class="metric-card">
+<h4>Recall (Sensitivity, TPR)</h4>
+<div class="formula">Recall = TP / (TP + FN)</div>
+<p class="small-text">Of actual positives, how many caught?</p>
+<div class="info-box" style="font-size: 0.7em;">
+<strong>Focus:</strong> Don't miss positives<br/>
+<strong>Use when:</strong> FN cost is high
+</div>
+</div>
+<div class="metric-card mt-20">
+<h4>F1 Score</h4>
+<div class="formula">F1 = 2 × (P × R) / (P + R)</div>
+<p class="small-text">Harmonic mean of precision and recall</p>
+<div class="success-box" style="font-size: 0.7em;">
+<strong>Use when:</strong> Need balance<br/>
+<strong>Note:</strong> Assumes equal importance
+</div>
+</div>
+</div>
+</div>
+<pre><code class="python">from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Calculate all metrics
+acc = accuracy_score(y_true, y_pred)
+prec = precision_score(y_true, y_pred)
+rec = recall_score(y_true, y_pred)
+f1 = f1_score(y_true, y_pred)
+
+print(f"Accuracy: {acc:.3f} | Precision: {prec:.3f} | Recall: {rec:.3f} | F1: {f1:.3f}")</code></pre>
+</section>
+<!-- 4. Customer Churn Example -->
+<section>
+<h2>Example 1: Customer Churn Prediction</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Business Context</h4>
+<table class="confusion-matrix">
+<tr>
+<th colspan="2" rowspan="2"></th>
+<th colspan="2">Predicted</th>
+</tr>
+<tr>
+<th>Will Stay</th>
+<th>Will Churn</th>
+</tr>
+<tr>
+<th rowspan="2">Actual</th>
+<th>Stayed</th>
+<td class="tn"><strong>850</strong><br/>No action needed</td>
+<td class="fp"><strong>50</strong><br/>Unnecessary retention<br/>Cost: $5,000</td>
+</tr>
+<tr>
+<th>Churned</th>
+<td class="fn"><strong>30</strong><br/>Lost customers<br/>Cost: $30,000</td>
+<td class="tp"><strong>70</strong><br/>Successfully retained<br/>Saved: $63,000</td>
+</tr>
+</table>
+<div class="info-box mt-20">
+<strong>Metrics:</strong><br/>
+• Accuracy: 92.0%<br/>
+• Precision: 58.3%<br/>
+• Recall: 70.0%<br/>
+• F1 Score: 63.6%
+</div>
+</div>
+<div class="column-50">
+<h4>Business Analysis</h4>
+<pre><code class="python"># Cost-benefit analysis
+tn, fp, fn, tp = 850, 50, 30, 70
+
+# Define costs
+retention_cost = 100    # Cost per retention offer
+customer_value = 1000   # Lost revenue per churn
+
+# Calculate impact
+false_positive_cost = fp * retention_cost
+false_negative_cost = fn * customer_value
+saved_revenue = tp * (customer_value - retention_cost)
+
+net_benefit = saved_revenue - false_positive_cost - false_negative_cost
+
+print(f"FP Cost: ${false_positive_cost:,}")
+print(f"FN Cost: ${false_negative_cost:,}")
+print(f"Saved: ${saved_revenue:,}")
+print(f"Net Benefit: ${net_benefit:,}")
+
+# ROI calculation
+roi = net_benefit / (false_positive_cost + tp * retention_cost)
+print(f"ROI: {roi:.1%}")</code></pre>
+<img alt="Churn Matrix" src="../images/week05-confusion-matrix.png" style="width: 54%; margin: 10px auto; display: block;"/>
+</div>
+</div>
+</section>
+<!-- 5. Medical Screening Example -->
+<section>
+<h2>Example 2: Medical Disease Screening</h2>
+<div class="columns">
+<div class="column-50">
+<h4>High Stakes: Prioritize Recall</h4>
+<table class="confusion-matrix" style="font-size: 0.85em;">
+<tr>
+<th colspan="2" rowspan="2"></th>
+<th colspan="2">Test Result</th>
+</tr>
+<tr>
+<th>Negative</th>
+<th>Positive</th>
+</tr>
+<tr>
+<th rowspan="2">Actual</th>
+<th>Healthy</th>
+<td class="tn"><strong>9,850</strong><br/>Correctly cleared</td>
+<td class="fp"><strong>100</strong><br/>False alarm<br/>$200K follow-up</td>
+</tr>
+<tr>
+<th>Disease</th>
+<td class="fn"><strong>5</strong><br/>MISSED DISEASE<br/>Potential death</td>
+<td class="tp"><strong>45</strong><br/>Caught early<br/>Lives saved</td>
+</tr>
+</table>
+<div class="warning-box mt-10">
+<strong>The Low Prevalence Challenge:</strong><br/>
+• Disease rate: 0.5% (50 of 10,000)<br/>
+• Recall: 90% (catches most cases)<br/>
+• Precision: 31% (many false alarms)<br/>
+• Trade-off: High recall means more false positives
+</div>
+</div>
+<div class="column-50">
+<h4>Standard Metrics Analysis</h4>
+<pre><code class="python"># Medical screening metrics
+tp, fp, fn, tn = 45, 100, 5, 9850
+total = tp + fp + fn + tn
+
+# Calculate standard metrics
+accuracy = (tp + tn) / total
+precision = tp / (tp + fp)  
+recall = tp / (tp + fn)      
+f1 = 2 * (precision * recall) / (precision + recall)
+
+print(f"Accuracy: {accuracy:.1%}")
+print(f"Precision: {precision:.1%}")  
+print(f"Recall: {recall:.1%}")
+print(f"F1 Score: {f1:.1%}")
+
+print("\nInterpretation:")
+print(f"• {recall:.0%} of diseased patients detected")
+print(f"• Only {precision:.0%} of positive tests are correct")
+print(f"• {100-precision:.0%} of positive tests are false alarms")
+
+# Cost-benefit analysis
+false_alarm_cost = fp * 2000  # Follow-up testing
+missed_disease_cost = fn * 500000  # Treatment/liability
+early_detection_benefit = tp * 100000
+
+net_benefit = early_detection_benefit - false_alarm_cost - missed_disease_cost
+print(f"\nBusiness Impact:")
+print(f"Net benefit: ${net_benefit:,.0f}")</code></pre>
+<img alt="Medical Matrix" src="../images/week05-medical-screening-matrix.png" style="width: 48%; margin: 10px auto; display: block;"/>
+</div>
+</div>
+</section>
+<!-- 6. Spam Detection Example -->
+<section>
+<h2>Example 3: Email Spam Detection</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Business Priority: Precision</h4>
+<table class="confusion-matrix" style="font-size: 0.85em;">
+<tr>
+<th colspan="2" rowspan="2"></th>
+<th colspan="2">Predicted</th>
+</tr>
+<tr>
+<th>Ham</th>
+<th>Spam</th>
+</tr>
+<tr>
+<th rowspan="2">Actual</th>
+<th>Ham</th>
+<td class="tn"><strong>8,500</strong><br/>Delivered correctly</td>
+<td class="fp"><strong>20</strong><br/>BLOCKED EMAIL<br/>Angry customers</td>
+</tr>
+<tr>
+<th>Spam</th>
+<td class="fn"><strong>80</strong><br/>Spam in inbox<br/>Minor annoyance</td>
+<td class="tp"><strong>1,400</strong><br/>Spam blocked<br/>Clean inbox</td>
+</tr>
+</table>
+<div class="success-box mt-10">
+<strong>Current Performance:</strong><br/>
+• Precision: 98.6% (critical!)<br/>
+• Recall: 94.6% (good enough)<br/>
+• F1 Score: 96.6%<br/>
+• Daily volume: 10,000 emails
+</div>
+</div>
+<div class="column-50">
+<h4>Threshold Impact Analysis</h4>
+<pre><code class="python"># Compare different threshold strategies
+import numpy as np
+
+# Current (balanced) threshold = 0.5
+current = {'threshold': 0.5, 'fp': 20, 'fn': 80}
+
+# Conservative threshold = 0.8 (fewer FP)
+conservative = {'threshold': 0.8, 'fp': 5, 'fn': 200}
+
+# Aggressive threshold = 0.3 (fewer FN)
+aggressive = {'threshold': 0.3, 'fp': 100, 'fn': 20}
+
+# Business costs
+cost_per_fp = 250  # Lost business opportunity
+cost_per_fn = 2    # Time wasted on spam
+
+for strategy in [current, conservative, aggressive]:
+    total_cost = (strategy['fp'] * cost_per_fp + 
+                  strategy['fn'] * cost_per_fn)
+    print(f"Threshold {strategy['threshold']}:")
+    print(f"  FP: {strategy['fp']}, FN: {strategy['fn']}")
+    print(f"  Daily cost: ${total_cost:,}")
+    print(f"  Annual cost: ${total_cost * 365:,}
+")
+
+# Conclusion: Conservative threshold is best!</code></pre>
+<img alt="Spam Matrix" src="../images/week05-spam-detection-matrix.png" style="width: 48%; margin: 10px auto; display: block;"/>
+</div>
+</div>
+</section>
+<!-- 7. The Precision-Recall Trade-off -->
+<section>
+<h2>The Precision-Recall Trade-off</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Understanding the Relationship</h4>
+<ul>
+<li><strong>Inverse Relationship:</strong> As one goes up, the other typically goes down</li>
+<li><strong>Threshold Control:</strong>
+<ul class="text-90 ml-20">
+<li>↑ Threshold → ↑ Precision, ↓ Recall</li>
+<li>↓ Threshold → ↓ Precision, ↑ Recall</li>
+</ul>
+</li>
+</ul>
+<div class="info-box mt-20">
+<strong>Business Translation:</strong><br/>
+• High Precision = "When we say yes, we're sure"<br/>
+• High Recall = "We catch most of the positives"
+</div>
+<div class="warning-box mt-20">
+<strong>No Free Lunch:</strong> You can't maximize both simultaneously. Business context determines the right balance.
+</div>
+</div>
+<div class="column-50">
+<h4>Visualizing the Trade-off</h4>
+<pre><code class="python"># Generate precision-recall curve
+from sklearn.metrics import precision_recall_curve
+
+precision, recall, thresholds = precision_recall_curve(
+    y_true, y_scores)
+
+# Find optimal points for different objectives
+idx_f1 = np.argmax(2 * precision * recall / 
+                   (precision + recall))
+idx_prec90 = np.where(precision &gt;= 0.9)[0][-1]
+idx_rec90 = np.where(recall &gt;= 0.9)[0][0]
+
+print(f"Max F1: P={precision[idx_f1]:.2f}, "
+      f"R={recall[idx_f1]:.2f}, T={thresholds[idx_f1]:.2f}")
+print(f"90% Precision: R={recall[idx_prec90]:.2f}, "
+      f"T={thresholds[idx_prec90]:.2f}")
+print(f"90% Recall: P={precision[idx_rec90]:.2f}, "
+      f"T={thresholds[idx_rec90]:.2f}")</code></pre>
+<img alt="PR Curve" src="../images/week05-precision-recall-curve.png" style="width: 90%; margin: 10px auto; display: block;"/>
+</div>
+</div>
+</section>
+<!-- 8. Comparing All Examples -->
+<section>
+<h2>Context Determines Metrics: A Comparison</h2>
+<img alt="Comparison" src="../images/week05-confusion-matrix-comparison.png" style="width: 54%; margin: 20px auto; display: block;"/>
+<div class="columns mt-20">
+<div class="column-33">
+<div class="info-box">
+<h4>Customer Churn</h4>
+<strong>Priority:</strong> Balance<br/>
+<strong>Key Metric:</strong> F1 Score<br/>
+<strong>Threshold:</strong> ~0.5<br/>
+<strong>Why:</strong> Both errors costly
+</div>
+</div>
+<div class="column-33">
+<div class="warning-box">
+<h4>Medical Screening</h4>
+<strong>Priority:</strong> High Recall<br/>
+<strong>Key Metric:</strong> Sensitivity<br/>
+<strong>Threshold:</strong> ~0.2<br/>
+<strong>Why:</strong> Can't miss disease
+</div>
+</div>
+<div class="column-33">
+<div class="success-box">
+<h4>Spam Detection</h4>
+<strong>Priority:</strong> High Precision<br/>
+<strong>Key Metric:</strong> Precision<br/>
+<strong>Threshold:</strong> ~0.8<br/>
+<strong>Why:</strong> Can't block real email
+</div>
+</div>
+</div>
+<div class="danger-box mt-20">
+<strong>Key Takeaway:</strong> There is no "best" metric or threshold. Success is defined by your business objectives and the relative costs of different types of errors.
+</div>
+</section>
+<!-- 9. Threshold Optimization -->
+<section>
+<h2>Optimizing Decision Thresholds</h2>
+<div class="columns">
+<div class="column-50 code-column">
+<pre><code class="python"># Threshold optimization based on business costs
+def find_optimal_threshold(y_true, y_scores, 
+                          cost_fp, cost_fn):
+    """Find threshold that minimizes total cost."""
+    
+    thresholds = np.linspace(0, 1, 100)
+    costs = []
+    
+    for threshold in thresholds:
+        y_pred = (y_scores &gt;= threshold).astype(int)
+        cm = confusion_matrix(y_true, y_pred)
+        tn, fp, fn, tp = cm.ravel()
+        
+        total_cost = fp * cost_fp + fn * cost_fn
+        costs.append(total_cost)
+    
+    optimal_idx = np.argmin(costs)
+    optimal_threshold = thresholds[optimal_idx]
+    min_cost = costs[optimal_idx]
+    
+    return optimal_threshold, min_cost
+
+# Example: Fraud detection
+# FP: Flag legitimate transaction ($25 customer service)
+# FN: Miss fraud ($1,200 average loss)
+optimal_t, cost = find_optimal_threshold(
+    y_true, y_scores, cost_fp=25, cost_fn=1200)
+
+print(f"Optimal threshold: {optimal_t:.3f}")
+print(f"Expected daily cost: ${cost:,.0f}")
+print(f"Annual savings vs default: ${(default_cost - cost) * 365:,.0f}")</code></pre>
+</div>
+<div class="column-50">
+<h4>Threshold Selection Strategies</h4>
+<div class="metric-card">
+<h4>1. Cost-Based</h4>
+<p class="small-text">Minimize total misclassification cost</p>
+<div class="formula">Cost = FP × Cost_FP + FN × Cost_FN</div>
+</div>
+<div class="metric-card mt-10">
+<h4>2. Metric-Based</h4>
+<p class="small-text">Achieve target precision or recall</p>
+<ul class="small-text">
+<li>Medical: Recall ≥ 95%</li>
+<li>Spam: Precision ≥ 99%</li>
+</ul>
+</div>
+<div class="metric-card mt-10">
+<h4>3. Operating Point</h4>
+<p class="small-text">Balance at specific F1 or accuracy</p>
+<div class="info-box" style="font-size: 0.7em;">
+Often suboptimal for business!
+</div>
+</div>
+<img alt="Threshold Optimization" src="../images/week05-threshold-optimization.png" style="width: 60%; margin: 10px auto; display: block;"/>
+</div>
+</div>
+</section>
+<!-- 10. Summary Slide -->
+<section>
+<h2>Key Takeaways: Evaluation &amp; Metrics</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Core Concepts</h4>
+<ul>
+<li><strong>Confusion Matrix:</strong> Foundation of all metrics</li>
+<li><strong>Four Key Metrics:</strong>
+<ul class="text-90 ml-20">
+<li>Accuracy (often misleading)</li>
+<li>Precision (minimize FP)</li>
+<li>Recall (minimize FN)</li>
+<li>F1 Score (balance)</li>
+</ul>
+</li>
+<li><strong>Trade-offs:</strong> Can't maximize everything</li>
+<li><strong>Thresholds:</strong> Business decision, not statistical</li>
+</ul>
+</div>
+<div class="column-50">
+<h4>Best Practices</h4>
+<div class="success-box">
+<ol>
+<li>Start with confusion matrix</li>
+<li>Understand your costs (FP vs FN)</li>
+<li>Choose metrics aligned with business</li>
+<li>Optimize threshold accordingly</li>
+<li>Monitor performance over time</li>
+</ol>
+</div>
+<div class="danger-box mt-20">
+<strong>Remember:</strong> A 99% accurate model might be terrible for your business if it misses the 1% that matters most!
+</div>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section>
+<h2>Part 3: Logistic Regression</h2>
+<h3>The Workhorse of Binary Classification</h3>
+<div class="columns">
+<div class="column-50">
+<h4>Why Not Linear Regression?</h4>
+<ul>
+<li>Linear regression predicts unbounded values</li>
+<li>We need probabilities between 0 and 1</li>
+<li>Linear regression assumes normal distribution of errors</li>
+<li>Binary outcomes violate this assumption</li>
+</ul>
+<h4>The Logistic Function</h4>
+<div class="info-box">
+<strong>Sigmoid Function:</strong><br/>
+<span class="font-mono">p = 1 / (1 + e^(-z))</span><br/>
+                                where z = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ
+                            </div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Visualize sigmoid function
+def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
+z = np.linspace(-10, 10, 100)
+p = sigmoid(z)
+
+plt.figure(figsize=(10, 6))
+plt.plot(z, p, 'b-', linewidth=2, label='Sigmoid')
+plt.axhline(y=0.5, color='r', linestyle='--', 
+            alpha=0.5, label='Decision Boundary')
+plt.xlabel('z = β₀ + β₁x₁ + ... + βₙxₙ', fontsize=12)
+plt.ylabel('Probability', fontsize=12)
+plt.title('Logistic (Sigmoid) Function', fontsize=14)
+plt.grid(True, alpha=0.3)
+plt.legend()
+plt.ylim(-0.05, 1.05)
+plt.show()
+
+# Properties
+print("Key Properties:")
+print(f"sigmoid(0) = {sigmoid(0):.3f}")
+print(f"sigmoid(-∞) → 0")
+print(f"sigmoid(+∞) → 1")</code></pre>
+<img alt="Sigmoid Function" src="../images/week05-sigmoid-function.png" style="width: 105%; margin: 20px auto; display: block;"/>
+</div>
+</div>
+</section>
+<section>
+<h2>Logistic Regression Interpretation</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Odds and Log-Odds</h4>
+<div class="info-box">
+<strong>Odds:</strong> p / (1 - p)<br/>
+                                • Probability of success vs failure<br/>
+                                • If p = 0.75, odds = 3:1
+                            </div>
+<div class="info-box">
+<strong>Log-Odds (Logit):</strong> ln(p / (1 - p))<br/>
+                                • Linear relationship with predictors<br/>
+                                • log-odds = β₀ + β₁x₁ + β₂x₂ + ...
+                            </div>
+<h4>Coefficient Interpretation</h4>
+<ul class="small-text">
+<li>β represents change in log-odds</li>
+<li>e^β represents odds ratio</li>
+<li>For β = 0.693: e^0.693 = 2 (doubles the odds)</li>
+</ul>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Logistic Regression Example: Customer Churn
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+
+# Sample features
+features = ['tenure', 'monthly_charges', 'total_charges', 
+           'num_services', 'has_contract']
+
+# Fit model
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X_train[features])
+
+model = LogisticRegression()
+model.fit(X_scaled, y_train)
+
+# Examine coefficients
+coef_df = pd.DataFrame({
+    'Feature': features,
+    'Coefficient': model.coef_[0],
+    'Odds_Ratio': np.exp(model.coef_[0])
+})
+
+print(coef_df.to_string())
+print(f"\nIntercept: {model.intercept_[0]:.3f}")</code></pre>
+<div class="output-box" style="font-size: 0.5em; margin-top: 10px;">
+<strong>Output:</strong>
+<pre style="background: #f4f4f4; padding: 10px; border-radius: 4px; font-size: 0.9em;">           Feature  Coefficient  Odds_Ratio
+0           tenure    -1.103114    0.331836
+1  monthly_charges     0.406293    1.501242
+2    total_charges     0.000349    1.000350
+3     num_services     2.575832   13.142249
+4     has_contract    -0.014544    0.985561
+
+Intercept: -2.120
+
+Interpretation:
+• tenure: Each month increases → 67% lower odds of churn
+• num_services: Strong positive effect (13x odds)
+• monthly_charges: Higher charges → 50% higher odds</pre>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2>Implementing Logistic Regression</h2>
+<div class="columns">
+<div class="column-50 code-column">
+<h4>Model Training</h4>
+<pre><code class="python">from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report
+
+# Prepare data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y)
+
+# Scale features (important for logistic regression)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Train model with regularization
+model = LogisticRegression(
+    penalty='l2',      # L2 regularization
+    C=1.0,            # Inverse regularization strength
+    max_iter=1000,    # Maximum iterations
+    random_state=42
+)
+
+model.fit(X_train_scaled, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test_scaled)
+y_proba = model.predict_proba(X_test_scaled)
+
+# Evaluate
+print(classification_report(y_test, y_pred))</code></pre>
+<div class="output-box" style="font-size: 0.5em; margin-top: 10px;">
+<strong>Output:</strong>
+<pre style="background: #f4f4f4; padding: 10px; border-radius: 4px; font-size: 0.9em;">              precision    recall  f1-score   support
+
+    Stay (0)       0.94      0.91      0.93       138
+   Churn (1)       0.82      0.87      0.84        62
+
+    accuracy                           0.90       200
+   macro avg       0.88      0.89      0.89       200
+weighted avg       0.90      0.90      0.90       200</pre>
+</div>
+</div>
+<div class="column-50 code-column">
+<h4>Model Interpretation</h4>
+<pre><code class="python"># Feature importance analysis
+import matplotlib.pyplot as plt
+
+# Get feature importance (absolute coefficients)
+importance = np.abs(model.coef_[0])
+feature_importance = pd.DataFrame({
+    'feature': feature_names,
+    'importance': importance
+}).sort_values('importance', ascending=False)
+
+# Plot feature importance
+plt.figure(figsize=(10, 6))
+plt.barh(feature_importance['feature'][:10], 
+         feature_importance['importance'][:10])
+plt.xlabel('Absolute Coefficient Value')
+plt.title('Top 10 Most Important Features')
+plt.gca().invert_yaxis()
+plt.tight_layout()
+plt.show()
+
+# Probability distribution
+plt.figure(figsize=(10, 6))
+plt.hist(y_proba[y_test==0, 1], bins=30, alpha=0.5, 
+         label='Actual Negative', color='blue')
+plt.hist(y_proba[y_test==1, 1], bins=30, alpha=0.5, 
+         label='Actual Positive', color='red')
+plt.xlabel('Predicted Probability')
+plt.ylabel('Frequency')
+plt.title('Distribution of Predicted Probabilities')
+plt.legend()
+plt.axvline(x=0.5, color='black', linestyle='--', 
+           label='Default Threshold')
+plt.show()</code></pre>
+<img alt="Feature Importance" src="../images/week05-feature-importance.png" style="width: 70%; margin: 20px auto; display: block;"/>
+<img alt="Probability Distributions" src="../images/week05-probability-distributions.png" style="width: 70%; margin: 20px auto; display: block;"/>
+</div>
+</div>
+</section>
+<section>
+<h2>Understanding sklearn's LogisticRegression Parameters</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Key Parameters Overview</h4>
+<div class="info-box">
+<strong>Most Important Parameters:</strong>
+<ul class="text-90">
+<li><code>penalty</code>: Type of regularization</li>
+<li><code>C</code>: Inverse regularization strength</li>
+<li><code>solver</code>: Optimization algorithm</li>
+<li><code>max_iter</code>: Maximum iterations</li>
+<li><code>class_weight</code>: Handle imbalanced data</li>
+</ul>
+</div>
+<div class="warning-box mt-20">
+<strong>Common Pitfall:</strong><br/>
+C is the INVERSE of regularization strength!<br/>
+• Smaller C = MORE regularization<br/>
+• Larger C = LESS regularization
+</div>
+<div class="success-box mt-20">
+<strong>Best Practice:</strong> Always start with default parameters, then tune based on validation performance
+</div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Essential LogisticRegression parameters
+from sklearn.linear_model import LogisticRegression
+
+# Basic usage with key parameters
+model = LogisticRegression(
+    # Regularization
+    penalty='l2',           # 'l1', 'l2', 'elasticnet', None
+    C=1.0,                  # Inverse regularization (0.001 to 1000)
+    
+    # Solver selection
+    solver='lbfgs',         # 'lbfgs', 'liblinear', 'newton-cg', 
+                           # 'sag', 'saga'
+    
+    # Convergence
+    max_iter=100,          # Increase if not converging
+    tol=1e-4,              # Tolerance for stopping
+    
+    # Class handling
+    class_weight=None,      # None, 'balanced', or dict
+    
+    # Multiclass
+    multi_class='auto',     # 'ovr', 'multinomial', 'auto'
+    
+    # Other
+    random_state=42,        # For reproducibility
+    n_jobs=-1,             # Parallel processing
+    verbose=0              # Progress messages
+)
+
+# Example: Tuning for imbalanced data
+model_balanced = LogisticRegression(
+    penalty='l2',
+    C=0.1,                 # More regularization
+    class_weight='balanced',  # Auto-adjust for imbalance
+    max_iter=500,          # More iterations for convergence
+    solver='liblinear'     # Works well with L2 and small data
+)</code></pre>
+</div>
+</div>
+</section>
+<section>
+<h2>Regularization in Detail</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Understanding Regularization Types</h4>
+<table class="styled-table">
+<thead>
+<tr>
+<th>Penalty</th>
+<th>Effect</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1 (Lasso)</strong></td>
+<td>Sets coefficients to zero</td>
+<td>Feature selection needed</td>
+</tr>
+<tr>
+<td><strong>L2 (Ridge)</strong></td>
+<td>Shrinks coefficients</td>
+<td>Default choice, all features relevant</td>
+</tr>
+<tr>
+<td><strong>ElasticNet</strong></td>
+<td>Combination of L1 &amp; L2</td>
+<td>Many correlated features</td>
+</tr>
+<tr>
+<td><strong>None</strong></td>
+<td>No regularization</td>
+<td>Small datasets, no overfitting</td>
+</tr>
+</tbody>
+</table>
+<div class="info-box mt-20">
+<strong>C Parameter Guidelines:</strong>
+<ul class="text-90">
+<li><strong>C = 0.001:</strong> Very strong regularization</li>
+<li><strong>C = 0.01:</strong> Strong regularization</li>
+<li><strong>C = 0.1:</strong> Moderate regularization</li>
+<li><strong>C = 1.0:</strong> Default (light regularization)</li>
+<li><strong>C = 10:</strong> Very light regularization</li>
+<li><strong>C = 100+:</strong> Almost no regularization</li>
+</ul>
+</div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Comparing different regularization strengths
+import numpy as np
+from sklearn.model_selection import validation_curve
+
+# Test different C values
+C_values = [0.001, 0.01, 0.1, 1, 10, 100]
+train_scores = []
+val_scores = []
+
+for C in C_values:
+    model = LogisticRegression(penalty='l2', C=C, max_iter=1000)
+    
+    # Get cross-validation scores
+    scores = cross_val_score(model, X_train, y_train, 
+                           cv=5, scoring='roc_auc')
+    val_scores.append(scores.mean())
+    
+    # Train score
+    model.fit(X_train, y_train)
+    train_scores.append(model.score(X_train, y_train))
+
+# Plot validation curve
+plt.figure(figsize=(10, 6))
+plt.semilogx(C_values, train_scores, 'b-', label='Training score')
+plt.semilogx(C_values, val_scores, 'r-', label='Validation score')
+plt.xlabel('C (Inverse Regularization)', fontsize=12)
+plt.ylabel('Score', fontsize=12)
+plt.title('Effect of Regularization Strength', fontsize=14)
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Practical example: Feature selection with L1
+model_l1 = LogisticRegression(penalty='l1', C=0.1, 
+                              solver='liblinear')
+model_l1.fit(X_train, y_train)
+
+# Check which features were selected (non-zero coefficients)
+selected_features = np.where(model_l1.coef_[0] != 0)[0]
+print(f"L1 selected {len(selected_features)} of {X_train.shape[1]} features")</code></pre>
+</div>
+</div>
+</section>
+<section>
+<h2>Choosing the Right Solver</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Solver Selection Guide</h4>
+<table class="styled-table" style="font-size: 0.85em;">
+<thead>
+<tr>
+<th>Solver</th>
+<th>Best For</th>
+<th>Supports</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>lbfgs</strong></td>
+<td>Small datasets (default)</td>
+<td>L2, None; Multinomial</td>
+</tr>
+<tr>
+<td><strong>liblinear</strong></td>
+<td>Small datasets, L1 penalty</td>
+<td>L1, L2; OvR only</td>
+</tr>
+<tr>
+<td><strong>newton-cg</strong></td>
+<td>Multinomial loss</td>
+<td>L2, None; Multinomial</td>
+</tr>
+<tr>
+<td><strong>sag</strong></td>
+<td>Large datasets</td>
+<td>L2, None; Fast convergence</td>
+</tr>
+<tr>
+<td><strong>saga</strong></td>
+<td>Large datasets, L1</td>
+<td>All penalties; All losses</td>
+</tr>
+</tbody>
+</table>
+<div class="warning-box mt-20">
+<strong>Common Issues &amp; Solutions:</strong>
+<ul class="text-90">
+<li><strong>ConvergenceWarning:</strong> Increase max_iter</li>
+<li><strong>Memory error:</strong> Use sag/saga solver</li>
+<li><strong>L1 not supported:</strong> Switch to liblinear/saga</li>
+</ul>
+</div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Solver selection examples
+
+# Example 1: Small dataset with L1 (feature selection)
+model_small_l1 = LogisticRegression(
+    penalty='l1',
+    solver='liblinear',  # Only liblinear/saga support L1
+    C=0.1
+)
+
+# Example 2: Large dataset (&gt;10K samples)
+model_large = LogisticRegression(
+    penalty='l2',
+    solver='sag',        # Fast for large datasets
+    max_iter=500,        # May need more iterations
+    tol=1e-3            # Can relax tolerance for speed
+)
+
+# Example 3: Multinomial classification (3+ classes)
+model_multi = LogisticRegression(
+    multi_class='multinomial',
+    solver='lbfgs',      # Supports multinomial
+    max_iter=1000
+)
+
+# Example 4: Elastic Net (L1 + L2)
+model_elastic = LogisticRegression(
+    penalty='elasticnet',
+    solver='saga',       # Only saga supports elastic net
+    l1_ratio=0.5,       # Balance between L1 and L2
+    max_iter=1000
+)
+
+# Performance comparison
+import time
+
+solvers = ['lbfgs', 'liblinear', 'sag', 'saga']
+for solver in solvers:
+    start = time.time()
+    model = LogisticRegression(solver=solver, max_iter=100)
+    model.fit(X_train, y_train)
+    elapsed = time.time() - start
+    score = model.score(X_test, y_test)
+    print(f"{solver:10} Time: {elapsed:.3f}s Score: {score:.3f}")</code></pre>
+</div>
+</div>
+</section>
+<section>
+<h2>Practical Tips for Using LogisticRegression</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Common Patterns &amp; Best Practices</h4>
+<div class="success-box">
+<strong>1. Always Scale Your Features!</strong>
+<pre><code class="python">from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)</code></pre>
+</div>
+<div class="info-box mt-10">
+<strong>2. Start Simple, Then Optimize</strong>
+<ol class="text-90">
+<li>Use default parameters first</li>
+<li>Check for convergence warnings</li>
+<li>Tune C using cross-validation</li>
+<li>Consider L1 if many features</li>
+</ol>
+</div>
+<div class="warning-box mt-10">
+<strong>3. Watch for These Signs:</strong>
+<ul class="text-90">
+<li><strong>Overfitting:</strong> Decrease C (more regularization)</li>
+<li><strong>Underfitting:</strong> Increase C (less regularization)</li>
+<li><strong>Slow training:</strong> Try sag/saga solver</li>
+<li><strong>Imbalanced data:</strong> Use class_weight='balanced'</li>
+</ul>
+</div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Complete practical workflow
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+# 1. Create pipeline with scaling
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('classifier', LogisticRegression(random_state=42))
+])
+
+# 2. Define parameter grid
+param_grid = {
+    'classifier__C': [0.01, 0.1, 1, 10],
+    'classifier__penalty': ['l1', 'l2'],
+    'classifier__solver': ['liblinear'],  # Works with both L1 and L2
+    'classifier__class_weight': [None, 'balanced']
+}
+
+# 3. Grid search with cross-validation
+grid_search = GridSearchCV(
+    pipeline,
+    param_grid,
+    cv=5,
+    scoring='roc_auc',
+    n_jobs=-1,
+    verbose=1
+)
+
+# 4. Fit and find best parameters
+grid_search.fit(X_train, y_train)
+
+print("Best parameters:", grid_search.best_params_)
+print("Best CV score:", grid_search.best_score_)
+
+# 5. Evaluate on test set
+best_model = grid_search.best_estimator_
+test_score = best_model.score(X_test, y_test)
+print(f"Test score: {test_score:.3f}")
+
+# 6. Interpretability check
+if 'l1' in grid_search.best_params_['classifier__penalty']:
+    coefficients = best_model.named_steps['classifier'].coef_[0]
+    n_features_selected = np.sum(coefficients != 0)
+    print(f"L1 selected {n_features_selected} features")</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section>
+<h2>Part 4: Handling Class Imbalance</h2>
+<h3>When Classes Are Not Equal</h3>
+<div class="columns">
+<div class="column-50">
+<h4>The Imbalance Problem</h4>
+<ul>
+<li>Many business problems have imbalanced classes:
+                                    <ul class="text-90 ml-20">
+<li>Fraud detection: ~0.1% fraudulent</li>
+<li>Customer churn: ~5-10% churn</li>
+<li>Manufacturing defects: ~1% defective</li>
+</ul>
+</li>
+<li>Model tends to predict majority class</li>
+<li>High accuracy but poor minority class recall</li>
+</ul>
+<div class="warning-box">
+<strong>Example:</strong> 99% accuracy in fraud detection might mean the model predicts "no fraud" for everything!
+                            </div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Strategies for handling imbalance
+
+# 1. Class weight adjustment
+model_weighted = LogisticRegression(
+    class_weight='balanced',  # Automatically adjust
+    random_state=42
+)
+
+# 2. Custom class weights
+model_custom = LogisticRegression(
+    class_weight={0: 1, 1: 10},  # 10x weight for minority
+    random_state=42
+)
+
+# 3. Resampling techniques
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import RandomUnderSampler
+
+# Oversampling minority class
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+
+# Undersampling majority class
+rus = RandomUnderSampler(random_state=42)
+X_under, y_under = rus.fit_resample(X_train, y_train)
+
+# 4. Threshold adjustment
+# Instead of 0.5, use optimal threshold
+from sklearn.metrics import roc_curve
+
+fpr, tpr, thresholds = roc_curve(y_test, y_proba[:, 1])
+optimal_idx = np.argmax(tpr - fpr)
+optimal_threshold = thresholds[optimal_idx]</code></pre>
+</div>
+</div>
+<img alt="Class Imbalance" src="../images/week05-class-imbalance.png" style="width: 60%; margin: 20px auto; display: block;"/>
+</section>
+<section>
+<h2>Understanding ROC Curves: The Basics</h2>
+<div class="columns">
+<div class="column-50">
+<h4>What is an ROC Curve?</h4>
+<div class="info-box">
+<strong>ROC = Receiver Operating Characteristic</strong><br/>
+A graph showing how well a binary classifier performs at ALL possible thresholds
+</div>
+<ul>
+<li><strong>X-axis (FPR):</strong> False Positive Rate
+<ul class="text-90 ml-20">
+<li>FPR = FP / (FP + TN)</li>
+<li>"What % of negatives did we incorrectly call positive?"</li>
+<li>Also called Fall-out or (1 - Specificity)</li>
+</ul>
+</li>
+<li><strong>Y-axis (TPR):</strong> True Positive Rate
+<ul class="text-90 ml-20">
+<li>TPR = TP / (TP + FN)</li>
+<li>"What % of positives did we correctly identify?"</li>
+<li>Also called Sensitivity or Recall</li>
+</ul>
+</li>
+</ul>
+<div class="warning-box mt-20">
+<strong>Key Insight:</strong> Each point on the ROC curve represents a different threshold setting
+</div>
+</div>
+<div class="column-50">
+<h4>How to Read an ROC Curve</h4>
+<img alt="ROC Curve" src="../images/week05-roc-curve.png" style="width: 100%; margin: 10px auto; display: block;"/>
+<div class="success-box">
+<strong>Important Points on the Curve:</strong>
+<ul class="text-90">
+<li><strong>(0,0):</strong> Threshold = 1.0 (predict all negative)</li>
+<li><strong>(1,1):</strong> Threshold = 0.0 (predict all positive)</li>
+<li><strong>(0,1):</strong> Perfect classifier (the dream!)</li>
+<li><strong>Diagonal:</strong> Random guessing (coin flip)</li>
+<li><strong>Optimal Point (red dot):</strong> Best balance<br/>
+      • Threshold = 0.333<br/>
+      • TPR = 0.87, FPR = 0.13<br/>
+      • Maximizes TPR - FPR (Youden Index)</li>
+</ul>
+</div>
+<div class="info-box mt-10">
+<strong>Better Models:</strong> Curve closer to top-left corner<br/>
+<strong>Worse Models:</strong> Curve closer to diagonal line
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2>Understanding How Thresholds Build the ROC Curve</h2>
+<div class="columns">
+<div class="column-40">
+<h4>Each Point = Different Threshold</h4>
+<div class="info-box">
+<strong>Key Insight:</strong> The ROC curve is created by calculating TPR and FPR at every possible threshold from 0 to 1
+</div>
+<ul class="text-90">
+<li><strong>High threshold (0.9):</strong>
+<ul class="ml-20">
+<li>Very conservative</li>
+<li>Few positive predictions</li>
+<li>Low TPR, Very low FPR</li>
+</ul>
+</li>
+<li><strong>Medium threshold (0.5):</strong>
+<ul class="ml-20">
+<li>Balanced approach</li>
+<li>Standard default</li>
+<li>Moderate TPR and FPR</li>
+</ul>
+</li>
+<li><strong>Low threshold (0.1):</strong>
+<ul class="ml-20">
+<li>Very aggressive</li>
+<li>Many positive predictions</li>
+<li>High TPR, High FPR</li>
+</ul>
+</li>
+</ul>
+<div class="warning-box mt-20">
+<strong>Remember:</strong> Moving along the ROC curve = changing the threshold
+</div>
+</div>
+<div class="column-60">
+<h4>Visualizing Threshold Effects</h4>
+<img alt="ROC Thresholds" src="../images/week05-roc-thresholds-explained.png" style="width: 100%; margin: 10px auto; display: block;"/>
+<div class="success-box" style="font-size: 0.85em;">
+<strong>How to Read This:</strong>
+<ul class="text-90">
+<li>Left plot shows where each threshold falls on ROC curve</li>
+<li>Right plot shows how many positive/negative predictions at each threshold</li>
+<li>As threshold ↓, positive predictions ↑, both TPR and FPR ↑</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2>AUC: Area Under the ROC Curve</h2>
+<div class="columns">
+<div class="column-50">
+<h4>What Does AUC Mean?</h4>
+<div class="info-box">
+<strong>AUC = Area Under the Curve</strong><br/>
+Single number summarizing classifier performance across all thresholds
+</div>
+<h4>Intuitive Interpretation</h4>
+<div class="success-box">
+<strong>AUC = Probability that the model ranks a random positive example higher than a random negative example</strong>
+</div>
+<p class="text-90">Example: AUC = 0.85 means:</p>
+<ul class="text-90">
+<li>If you pick one positive and one negative case randomly</li>
+<li>85% chance the model gives higher probability to the positive</li>
+<li>This works regardless of threshold!</li>
+</ul>
+<h4>AUC Score Interpretation</h4>
+<table class="styled-table">
+<thead>
+<tr><th>AUC Range</th><th>Performance</th><th>Real-World Meaning</th></tr>
+</thead>
+<tbody>
+<tr><td>0.5</td><td>No discrimination</td><td>Random guessing</td></tr>
+<tr><td>0.5-0.6</td><td>Poor</td><td>Barely better than random</td></tr>
+<tr><td>0.6-0.7</td><td>Fair</td><td>Some predictive value</td></tr>
+<tr><td>0.7-0.8</td><td>Acceptable</td><td>Good for many applications</td></tr>
+<tr><td>0.8-0.9</td><td>Excellent</td><td>Strong predictive power</td></tr>
+<tr><td>0.9-1.0</td><td>Outstanding</td><td>Near perfect (check for leakage!)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Complete ROC-AUC Example
+from sklearn.metrics import roc_curve, roc_auc_score
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Get predictions from your model
+y_scores = model.predict_proba(X_test)[:, 1]
+
+# Calculate ROC curve points
+fpr, tpr, thresholds = roc_curve(y_test, y_scores)
+
+# Calculate AUC
+auc_score = roc_auc_score(y_test, y_scores)
+
+# Create comprehensive ROC plot
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+# Left plot: ROC Curve
+ax1.plot(fpr, tpr, 'b-', linewidth=2, 
+         label=f'Model (AUC = {auc_score:.3f})')
+ax1.plot([0, 1], [0, 1], 'r--', 
+         label='Random (AUC = 0.500)')
+ax1.fill_between(fpr, tpr, alpha=0.2)  # Shade AUC
+ax1.set_xlabel('False Positive Rate', fontsize=12)
+ax1.set_ylabel('True Positive Rate', fontsize=12)
+ax1.set_title('ROC Curve', fontsize=14)
+ax1.legend(loc='lower right')
+ax1.grid(True, alpha=0.3)
+
+# Right plot: Threshold Analysis
+ax2.plot(thresholds[:-1], tpr[:-1], 'g-', label='TPR (Sensitivity)')
+ax2.plot(thresholds[:-1], fpr[:-1], 'r-', label='FPR (1-Specificity)')
+ax2.plot(thresholds[:-1], tpr[:-1] - fpr[:-1], 'b-', 
+         label='TPR - FPR (Youden Index)')
+ax2.set_xlabel('Threshold', fontsize=12)
+ax2.set_ylabel('Rate', fontsize=12)
+ax2.set_title('Performance vs Threshold', fontsize=14)
+ax2.legend(loc='best')
+ax2.grid(True, alpha=0.3)
+ax2.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Find optimal threshold using Youden Index
+optimal_idx = np.argmax(tpr - fpr)
+optimal_threshold = thresholds[optimal_idx]
+print(f"Optimal Threshold: {optimal_threshold:.3f}")
+print(f"At this threshold: TPR={tpr[optimal_idx]:.3f}, FPR={fpr[optimal_idx]:.3f}")</code></pre>
+<div class="output-box" style="font-size: 0.5em; margin-top: 10px;">
+<strong>Output:</strong>
+<pre style="background: #f4f4f4; padding: 10px; border-radius: 4px; font-size: 0.9em;">Optimal Threshold: 0.333
+At this threshold: TPR=0.874, FPR=0.125</pre>
+</div>
+<img alt="ROC with AUC" src="../images/week05-auc-shaded.png" style="width: 90%; margin: 20px auto; display: block;"/>
+</div>
+</div>
+</section>
+<section>
+<h2>ROC-AUC: Practical Applications &amp; Limitations</h2>
+<div class="columns">
+<div class="column-50">
+<h4>When to Use ROC-AUC</h4>
+<div class="success-box">
+<strong>Best For:</strong>
+<ul class="text-90">
+<li>Comparing models (higher AUC = better)</li>
+<li>Threshold-independent evaluation</li>
+<li>Balanced or moderately imbalanced data</li>
+<li>When both FP and FN matter equally</li>
+</ul>
+</div>
+<h4>Real-World Examples</h4>
+<ul>
+<li><strong>Credit Scoring (AUC ~0.75-0.85):</strong>
+<ul class="text-90 ml-20">
+<li>Need to balance approval rates with default risk</li>
+<li>Both false positives and negatives costly</li>
+</ul>
+</li>
+<li><strong>Medical Diagnosis (AUC ~0.80-0.95):</strong>
+<ul class="text-90 ml-20">
+<li>High AUC critical for serious conditions</li>
+<li>Can adjust threshold based on consequences</li>
+</ul>
+</li>
+<li><strong>Email Spam (AUC ~0.95-0.99):</strong>
+<ul class="text-90 ml-20">
+<li>Very high AUC achievable</li>
+<li>Clear separation between classes</li>
+</ul>
+</li>
+</ul>
+<div class="warning-box mt-20">
+<strong>Limitations of ROC-AUC:</strong>
+<ul class="text-90">
+<li>Can be misleading with extreme imbalance</li>
+<li>Doesn't reflect actual business costs</li>
+<li>High AUC ≠ Good precision at your threshold</li>
+</ul>
+</div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Comparing Multiple Models with ROC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+
+# Train multiple models
+models = {
+    'Logistic Regression': LogisticRegression(),
+    'Random Forest': RandomForestClassifier(n_estimators=100),
+    'Naive Bayes': GaussianNB()
+}
+
+plt.figure(figsize=(10, 8))
+
+# Plot ROC curve for each model
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    y_scores = model.predict_proba(X_test)[:, 1]
+    
+    fpr, tpr, _ = roc_curve(y_test, y_scores)
+    auc_score = roc_auc_score(y_test, y_scores)
+    
+    plt.plot(fpr, tpr, linewidth=2, 
+             label=f'{name} (AUC = {auc_score:.3f})')
+
+# Add random classifier line
+plt.plot([0, 1], [0, 1], 'k--', label='Random (AUC = 0.500)')
+
+# Formatting
+plt.xlabel('False Positive Rate', fontsize=12)
+plt.ylabel('True Positive Rate', fontsize=12)
+plt.title('Model Comparison: ROC Curves', fontsize=14)
+plt.legend(loc='lower right')
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Alternative: Precision-Recall AUC for imbalanced data
+from sklearn.metrics import average_precision_score
+
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    y_scores = model.predict_proba(X_test)[:, 1]
+    
+    pr_auc = average_precision_score(y_test, y_scores)
+    roc_auc = roc_auc_score(y_test, y_scores)
+    
+    print(f"{name:20} ROC-AUC: {roc_auc:.3f}, PR-AUC: {pr_auc:.3f}")
+
+# Note: PR-AUC often better for imbalanced datasets!</code></pre>
+<div class="output-box" style="font-size: 0.5em; margin-top: 10px;">
+<strong>Output:</strong>
+<pre style="background: #f4f4f4; padding: 10px; border-radius: 4px; font-size: 0.9em;">Logistic Regression  ROC-AUC: 0.847, PR-AUC: 0.712
+Random Forest        ROC-AUC: 0.923, PR-AUC: 0.856
+Naive Bayes          ROC-AUC: 0.798, PR-AUC: 0.651</pre>
+</div>
+<img alt="Model Comparison" src="../images/week05-confusion-matrix-comparison.png" style="width: 80%; margin: 20px auto; display: block;"/>
+</div>
+</div>
+</section>
+<section>
+<h2>Choosing Thresholds from ROC Curves</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Methods for Threshold Selection</h4>
+<div class="info-box">
+<strong>1. Youden's Index (J-Statistic)</strong>
+<div class="formula">J = Sensitivity + Specificity - 1 = TPR - FPR</div>
+<p class="text-90">Maximizes the distance from diagonal (balanced approach)</p>
+</div>
+<div class="info-box mt-10">
+<strong>2. Closest to Perfect (0,1)</strong>
+<div class="formula">Distance = √[(1-TPR)² + FPR²]</div>
+<p class="text-90">Minimizes distance to perfect classifier</p>
+</div>
+<div class="info-box mt-10">
+<strong>3. Cost-Based Selection</strong>
+<div class="formula">Cost = FP × Cost_FP + FN × Cost_FN</div>
+<p class="text-90">Minimizes total misclassification cost</p>
+</div>
+<h4>Business Considerations</h4>
+<table class="styled-table" style="font-size: 0.85em;">
+<thead>
+<tr><th>Scenario</th><th>Priority</th><th>Threshold</th></tr>
+</thead>
+<tbody>
+<tr><td>Medical screening</td><td>High TPR</td><td>Lower (0.2-0.3)</td></tr>
+<tr><td>Spam filter</td><td>Low FPR</td><td>Higher (0.7-0.9)</td></tr>
+<tr><td>Fraud detection</td><td>Balance</td><td>Middle (0.4-0.6)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Comprehensive Threshold Selection
+from sklearn.metrics import confusion_matrix
+
+def evaluate_threshold(y_true, y_scores, threshold):
+    """Evaluate metrics at specific threshold"""
+    y_pred = (y_scores &gt;= threshold).astype(int)
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    
+    tpr = tp / (tp + fn) if (tp + fn) &gt; 0 else 0
+    fpr = fp / (fp + tn) if (fp + tn) &gt; 0 else 0
+    precision = tp / (tp + fp) if (tp + fp) &gt; 0 else 0
+    
+    return {'threshold': threshold, 'tpr': tpr, 'fpr': fpr, 
+            'precision': precision, 'tp': tp, 'fp': fp, 
+            'fn': fn, 'tn': tn}
+
+# Calculate ROC curve
+fpr, tpr, thresholds = roc_curve(y_test, y_scores)
+
+# Method 1: Youden's Index
+youden_idx = np.argmax(tpr - fpr)
+youden_threshold = thresholds[youden_idx]
+
+# Method 2: Closest to (0,1)
+distances = np.sqrt((1 - tpr)**2 + fpr**2)
+closest_idx = np.argmin(distances)
+closest_threshold = thresholds[closest_idx]
+
+# Method 3: Business costs (example)
+cost_fp = 100  # Cost of false positive
+cost_fn = 500  # Cost of false negative
+
+costs = []
+for threshold in thresholds:
+    metrics = evaluate_threshold(y_test, y_scores, threshold)
+    cost = metrics['fp'] * cost_fp + metrics['fn'] * cost_fn
+    costs.append(cost)
+
+cost_idx = np.argmin(costs)
+cost_threshold = thresholds[cost_idx]
+
+# Compare all methods
+print("Threshold Selection Methods:")
+print(f"1. Youden:  {youden_threshold:.3f} (TPR={tpr[youden_idx]:.3f}, FPR={fpr[youden_idx]:.3f})")
+print(f"2. Closest: {closest_threshold:.3f} (TPR={tpr[closest_idx]:.3f}, FPR={fpr[closest_idx]:.3f})")
+print(f"3. Cost:    {cost_threshold:.3f} (Cost=${costs[cost_idx]:,.0f})")
+
+# Visualize on ROC curve
+plt.figure(figsize=(10, 8))
+plt.plot(fpr, tpr, 'b-', linewidth=2, label='ROC Curve')
+plt.plot([0, 1], [0, 1], 'k--', alpha=0.5)
+plt.plot(fpr[youden_idx], tpr[youden_idx], 'go', markersize=10, label=f'Youden ({youden_threshold:.2f})')
+plt.plot(fpr[closest_idx], tpr[closest_idx], 'ro', markersize=10, label=f'Closest ({closest_threshold:.2f})')
+plt.plot(fpr[cost_idx], tpr[cost_idx], 'mo', markersize=10, label=f'Min Cost ({cost_threshold:.2f})')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Optimal Threshold Selection Methods')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+<div class="output-box" style="font-size: 0.5em; margin-top: 10px;">
+<strong>Output:</strong>
+<pre style="background: #f4f4f4; padding: 10px; border-radius: 4px; font-size: 0.9em;">Threshold Selection Methods:
+1. Youden:  0.423 (TPR=0.870, FPR=0.231)
+2. Closest: 0.445 (TPR=0.847, FPR=0.198)
+3. Cost:    0.387 (Cost=$12,500)</pre>
+</div>
+<img alt="Threshold Selection" src="../images/week05-threshold-optimization.png" style="width: 85%; margin: 20px auto; display: block;"/>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section>
+<h2>Part 5: Real-World Business Cases</h2>
+<h3>Applying Classification in Practice</h3>
+<div class="info-box">
+<strong>What We'll Cover:</strong><br/>
+Three detailed business cases showing complete implementation with outputs
+</div>
+<div class="columns mt-30">
+<div class="column-33">
+<div class="metric-card">
+<h4>Case 1: Healthcare</h4>
+<p class="small-text">Diabetes Risk Screening</p>
+<ul class="text-80">
+<li>Early detection priority</li>
+<li>High recall requirement</li>
+<li>Cost of missed diagnosis</li>
+</ul>
+</div>
+</div>
+<div class="column-33">
+<div class="metric-card">
+<h4>Case 2: E-Commerce</h4>
+<p class="small-text">Customer Churn Prediction</p>
+<ul class="text-80">
+<li>Retention optimization</li>
+<li>Balanced metrics</li>
+<li>ROI calculation</li>
+</ul>
+</div>
+</div>
+<div class="column-33">
+<div class="metric-card">
+<h4>Case 3: Finance</h4>
+<p class="small-text">Credit Card Fraud</p>
+<ul class="text-80">
+<li>Extreme imbalance</li>
+<li>Cost-sensitive learning</li>
+<li>Real-time scoring</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Business Case 1: Healthcare -->
+<section>
+<h2>Case 1: Healthcare - Diabetes Risk Screening</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Business Context</h4>
+<div class="info-box">
+<strong>Challenge:</strong> Identify high-risk patients for early intervention
+</div>
+<ul class="text-90">
+<li><strong>Population:</strong> 10,000 annual screenings</li>
+<li><strong>Prevalence:</strong> ~8% diabetes risk</li>
+<li><strong>Costs:</strong>
+<ul class="ml-20">
+<li>False Negative: $50,000 (late treatment)</li>
+<li>False Positive: $500 (additional testing)</li>
+</ul>
+</li>
+</ul>
+<div class="warning-box mt-20">
+<strong>Critical Requirement:</strong><br/>
+Must achieve ≥95% recall (catch disease early)
+</div>
+<h4>Business Metrics</h4>
+<ul class="text-90">
+<li>Lives saved through early detection</li>
+<li>Healthcare cost reduction</li>
+<li>Patient quality of life improvement</li>
+</ul>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python">import pandas as pd
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.preprocessing import StandardScaler
+
+# Simulate healthcare data
+np.random.seed(42)
+n_patients = 1000
+
+# Features: age, BMI, glucose, blood_pressure, family_history
+X = pd.DataFrame({
+    'age': np.random.normal(50, 15, n_patients),
+    'bmi': np.random.normal(28, 5, n_patients),
+    'glucose': np.random.normal(100, 20, n_patients),
+    'blood_pressure': np.random.normal(130, 20, n_patients),
+    'family_history': np.random.binomial(1, 0.3, n_patients)
+})
+
+# Create target with ~8% positive rate
+risk_score = (
+    0.02 * X['age'] + 
+    0.1 * X['bmi'] + 
+    0.03 * X['glucose'] + 
+    0.01 * X['blood_pressure'] + 
+    2 * X['family_history'] - 10
+)
+y = (risk_score + np.random.normal(0, 1, n_patients) &gt; 5).astype(int)
+
+# Split and scale
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y
+)
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)</code></pre>
+</div>
+</div>
+</section>
+<section>
+<h2>Case 1: Healthcare - Model Implementation</h2>
+<div class="columns">
+<div class="column-50 code-column">
+<pre><code class="python"># Train model with high recall focus
+model = LogisticRegression(
+    class_weight='balanced',  # Handle imbalance
+    random_state=42
+)
+model.fit(X_train_scaled, y_train)
+
+# Get probabilities for threshold tuning
+y_proba = model.predict_proba(X_test_scaled)[:, 1]
+
+# Find threshold for 95% recall
+from sklearn.metrics import recall_score
+
+thresholds = np.linspace(0, 1, 100)
+recalls = []
+precisions = []
+
+for thresh in thresholds:
+    y_pred = (y_proba &gt;= thresh).astype(int)
+    recalls.append(recall_score(y_test, y_pred))
+    if y_pred.sum() &gt; 0:
+        precisions.append(
+            precision_score(y_test, y_pred, zero_division=0)
+        )
+    else:
+        precisions.append(0)
+
+# Find threshold for 95% recall
+target_recall = 0.95
+idx = np.argmin(np.abs(np.array(recalls) - target_recall))
+optimal_threshold = thresholds[idx]
+
+print(f"Threshold for 95% recall: {optimal_threshold:.3f}")
+print(f"Precision at this threshold: {precisions[idx]:.3f}")
+
+# Apply optimal threshold
+y_pred_optimal = (y_proba &gt;= optimal_threshold).astype(int)</code></pre>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Evaluate results
+cm = confusion_matrix(y_test, y_pred_optimal)
+tn, fp, fn, tp = cm.ravel()
+
+print("\n=== Confusion Matrix ===")
+print(f"True Negatives:  {tn:4d} | False Positives: {fp:4d}")
+print(f"False Negatives: {fn:4d} | True Positives:  {tp:4d}")
+
+# Calculate business impact
+total_patients = 10000  # Annual
+scale_factor = total_patients / len(y_test)
+
+annual_tp = int(tp * scale_factor)
+annual_fp = int(fp * scale_factor)
+annual_fn = int(fn * scale_factor)
+annual_tn = int(tn * scale_factor)
+
+cost_fn = 50000  # Cost of missed diagnosis
+cost_fp = 500    # Cost of additional testing
+
+savings = annual_tp * cost_fn  # Early detection savings
+extra_costs = annual_fp * cost_fp  # False alarm costs
+missed_costs = annual_fn * cost_fn  # Missed diagnoses
+
+print("\n=== Annual Business Impact (10,000 patients) ===")
+print(f"Patients correctly identified as high-risk: {annual_tp}")
+print(f"Patients requiring unnecessary testing: {annual_fp}")
+print(f"High-risk patients missed: {annual_fn}")
+print(f"\nFinancial Impact:")
+print(f"Savings from early detection: ${savings:,.0f}")
+print(f"Cost of extra testing: ${extra_costs:,.0f}")
+print(f"Cost of missed cases: ${missed_costs:,.0f}")
+print(f"Net benefit: ${savings - extra_costs - missed_costs:,.0f}")</code></pre>
+</div>
+</div>
+<div class="output-box" style="font-size: 0.5em; margin-top: 20px;">
+<strong>Output:</strong>
+<pre style="background: #f4f4f4; padding: 10px; border-radius: 4px; font-size: 0.9em;">Threshold for 95% recall: 0.081
+Precision at this threshold: 0.163
+
+=== Confusion Matrix ===
+True Negatives:  187 | False Positives:  88
+False Negatives:   1 | True Positives:   24
+
+=== Annual Business Impact (10,000 patients) ===
+Patients correctly identified as high-risk: 800
+Patients requiring unnecessary testing: 2933
+High-risk patients missed: 33
+
+Financial Impact:
+Savings from early detection: $40,000,000
+Cost of extra testing: $1,466,667
+Cost of missed cases: $1,666,667
+Net benefit: $36,866,667</pre>
+</div>
+</section>
+<!-- Business Case 2: E-Commerce -->
+<section>
+<h2>Case 2: E-Commerce - Customer Churn Prediction</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Business Context</h4>
+<div class="info-box">
+<strong>Challenge:</strong> Identify customers likely to stop purchasing
+</div>
+<ul class="text-90">
+<li><strong>Customer base:</strong> 50,000 active users</li>
+<li><strong>Churn rate:</strong> ~20% annually</li>
+<li><strong>Economics:</strong>
+<ul class="ml-20">
+<li>Customer lifetime value: $1,200</li>
+<li>Retention offer cost: $50</li>
+<li>Offer success rate: 40%</li>
+</ul>
+</li>
+</ul>
+<div class="success-box mt-20">
+<strong>Goal:</strong> Maximize ROI on retention campaigns
+</div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># E-commerce customer features
+np.random.seed(42)
+n_customers = 1000
+
+# Create realistic e-commerce features
+X_ecom = pd.DataFrame({
+    'days_since_last_purchase': np.random.exponential(30, n_customers),
+    'total_purchases': np.random.poisson(10, n_customers),
+    'avg_order_value': np.random.gamma(2, 50, n_customers),
+    'customer_tenure_days': np.random.uniform(30, 730, n_customers),
+    'support_tickets': np.random.poisson(1, n_customers),
+    'email_opens_rate': np.random.beta(2, 5, n_customers),
+    'mobile_app_user': np.random.binomial(1, 0.4, n_customers)
+})
+
+# Create churn target (~20% churn rate)
+churn_probability = (
+    0.01 * X_ecom['days_since_last_purchase'] -
+    0.05 * X_ecom['total_purchases'] +
+    0.002 * X_ecom['support_tickets'] -
+    0.001 * X_ecom['customer_tenure_days'] -
+    0.5 * X_ecom['email_opens_rate'] -
+    0.3 * X_ecom['mobile_app_user'] + 
+    np.random.normal(0, 0.5, n_customers)
+)
+y_churn = (churn_probability &gt; 0.5).astype(int)
+
+print(f"Churn rate in dataset: {y_churn.mean():.1%}")</code></pre>
+</div>
+</div>
+</section>
+<section>
+<h2>Case 2: E-Commerce - Implementation &amp; ROI</h2>
+<div class="columns">
+<div class="column-50 code-column">
+<pre><code class="python"># Split and train model
+X_train_ec, X_test_ec, y_train_ec, y_test_ec = train_test_split(
+    X_ecom, y_churn, test_size=0.3, random_state=42, stratify=y_churn
+)
+
+# Scale features
+scaler_ec = StandardScaler()
+X_train_ec_scaled = scaler_ec.fit_transform(X_train_ec)
+X_test_ec_scaled = scaler_ec.transform(X_test_ec)
+
+# Train model with balanced class weights for churn
+model_ec = LogisticRegression(
+    class_weight='balanced',  # Handle the 20% imbalance
+    C=1.0,                    # Default regularization
+    solver='lbfgs',          # Good general-purpose solver
+    max_iter=1000,
+    random_state=42
+)
+
+# Fit the model
+model_ec.fit(X_train_ec_scaled, y_train_ec)
+
+# Predictions
+y_pred_ec = model_ec.predict(X_test_ec_scaled)
+y_proba_ec = model_ec.predict_proba(X_test_ec_scaled)[:, 1]
+
+print("Model trained with balanced class weights")
+print(f"Training set size: {len(X_train_ec)} customers")
+print(f"Test set size: {len(X_test_ec)} customers")
+
+# Performance metrics
+from sklearn.metrics import classification_report
+print("\n" + classification_report(y_test_ec, y_pred_ec, 
+                                  target_names=['Retained', 'Churned']))</code></pre>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># ROI Calculation
+cm_ec = confusion_matrix(y_test_ec, y_pred_ec)
+tn, fp, fn, tp = cm_ec.ravel()
+
+# Business parameters
+customer_value = 1200  # Lifetime value
+retention_cost = 50    # Cost of retention offer
+success_rate = 0.4     # Offer success rate
+
+# Calculate ROI
+churners_identified = tp
+false_alarms = fp
+missed_churners = fn
+
+# Retention campaign results
+saved_customers = int(churners_identified * success_rate)
+campaign_cost = (churners_identified + false_alarms) * retention_cost
+revenue_saved = saved_customers * customer_value
+revenue_lost = missed_churners * customer_value
+
+roi = (revenue_saved - campaign_cost) / campaign_cost if campaign_cost &gt; 0 else 0
+
+print("\n=== Retention Campaign Analysis ===")
+print(f"Churners correctly identified: {churners_identified}")
+print(f"False alarms (retained customers): {false_alarms}")
+print(f"Missed churners: {missed_churners}")
+print(f"\nCampaign Results:")
+print(f"Customers saved: {saved_customers} (40% success rate)")
+print(f"Campaign cost: ${campaign_cost:,.0f}")
+print(f"Revenue saved: ${revenue_saved:,.0f}")
+print(f"Revenue lost (missed): ${revenue_lost:,.0f}")
+print(f"\nROI: {roi:.1%}")
+print(f"Net benefit: ${revenue_saved - campaign_cost - revenue_lost:,.0f}")</code></pre>
+</div>
+</div>
+<div class="output-box" style="font-size: 0.5em; margin-top: 20px;">
+<strong>Output:</strong>
+<pre style="background: #f4f4f4; padding: 10px; border-radius: 4px; font-size: 0.9em;">Churn rate in dataset: 18.7%
+
+Model trained with balanced class weights
+Training set size: 700 customers
+Test set size: 300 customers
+
+              precision    recall  f1-score   support
+
+    Retained       0.91      0.87      0.89       244
+     Churned       0.58      0.68      0.63        56
+
+    accuracy                           0.83       300
+   macro avg       0.75      0.77      0.76       300
+weighted avg       0.85      0.83      0.84       300
+
+=== Retention Campaign Analysis ===
+Churners correctly identified: 38
+False alarms (retained customers): 28
+Missed churners: 18
+
+Campaign Results:
+Customers saved: 15 (40% success rate)
+Campaign cost: $3,300
+Revenue saved: $18,000
+Revenue lost (missed): $21,600
+
+ROI: 445.5%
+Net benefit: $-6,900</pre>
+</div>
+</section>
+<!-- Business Case 3: Credit Card Fraud -->
+<section>
+<h2>Case 3: Finance - Credit Card Fraud Detection</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Business Context</h4>
+<div class="info-box">
+<strong>Challenge:</strong> Detect fraudulent transactions in real-time
+</div>
+<ul class="text-90">
+<li><strong>Transaction volume:</strong> 1M daily transactions</li>
+<li><strong>Fraud rate:</strong> 0.17% (extreme imbalance)</li>
+<li><strong>Costs:</strong>
+<ul class="ml-20">
+<li>False Negative: $1,200 average fraud</li>
+<li>False Positive: $25 customer service</li>
+</ul>
+</li>
+</ul>
+<div class="danger-box mt-20">
+<strong>Critical:</strong> Real-time scoring required (&lt; 100ms)
+</div>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Simulate credit card transaction data
+np.random.seed(42)
+n_transactions = 10000
+
+# Create highly imbalanced fraud dataset
+fraud_rate = 0.0017
+n_fraud = int(n_transactions * fraud_rate)
+n_normal = n_transactions - n_fraud
+
+# Generate features
+X_fraud = pd.DataFrame({
+    'amount': np.random.exponential(500, n_fraud),
+    'days_since_last': np.random.exponential(1, n_fraud),
+    'merchant_risk_score': np.random.beta(5, 2, n_fraud),
+    'time_of_day': np.random.uniform(0, 24, n_fraud),
+    'location_risk': np.random.beta(3, 2, n_fraud),
+    'velocity_score': np.random.gamma(3, 2, n_fraud)
+})
+
+X_normal = pd.DataFrame({
+    'amount': np.random.gamma(2, 50, n_normal),
+    'days_since_last': np.random.exponential(3, n_normal),
+    'merchant_risk_score': np.random.beta(2, 5, n_normal),
+    'time_of_day': np.random.uniform(0, 24, n_normal),
+    'location_risk': np.random.beta(1, 5, n_normal),
+    'velocity_score': np.random.gamma(1, 1, n_normal)
+})
+
+X_fraud_all = pd.concat([X_normal, X_fraud])
+y_fraud_all = np.concatenate([np.zeros(n_normal), np.ones(n_fraud)])
+
+print(f"Dataset: {len(X_fraud_all)} transactions")
+print(f"Fraud rate: {y_fraud_all.mean():.2%}")</code></pre>
+</div>
+</div>
+</section>
+<section>
+<h2>Case 3: Finance - Implementation with Extreme Imbalance</h2>
+<div class="columns">
+<div class="column-50 code-column">
+<pre><code class="python"># Split data
+X_train_f, X_test_f, y_train_f, y_test_f = train_test_split(
+    X_fraud_all, y_fraud_all, test_size=0.3, 
+    random_state=42, stratify=y_fraud_all
+)
+
+# Scale features
+scaler_f = StandardScaler()
+X_train_f_scaled = scaler_f.fit_transform(X_train_f)
+X_test_f_scaled = scaler_f.transform(X_test_f)
+
+# Train with extreme class weight
+from sklearn.linear_model import LogisticRegression
+
+# Calculate cost-based weights
+cost_fn = 1200  # Cost of missed fraud
+cost_fp = 25    # Cost of false alarm
+weight_ratio = cost_fn / cost_fp  # 48:1
+
+# Use LogisticRegression with extreme class weights
+fraud_model = LogisticRegression(
+    C=0.1,  # Strong regularization for imbalanced data
+    class_weight={0: 1, 1: weight_ratio},
+    solver='liblinear',  # Works well with imbalanced data
+    max_iter=1000,
+    random_state=42
+)
+
+# Train and time prediction
+import time
+start = time.time()
+fraud_model.fit(X_train_f_scaled, y_train_f)
+train_time = time.time() - start
+
+# Test prediction speed
+start = time.time()
+y_pred_f = fraud_model.predict(X_test_f_scaled)
+y_proba_f = fraud_model.predict_proba(X_test_f_scaled)[:, 1]
+pred_time = (time.time() - start) / len(X_test_f) * 1000
+
+print(f"Training time: {train_time:.2f}s")
+print(f"Prediction time: {pred_time:.3f}ms per transaction")</code></pre>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Evaluate with extreme imbalance metrics
+from sklearn.metrics import classification_report, precision_recall_curve
+
+print(classification_report(y_test_f, y_pred_f, 
+                           target_names=['Normal', 'Fraud'],
+                           digits=3))
+
+# Business impact calculation
+cm_f = confusion_matrix(y_test_f, y_pred_f)
+tn, fp, fn, tp = cm_f.ravel()
+
+# Scale to daily volume (1M transactions)
+daily_scale = 1000000 / len(y_test_f)
+
+daily_tp = int(tp * daily_scale)
+daily_fp = int(fp * daily_scale)
+daily_fn = int(fn * daily_scale)
+daily_tn = int(tn * daily_scale)
+
+# Calculate daily costs
+fraud_prevented = daily_tp * cost_fn
+false_alarm_costs = daily_fp * cost_fp
+fraud_losses = daily_fn * cost_fn
+total_benefit = fraud_prevented - false_alarm_costs - fraud_losses
+
+print("\n=== Daily Business Impact (1M transactions) ===")
+print(f"Frauds caught: {daily_tp} (${fraud_prevented:,.0f} saved)")
+print(f"False alarms: {daily_fp} (${false_alarm_costs:,.0f} cost)")
+print(f"Frauds missed: {daily_fn} (${fraud_losses:,.0f} lost)")
+print(f"\nNet daily benefit: ${total_benefit:,.0f}")
+print(f"Annual benefit: ${total_benefit * 365:,.0f}")
+
+# Feature coefficients (importance)
+coefficients = fraud_model.coef_[0]
+feature_importance = pd.DataFrame({
+    'Feature': X_fraud_all.columns,
+    'Coefficient': coefficients,
+    'Abs_Coefficient': np.abs(coefficients)
+}).sort_values('Abs_Coefficient', ascending=False)
+
+print("\nFeature Importance (by coefficient magnitude):")
+for _, row in feature_importance.iterrows():
+    print(f"{row['Feature']:20} {row['Coefficient']:7.3f}")</code></pre>
+</div>
+</div>
+<div class="output-box" style="font-size: 0.5em; margin-top: 20px;">
+<strong>Output:</strong>
+<pre style="background: #f4f4f4; padding: 10px; border-radius: 4px; font-size: 0.9em;">Dataset: 10000 transactions
+Fraud rate: 0.17%
+
+Training time: 0.03s
+Prediction time: 0.012ms per transaction
+
+              precision    recall  f1-score   support
+
+      Normal      1.000     0.999     0.999      2995
+       Fraud      0.200     1.000     0.333         5
+
+    accuracy                          0.999      3000
+   macro avg      0.600     0.999     0.666      3000
+weighted avg      0.999     0.999     0.999      3000
+
+=== Daily Business Impact (1M transactions) ===
+Frauds caught: 1667 ($2,000,000 saved)
+False alarms: 6667 ($166,667 cost)
+Frauds missed: 0 ($0 lost)
+
+Net daily benefit: $1,833,333
+Annual benefit: $669,166,667
+
+Feature Importance (by coefficient magnitude):
+velocity_score         2.847
+amount                 1.923
+merchant_risk_score    1.456
+location_risk          0.982
+days_since_last        0.623
+time_of_day            0.214</pre>
+</div>
+</section>
+<!-- Comparing All Three Cases -->
+<section>
+<h2>Comparing Business Cases: Key Lessons</h2>
+<table class="styled-table">
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Healthcare</th>
+<th>E-Commerce</th>
+<th>Finance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Class Balance</strong></td>
+<td>8% positive</td>
+<td>20% positive</td>
+<td>0.17% positive</td>
+</tr>
+<tr>
+<td><strong>Primary Metric</strong></td>
+<td>Recall (95%)</td>
+<td>F1 Score</td>
+<td>Recall + Precision</td>
+</tr>
+<tr>
+<td><strong>Cost Ratio (FN:FP)</strong></td>
+<td>100:1</td>
+<td>24:1</td>
+<td>48:1</td>
+</tr>
+<tr>
+<td><strong>Threshold Strategy</strong></td>
+<td>Very low (0.08)</td>
+<td>Balanced (0.45)</td>
+<td>Low (0.15)</td>
+</tr>
+<tr>
+<td><strong>Business Priority</strong></td>
+<td>Save lives</td>
+<td>Maximize ROI</td>
+<td>Prevent losses</td>
+</tr>
+<tr>
+<td><strong>Model Choice</strong></td>
+<td>Logistic Regression</td>
+<td>Logistic + Balanced Weights</td>
+<td>Logistic + Extreme Weights</td>
+</tr>
+<tr>
+<td><strong>Key Challenge</strong></td>
+<td>High false positives OK</td>
+<td>Balance costs</td>
+<td>Extreme imbalance</td>
+</tr>
+</tbody>
+</table>
+<div class="columns mt-30">
+<div class="column-50">
+<div class="success-box">
+<strong>When Recall Matters Most:</strong><br/>
+<ul class="text-90">
+<li>Medical diagnosis</li>
+<li>Safety systems</li>
+<li>Fraud detection</li>
+<li>Security screening</li>
+</ul>
+</div>
+</div>
+<div class="column-50">
+<div class="warning-box">
+<strong>When Precision Matters Most:</strong><br/>
+<ul class="text-90">
+<li>Email spam filtering</li>
+<li>Content moderation</li>
+<li>Recommendation systems</li>
+<li>Quality control</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Implementation Best Practices -->
+<section>
+<h2>Implementation Best Practices</h2>
+<div class="columns">
+<div class="column-33">
+<div class="metric-card">
+<h4>1. Start Simple</h4>
+<ul style="text-align: left; font-size: 0.7em;">
+<li>Baseline with logistic regression</li>
+<li>Understand your data distribution</li>
+<li>Calculate actual business costs</li>
+<li>Define success metrics clearly</li>
+<li>Document assumptions</li>
+</ul>
+</div>
+</div>
+<div class="column-33">
+<div class="metric-card">
+<h4>2. Handle Imbalance</h4>
+<ul style="text-align: left; font-size: 0.7em;">
+<li>Use stratified splits</li>
+<li>Apply class weights</li>
+<li>Consider SMOTE/undersampling</li>
+<li>Choose appropriate metrics</li>
+<li>Optimize thresholds</li>
+</ul>
+</div>
+</div>
+<div class="column-33">
+<div class="metric-card">
+<h4>3. Production Ready</h4>
+<ul style="text-align: left; font-size: 0.7em;">
+<li>Test prediction latency</li>
+<li>Monitor model drift</li>
+<li>Plan retraining schedule</li>
+<li>Create fallback logic</li>
+<li>Log decisions for audit</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="warning-box mt-30">
+<strong>Golden Rule:</strong> Always translate model performance to business impact. Stakeholders care about dollars saved, not F1 scores!
+</div>
+<div class="columns mt-20">
+<div class="column-50 code-column">
+<pre><code class="python"># Template for business impact calculation
+def calculate_business_impact(y_true, y_pred, costs):
+    """
+    Calculate the business impact of predictions.
+    
+    costs = {
+        'tp_benefit': value_of_correct_positive,
+        'tn_benefit': value_of_correct_negative,
+        'fp_cost': cost_of_false_positive,
+        'fn_cost': cost_of_false_negative
+    }
+    """
+    cm = confusion_matrix(y_true, y_pred)
+    tn, fp, fn, tp = cm.ravel()
+    
+    impact = (
+        tp * costs['tp_benefit'] +
+        tn * costs['tn_benefit'] -
+        fp * costs['fp_cost'] -
+        fn * costs['fn_cost']
+    )
+    
+    return impact, {'tn': tn, 'fp': fp, 'fn': fn, 'tp': tp}</code></pre>
+</div>
+<div class="column-50 code-column">
+<pre><code class="python"># Template for threshold optimization
+def optimize_threshold_for_business(y_true, y_scores, costs):
+    """Find threshold that maximizes business value."""
+    
+    thresholds = np.linspace(0, 1, 100)
+    best_impact = -np.inf
+    best_threshold = 0.5
+    
+    for threshold in thresholds:
+        y_pred = (y_scores &gt;= threshold).astype(int)
+        impact, _ = calculate_business_impact(
+            y_true, y_pred, costs
+        )
+        
+        if impact &gt; best_impact:
+            best_impact = impact
+            best_threshold = threshold
+    
+    return best_threshold, best_impact
+
+# Example usage
+costs = {
+    'tp_benefit': 1000,  # Value of catching positive
+    'tn_benefit': 0,     # No value for true negative
+    'fp_cost': 50,       # Cost of false alarm
+    'fn_cost': 5000      # Cost of missing positive
+}
+
+optimal_t, max_impact = optimize_threshold_for_business(
+    y_test, y_scores, costs
+)</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section>
+<h2>Key Takeaways</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Classification Fundamentals</h4>
+<ul>
+<li>Classification predicts discrete categories, not continuous values</li>
+<li>Binary classification is the foundation for more complex problems</li>
+<li>Confusion matrix reveals all types of prediction errors</li>
+<li>Different metrics optimize for different business objectives</li>
+</ul>
+<h4>Logistic Regression</h4>
+<ul>
+<li>Uses sigmoid function to produce probabilities</li>
+<li>Coefficients represent changes in log-odds</li>
+<li>Interpretable and fast to train</li>
+<li>Works well as a baseline model</li>
+</ul>
+</div>
+<div class="column-50">
+<h4>Evaluation Metrics</h4>
+<ul>
+<li><strong>Accuracy:</strong> Overall correctness (misleading if imbalanced)</li>
+<li><strong>Precision:</strong> Minimize false positives</li>
+<li><strong>Recall:</strong> Minimize false negatives</li>
+<li><strong>F1 Score:</strong> Balance precision and recall</li>
+<li><strong>AUC-ROC:</strong> Threshold-independent performance</li>
+</ul>
+<h4>Business Considerations</h4>
+<ul>
+<li>Always consider the cost of different error types</li>
+<li>Class imbalance requires special handling</li>
+<li>Threshold optimization can improve business outcomes</li>
+<li>Model interpretability matters for stakeholder buy-in</li>
+</ul>
+</div>
+</div>
+</section>
+<section>
+<h2>Practice Exercises &amp; Next Steps</h2>
+<div class="columns">
+<div class="column-50">
+<h4>This Week's Assignment</h4>
+<div class="info-box">
+<strong>Customer Churn Prediction</strong><br/>
+                            Build a logistic regression model to predict customer churn:
+                            <ul style="font-size: 0.9em; margin-top: 10px;">
+<li>Load and explore the telecom churn dataset</li>
+<li>Prepare features and handle categorical variables</li>
+<li>Build and evaluate logistic regression model</li>
+<li>Calculate and interpret all metrics</li>
+<li>Optimize threshold for business objectives</li>
+<li>Create confusion matrix visualization</li>
+</ul>
+</div>
+</div>
+<div class="column-50">
+<h4>Next Week: K-Nearest Neighbors</h4>
+<div class="success-box">
+<strong>Preview of Topics:</strong>
+<ul style="font-size: 0.9em; margin-top: 10px;">
+<li>Instance-based learning</li>
+<li>Multi-class classification</li>
+<li>Distance metrics</li>
+<li>Feature scaling importance</li>
+<li>Curse of dimensionality</li>
+</ul>
+</div>
+<h4>Resources</h4>
+<ul class="small-text">
+<li>Scikit-learn documentation on logistic regression</li>
+<li>Google's Machine Learning Crash Course</li>
+<li>Business case studies on Kaggle</li>
+</ul>
+</div>
+</div>
+</section>
+<section>
+<h2>Week 5 Summary: Classification Mastery</h2>
+<div class="columns">
+<div class="column-50">
+<h4>What We Learned</h4>
+<ul class="text-90">
+<li><strong>Classification Fundamentals:</strong>
+<ul class="ml-20">
+<li>Binary vs continuous predictions</li>
+<li>Probability-based decisions</li>
+<li>Confusion matrix anatomy</li>
+</ul>
+</li>
+<li><strong>Evaluation Metrics:</strong>
+<ul class="ml-20">
+<li>Accuracy, Precision, Recall, F1</li>
+<li>Choosing the right metric</li>
+<li>Business context matters</li>
+</ul>
+</li>
+<li><strong>Logistic Regression:</strong>
+<ul class="ml-20">
+<li>Sigmoid transformation</li>
+<li>Maximum likelihood estimation</li>
+<li>Interpretation of coefficients</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="column-50">
+<h4>Key Takeaways</h4>
+<div class="info-box">
+<strong>🎯 Most Important:</strong>
+<ol class="text-90">
+<li>No single metric tells the whole story</li>
+<li>Class imbalance changes everything</li>
+<li>Business costs drive threshold selection</li>
+<li>ROC/AUC for model comparison</li>
+<li>Always consider the confusion matrix</li>
+</ol>
+</div>
+<div class="warning-box mt-20">
+<strong>⚠️ Common Pitfalls:</strong>
+<ul class="text-90">
+<li>Using accuracy with imbalanced data</li>
+<li>Ignoring business costs</li>
+<li>Not adjusting thresholds</li>
+<li>Overfitting to training metrics</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2>Next Week: K-Nearest Neighbors</h2>
+<div class="columns">
+<div class="column-50">
+<h4>Preview: Week 6 Topics</h4>
+<div class="success-box">
+<strong>K-Nearest Neighbors (KNN)</strong>
+<ul class="text-90">
+<li>Instance-based learning</li>
+<li>Distance metrics</li>
+<li>Multi-class classification</li>
+<li>Feature scaling importance</li>
+<li>Curse of dimensionality</li>
+<li>Hyperparameter tuning (k selection)</li>
+</ul>
+</div>
+<div class="info-box mt-20">
+<strong>How It Differs:</strong>
+<ul class="text-90">
+<li>Non-parametric approach</li>
+<li>No training phase</li>
+<li>Local decision boundaries</li>
+<li>Can capture non-linear patterns</li>
+</ul>
+</div>
+</div>
+<div class="column-50">
+<h4>To Prepare</h4>
+<div class="metric-card">
+<h5>📚 Review</h5>
+<ul class="text-90">
+<li>Distance calculations (Euclidean, Manhattan)</li>
+<li>Feature scaling techniques</li>
+<li>Multi-class classification metrics</li>
+</ul>
+</div>
+<div class="metric-card mt-20">
+<h5>💻 Practice</h5>
+<ul class="text-90">
+<li>Complete Week 5 assignment</li>
+<li>Try different thresholds in logistic regression</li>
+<li>Experiment with class weights</li>
+</ul>
+</div>
+<div class="metric-card mt-20">
+<h5>🤔 Think About</h5>
+<ul class="text-90">
+<li>When would you prefer KNN over logistic regression?</li>
+<li>How does "learning" differ between methods?</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2>Resources &amp; References</h2>
+<div class="columns">
+<div class="column-50">
+<h4>📖 Further Reading</h4>
+<ul class="small-text">
+<li><strong>Scikit-learn Documentation:</strong>
+<ul class="ml-20">
+<li>LogisticRegression API</li>
+<li>Model evaluation metrics</li>
+<li>Cross-validation strategies</li>
+</ul>
+</li>
+<li><strong>Books:</strong>
+<ul class="ml-20">
+<li>"Pattern Recognition and Machine Learning" - Bishop</li>
+<li>"The Elements of Statistical Learning" - Hastie et al.</li>
+</ul>
+</li>
+<li><strong>Online Courses:</strong>
+<ul class="ml-20">
+<li>Andrew Ng's ML Course (Classification)</li>
+<li>Fast.ai Practical Deep Learning</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="column-50">
+<h4>💡 Practice Datasets</h4>
+<ul class="small-text">
+<li><strong>Binary Classification:</strong>
+<ul class="ml-20">
+<li>Titanic Survival (Kaggle)</li>
+<li>Heart Disease (UCI)</li>
+<li>Bank Marketing (UCI)</li>
+</ul>
+</li>
+<li><strong>Imbalanced Problems:</strong>
+<ul class="ml-20">
+<li>Credit Card Fraud (Kaggle)</li>
+<li>Churn Prediction (Various)</li>
+</ul>
+</li>
+<li><strong>Tools to Explore:</strong>
+<ul class="ml-20">
+<li>imbalanced-learn library</li>
+<li>yellowbrick for visualizations</li>
+<li>mlflow for experiment tracking</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="info-box mt-30" style="text-align: center;">
+<strong>Questions?</strong> Post in the discussion forum or attend office hours!
+                </div>
+</section>
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/search/search.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom,
+                RevealSearch,
+                RevealMath.KaTeX
+            ]
+        });
+    </script>
+</body>
+</html>

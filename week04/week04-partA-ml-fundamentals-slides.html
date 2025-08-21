@@ -282,8 +282,90 @@
                             </ul>
                         </div>
                         <div class="column">
-                            <img src="../images/week04-polynomial-degrees.svg" alt="Polynomial regression degrees showing underfitting and overfitting" style="width: 100%;">
+                            <h4>The Key Insight</h4>
+                            <div class="info-box">
+                                <p><strong>True relationship:</strong> 3rd order polynomial with noise</p>
+                                <p>y = 0.5x³ - 2x² + x + 2 + noise</p>
+                            </div>
+                            <div class="warning-box" style="margin-top: 20px;">
+                                <p><strong>The Challenge:</strong></p>
+                                <ul style="margin: 10px 0;">
+                                    <li>We don't know the true relationship</li>
+                                    <li>We only have noisy samples</li>
+                                    <li>Must choose model complexity wisely</li>
+                                </ul>
+                            </div>
                         </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Visualizing Under/Overfitting</h2>
+                    <h3>Polynomial Fits of Different Degrees</h3>
+                    
+                    <img src="../images/week04-polynomial-degrees.svg" alt="Polynomial regression degrees showing underfitting and overfitting" style="width: 85%; margin: 20px auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 20px;">
+                        <div class="column">
+                            <div class="info-box">
+                                <h4>Degree 1 (Linear)</h4>
+                                <p><strong style="color: #e74c3c;">Underfitting</strong></p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Too simple</li>
+                                    <li>Can't capture curves</li>
+                                    <li>High bias, low variance</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="success-box">
+                                <h4>Degree 2-3</h4>
+                                <p><strong style="color: #27ae60;">Just Right</strong></p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Captures true pattern</li>
+                                    <li>Ignores noise</li>
+                                    <li>Good generalization</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="warning-box">
+                                <h4>Degree 20</h4>
+                                <p><strong style="color: #f39c12;">Overfitting</strong></p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Too complex</li>
+                                    <li>Fits noise</li>
+                                    <li>Low bias, high variance</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Examples of Model Fitting</h2>
+                    <h3>Visual Comparison of Different Complexities</h3>
+                    
+                    <div class="columns">
+                        <div class="column" style="flex: 1;">
+                            <h4>Underfitting (Degree 1)</h4>
+                            <img src="../images/week04-underfitting.png" alt="Underfitting example" style="width: 100%; border: 2px solid #e74c3c;">
+                            <p style="font-size: 0.8em; margin-top: 10px;">Linear model can't capture the curved pattern</p>
+                        </div>
+                        <div class="column" style="flex: 1;">
+                            <h4>Good Fit (Degree 3)</h4>
+                            <img src="../images/week04-good-fit.png" alt="Good fit example" style="width: 100%; border: 2px solid #27ae60;">
+                            <p style="font-size: 0.8em; margin-top: 10px;">Captures the true pattern, ignores noise</p>
+                        </div>
+                        <div class="column" style="flex: 1;">
+                            <h4>Overfitting (Degree 20)</h4>
+                            <img src="../images/week04-overfitting.png" alt="Overfitting example" style="width: 100%; border: 2px solid #f39c12;">
+                            <p style="font-size: 0.8em; margin-top: 10px;">Fits every data point, including noise</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>Key Observation:</strong> The overfitted model passes through every training point perfectly but will fail catastrophically on new data!
                     </div>
                 </section>
 

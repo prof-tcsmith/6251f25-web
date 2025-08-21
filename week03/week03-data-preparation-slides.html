@@ -212,6 +212,133 @@
                 </section>
 
                 <section>
+                    <h2>Understanding Variables in ML</h2>
+                    <h3>Input vs. Target Variables</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Variable Terminology</h4>
+                            <div class="info-box">
+                                <p><strong>Input Variables</strong> (what we use to predict):</p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Features</li>
+                                    <li>Independent variables</li>
+                                    <li>Predictors</li>
+                                    <li>X variables</li>
+                                    <li>Explanatory variables</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="warning-box" style="margin-top: 20px;">
+                                <p><strong>Target Variable</strong> (what we want to predict):</p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Label</li>
+                                    <li>Dependent variable</li>
+                                    <li>Response variable</li>
+                                    <li>Y variable</li>
+                                    <li>Outcome variable</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="column-50">
+                            <h4>Variable Types</h4>
+                            <div class="success-box">
+                                <p><strong>Continuous (Numeric):</strong></p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Can take any value in a range</li>
+                                    <li>Examples: price, temperature, age</li>
+                                    <li>Operations: mean, median, arithmetic</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="success-box" style="margin-top: 20px;">
+                                <p><strong>Categorical (Label/Class):</strong></p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Discrete categories or groups</li>
+                                    <li>Examples: color, brand, yes/no</li>
+                                    <li>Operations: mode, frequency counts</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Example: Customer Purchase Prediction</h2>
+                    <h3>Identifying Variable Types and Roles</h3>
+                    
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                            <thead>
+                                <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                    <th style="padding: 10px; border: 1px solid #ddd;">Variable Name</th>
+                                    <th style="padding: 10px; border: 1px solid #ddd;">Role</th>
+                                    <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
+                                    <th style="padding: 10px; border: 1px solid #ddd;">Example Values</th>
+                                    <th style="padding: 10px; border: 1px solid #ddd;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: #f8f9fa;">
+                                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Age</strong></td>
+                                    <td style="padding: 8px; border: 1px solid #ddd; color: #3498db;">Input/Feature</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Continuous</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">25, 34, 67</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Customer age in years</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Income</strong></td>
+                                    <td style="padding: 8px; border: 1px solid #ddd; color: #3498db;">Input/Feature</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Continuous</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">45000, 78500, 120000</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Annual income in dollars</td>
+                                </tr>
+                                <tr style="background: #f8f9fa;">
+                                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Gender</strong></td>
+                                    <td style="padding: 8px; border: 1px solid #ddd; color: #3498db;">Input/Feature</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Categorical</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">M, F, Other</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Customer gender</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Region</strong></td>
+                                    <td style="padding: 8px; border: 1px solid #ddd; color: #3498db;">Input/Feature</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Categorical</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">North, South, East, West</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Geographic region</td>
+                                </tr>
+                                <tr style="background: #f8f9fa;">
+                                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Previous_Purchases</strong></td>
+                                    <td style="padding: 8px; border: 1px solid #ddd; color: #3498db;">Input/Feature</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Continuous</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">0, 5, 23</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Number of past purchases</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Membership_Type</strong></td>
+                                    <td style="padding: 8px; border: 1px solid #ddd; color: #3498db;">Input/Feature</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Categorical</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Basic, Gold, Platinum</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Customer membership level</td>
+                                </tr>
+                                <tr style="background: #ffe6e6;">
+                                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Will_Purchase</strong></td>
+                                    <td style="padding: 8px; border: 1px solid #ddd; color: #e74c3c; font-weight: bold;">Target/Label</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Categorical</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Yes, No</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Whether customer will make a purchase (what we predict)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>Key Insight:</strong> We use multiple input variables (features) of different types to predict a single target variable. The target is what we want our model to learn to predict.
+                    </div>
+                </section>
+
+                <section>
                     <h2>Data Quality Assessment</h2>
                     <div class="columns">
                         <div class="column-50 key-points">

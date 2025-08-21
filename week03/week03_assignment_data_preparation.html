@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 3 Assignment: Data Preparation Deep Dive</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .rubric-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        .rubric-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .rubric-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .submission-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        .data-desc {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Week 3 Assignment: Data Preparation Deep Dive</h1>
+        
+        <div class="info-box">
+            <h3 style="margin-top: 0; color: white;">Assignment Overview</h3>
+            <p><strong>Due Date:</strong> End of Week 3 (Sunday 11:59 PM)</p>
+            <p><strong>Total Points:</strong> 20</p>
+            <p><strong>Learning Objectives:</strong> Apply data quality assessment, handle missing data strategically, encode categorical variables properly, and detect/handle outliers.</p>
+        </div>
+
+        <h2>Business Context</h2>
+        <p>You're a data scientist at an e-commerce company preparing customer data for a machine learning model to predict customer lifetime value. The raw dataset has typical real-world issues: missing values, inconsistent formats, outliers, and categorical variables that need encoding.</p>
+
+        <div class="data-desc">
+            <h4>Dataset Description</h4>
+            <p>The dataset contains customer information with the following columns:</p>
+            <ul>
+                <li><code>customer_id</code>: Unique identifier</li>
+                <li><code>age</code>: Customer age (has missing values)</li>
+                <li><code>income</code>: Annual income (has outliers and missing values)</li>
+                <li><code>membership_type</code>: 'Bronze', 'Silver', 'Gold', 'Platinum' (ordinal)</li>
+                <li><code>region</code>: Geographic region (nominal categorical)</li>
+                <li><code>purchase_frequency</code>: Purchases per month (has outliers)</li>
+                <li><code>satisfaction_score</code>: 1-10 rating (25% missing)</li>
+                <li><code>email_domain</code>: Email provider (high cardinality - 50+ unique values)</li>
+                <li><code>total_spent</code>: Total amount spent (target variable)</li>
+            </ul>
+        </div>
+
+        <h2>Part 1: Data Quality Assessment & Variable Understanding (5 points)</h2>
+        
+        <h3>Task 1.1: Variable Classification (2 points)</h3>
+        <ol type="a">
+            <li>Identify which variables are:
+                <ul>
+                    <li>Input variables (features) vs. target variable</li>
+                    <li>Continuous vs. categorical</li>
+                    <li>If categorical: nominal vs. ordinal</li>
+                </ul>
+            </li>
+            <li>Create a summary table showing variable name, type, role, and recommended encoding method</li>
+        </ol>
+
+        <h3>Task 1.2: Missing Data Analysis (3 points)</h3>
+        <ol type="a">
+            <li>Calculate the percentage of missing values for each column</li>
+            <li>Determine the missing data type (MCAR, MAR, or MNAR) for:
+                <ul>
+                    <li><code>age</code>: Missing mostly for younger customers</li>
+                    <li><code>income</code>: Missing randomly across all groups</li>
+                    <li><code>satisfaction_score</code>: Missing more often for dissatisfied customers</li>
+                </ul>
+            </li>
+            <li>Based on the decision framework from class, recommend whether to drop, impute, or handle differently for each variable with missing data</li>
+        </ol>
+
+        <h2>Part 2: Missing Data Handling & Imputation (5 points)</h2>
+        
+        <h3>Task 2.1: Implement Missing Data Strategy (3 points)</h3>
+        <p>Using the provided dataset (or generate synthetic data matching the description):</p>
+        <ol type="a">
+            <li>For <code>income</code> (MCAR, 15% missing):
+                <ul>
+                    <li>Impute using median (explain why median over mean)</li>
+                    <li>Create an indicator variable for missingness</li>
+                </ul>
+            </li>
+            <li>For <code>satisfaction_score</code> (MNAR, 25% missing):
+                <ul>
+                    <li>Implement a strategy considering the bias</li>
+                    <li>Document your approach and reasoning</li>
+                </ul>
+            </li>
+            <li>For <code>age</code> (MAR, 10% missing):
+                <ul>
+                    <li>Use appropriate imputation based on other variables</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Task 2.2: Validation (2 points)</h3>
+        <ol type="a">
+            <li>Compare distributions before and after imputation</li>
+            <li>Create visualizations showing the impact of your imputation strategy</li>
+        </ol>
+
+        <h2>Part 3: Categorical Encoding (5 points)</h2>
+        
+        <h3>Task 3.1: Implement Appropriate Encoding (3 points)</h3>
+        <ol type="a">
+            <li><code>membership_type</code> (ordinal):
+                <ul>
+                    <li>Apply ordinal encoding with proper ordering</li>
+                    <li>Explain why ordinal encoding is appropriate</li>
+                </ul>
+            </li>
+            <li><code>region</code> (nominal, 5 categories):
+                <ul>
+                    <li>Apply one-hot encoding</li>
+                    <li>Use <code>drop_first=True</code> and explain why</li>
+                </ul>
+            </li>
+            <li><code>email_domain</code> (high cardinality, 50+ categories):
+                <ul>
+                    <li>Implement frequency encoding OR</li>
+                    <li>Group rare categories (threshold: <1% of data)</li>
+                    <li>Justify your choice</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Task 3.2: Train/Test Encoding Best Practices (2 points)</h3>
+        <ol type="a">
+            <li>Split data into train/test BEFORE encoding</li>
+            <li>Fit encoders on training data only</li>
+            <li>Handle potential new categories in test set</li>
+            <li>Demonstrate proper workflow with code</li>
+        </ol>
+
+        <h2>Part 4: Outlier Detection & Handling (5 points)</h2>
+        
+        <h3>Task 4.1: Detect Outliers (2.5 points)</h3>
+        <ol type="a">
+            <li>Use IQR method to detect outliers in <code>income</code> and <code>purchase_frequency</code></li>
+            <li>Visualize outliers using box plots</li>
+            <li>Calculate what percentage of data are outliers</li>
+        </ol>
+
+        <h3>Task 4.2: Handle Outliers Strategically (2.5 points)</h3>
+        <ol type="a">
+            <li>For <code>income</code> outliers:
+                <ul>
+                    <li>Investigate if they're valid (e.g., high-net-worth customers)</li>
+                    <li>Decide whether to keep, cap, or remove</li>
+                </ul>
+            </li>
+            <li>For <code>purchase_frequency</code> outliers:
+                <ul>
+                    <li>Apply appropriate transformation or capping</li>
+                </ul>
+            </li>
+            <li>Document your decisions and their business justification</li>
+        </ol>
+
+        <div class="submission-box">
+            <h3 style="margin-top: 0;">Submission Requirements</h3>
+            <p>Submit a Jupyter Notebook named <code>week03_[YourStudentID].ipynb</code> containing:</p>
+            <ol>
+                <li>All code cells with outputs displayed</li>
+                <li>Markdown cells explaining each decision</li>
+                <li>Visualizations for data quality assessment</li>
+                <li>A summary section with:
+                    <ul>
+                        <li>Key data quality issues found</li>
+                        <li>Strategies applied and why</li>
+                        <li>Impact on data shape and distributions</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Grading Rubric (20 Points Total)</h2>
+        
+        <table class="rubric-table">
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Points</th>
+                    <th>Excellent (100%)</th>
+                    <th>Good (80%)</th>
+                    <th>Satisfactory (60%)</th>
+                    <th>Needs Improvement (40%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Data Quality Assessment</strong><br>(Variable types, missing analysis)</td>
+                    <td>5</td>
+                    <td>Correctly identifies all variable types and missing patterns, excellent reasoning</td>
+                    <td>Most classifications correct, good analysis</td>
+                    <td>Basic understanding shown, some errors</td>
+                    <td>Major misunderstandings or incomplete</td>
+                </tr>
+                <tr>
+                    <td><strong>Missing Data Handling</strong><br>(Imputation strategies)</td>
+                    <td>5</td>
+                    <td>Appropriate methods for each type, well-justified, validation included</td>
+                    <td>Good strategies, minor issues</td>
+                    <td>Basic imputation works, limited justification</td>
+                    <td>Inappropriate methods or major errors</td>
+                </tr>
+                <tr>
+                    <td><strong>Categorical Encoding</strong><br>(Proper encoding methods)</td>
+                    <td>5</td>
+                    <td>Perfect encoding choices, handles train/test properly, avoids data leakage</td>
+                    <td>Good encoding, minor issues with workflow</td>
+                    <td>Basic encoding works, some inappropriate choices</td>
+                    <td>Wrong encoding methods or data leakage</td>
+                </tr>
+                <tr>
+                    <td><strong>Outlier Handling</strong><br>(Detection and treatment)</td>
+                    <td>5</td>
+                    <td>Thorough detection, strategic handling with business justification</td>
+                    <td>Good detection, reasonable handling</td>
+                    <td>Basic outlier detection, simple handling</td>
+                    <td>Poor or missing outlier treatment</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="warning-box">
+            <h4 style="margin-top: 0;">Critical Requirements:</h4>
+            <ul>
+                <li><strong>No data leakage:</strong> Always split before encoding/scaling</li>
+                <li><strong>Preserve data integrity:</strong> Don't lose information unnecessarily</li>
+                <li><strong>Document decisions:</strong> Explain WHY you chose each method</li>
+                <li><strong>Consider business context:</strong> Your decisions should make business sense</li>
+            </ul>
+        </div>
+
+        <h2>Starter Code</h2>
+        <pre><code class="python">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OrdinalEncoder
+
+# Generate synthetic data (or load provided dataset)
+np.random.seed(42)
+n_samples = 1000
+
+# Create base dataset
+data = {
+    'customer_id': range(1, n_samples + 1),
+    'age': np.random.normal(40, 15, n_samples),
+    'income': np.random.lognormal(10.5, 0.8, n_samples),
+    'membership_type': np.random.choice(['Bronze', 'Silver', 'Gold', 'Platinum'], 
+                                       n_samples, p=[0.4, 0.3, 0.2, 0.1]),
+    'region': np.random.choice(['North', 'South', 'East', 'West', 'Central'], n_samples),
+    'purchase_frequency': np.random.poisson(3, n_samples),
+    'satisfaction_score': np.random.randint(1, 11, n_samples),
+    'email_domain': np.random.choice([f'domain{i}' for i in range(60)], n_samples),
+    'total_spent': np.random.lognormal(7, 1.5, n_samples)
+}
+
+df = pd.DataFrame(data)
+
+# Introduce missing values with different patterns
+# MCAR: income (15% random missing)
+missing_income = np.random.random(n_samples) < 0.15
+df.loc[missing_income, 'income'] = np.nan
+
+# MAR: age (missing more for younger customers)
+missing_age_prob = 0.3 * np.exp(-df['age'] / 20)  # Higher probability for younger
+missing_age = np.random.random(n_samples) < missing_age_prob
+df.loc[missing_age, 'age'] = np.nan
+
+# MNAR: satisfaction_score (missing more for dissatisfied)
+missing_satisfaction_prob = 0.4 * np.exp(-df['satisfaction_score'] / 3)
+missing_satisfaction = np.random.random(n_samples) < missing_satisfaction_prob
+df.loc[missing_satisfaction, 'satisfaction_score'] = np.nan
+
+# Add some outliers
+outlier_indices = np.random.choice(n_samples, 20, replace=False)
+df.loc[outlier_indices, 'income'] *= 10
+df.loc[outlier_indices[:10], 'purchase_frequency'] = np.random.randint(20, 30, 10)
+
+print("Dataset created with", len(df), "rows")
+print("\nMissing values:")
+print(df.isnull().sum())
+print("\nFirst few rows:")
+print(df.head())
+
+# Your code starts here...</code></pre>
+
+        <h2>Tips for Success</h2>
+        <ul>
+            <li>Review the decision framework from slides for missing data handling</li>
+            <li>Remember: one-hot encoding needs <code>drop_first=True</code> for linear models</li>
+            <li>Always consider the business impact of your data preparation decisions</li>
+            <li>Use visualizations to validate your transformations</li>
+            <li>Test your encoding pipeline on a train/test split to ensure it generalizes</li>
+        </ul>
+    </div>
+</body>
+</html>

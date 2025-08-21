@@ -1,0 +1,1377 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 4 Part B: Linear Regression</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Common slide styles -->
+    <link rel="stylesheet" href="../common-slides.css">
+    
+    <!-- Week 4 specific styles -->
+    <style>
+        /* Center alignment helper */
+        .center {
+            text-align: center !important;
+        }
+        
+        /* Small text helper */
+        .small-text {
+            font-size: 0.7em;
+        }
+        
+        /* Highlight helper */
+        .highlight {
+            background-color: rgba(243, 156, 18, 0.3);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        /* Code blocks in code-column - optimized for dense code */
+        .reveal .columns .column-50.code-column pre {
+            max-height: 578px !important;
+            font-size: 0.46em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            white-space: pre !important;
+        }
+        
+        .reveal .columns .column-50.code-column pre code {
+            max-height: 558px !important;
+            overflow-x: visible !important;
+            overflow-y: visible !important;
+            white-space: pre !important;
+        }
+        
+        /* Code blocks in standard columns - slightly larger font */
+        .reveal .columns .column-50:not(.code-column) pre {
+            max-height: 550px !important;
+            font-size: 0.48em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+        
+        /* When both columns have code - narrower with gap */
+        .reveal .columns .column-50.code-column {
+            flex: 0 0 47% !important;
+            max-width: 47% !important;
+            margin-right: 1.5% !important;
+        }
+        
+        /* Remove margin from last column to prevent overflow */
+        .reveal .columns .column-50.code-column:last-child {
+            margin-right: 0 !important;
+        }
+        
+        /* When only column-50 (no code-column) - slightly wider */
+        .reveal .columns .column-50:not(.code-column) {
+            flex: 0 0 48% !important;
+            max-width: 48% !important;
+            margin-right: 1% !important;
+        }
+        
+        /* Remove margin from last column */
+        .reveal .columns .column-50:not(.code-column):last-child {
+            margin-right: 0 !important;
+        }
+        
+        /* Ensure slide numbers are visible */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.6em;
+        }
+        
+        /* Success and danger text colors for metrics */
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .danger {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section>
+                <h1>Linear Regression</h1>
+                <h3 style="border: none; text-align: center; color: #666;">Week 4 Part B: Deep Dive</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">From Theory to Implementation</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251 | Week 4</strong><br>
+                    Mathematical Foundations • Python Implementation • Business Applications
+                </p>
+            </section>
+
+            <!-- Topic Overview Hierarchy -->
+            <section>
+                <h2>Linear Regression - Topic Hierarchy</h2>
+                
+                <!-- Learning Path at the top -->
+                <div style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px;">
+                    <p style="font-size: 1em; text-align: center; margin: 0; color: white; font-weight: bold;">
+                        Learning Path: Theory → Implementation → Evaluation → Optimization → Application
+                    </p>
+                </div>
+                
+                <!-- Two-column ASCII tree layout -->
+                <div style="display: flex; gap: 20px; height: 450px;">
+                    <!-- Left Column -->
+                    <div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+                        <pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #e74c3c;">LINEAR REGRESSION: PREDICTIVE MODELING FOUNDATION</strong>
+
+<strong style="color: #9b59b6;">📐 Part 1: Mathematical Foundations</strong>
+├── The Linear Model
+│   ├── Simple Linear Regression (y = β₀ + β₁x + ε)
+│   ├── Multiple Linear Regression
+│   └── Matrix Formulation (Y = Xβ + ε)
+├── Ordinary Least Squares (OLS)
+│   ├── The Optimization Problem
+│   ├── Closed-Form Solution (β = (X'X)⁻¹X'y)
+│   └── Geometric Interpretation
+└── OLS Assumptions
+    ├── Linearity
+    ├── Independence
+    ├── Homoscedasticity
+    ├── Normality
+    └── No Multicollinearity
+
+<strong style="color: #e67e22;">💻 Part 2: Implementation in Python</strong>
+├── From Scratch
+│   ├── Simple Linear Regression
+│   └── Gradient Descent Implementation
+├── Using scikit-learn
+│   ├── Data Preparation
+│   ├── <span style="background: #fff3cd; padding: 1px;">⚠️ Categorical Encoding (Week 3)</span>
+│   ├── Feature Scaling (StandardScaler)
+│   └── Model Training & Prediction
+└── Advanced Features
+    ├── Polynomial Regression
+    └── Interaction Terms
+                        </pre>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div style="flex: 1; background: #f8f9fa; padding: 30px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; line-height: 1.5; height: 100%;">
+                        <pre style="margin: 0; color: #2c3e50; height: 430px !important; overflow-y: auto !important; max-height: none !important;">
+<strong style="color: #16a085;">📊 Part 3: Model Evaluation</strong>
+├── Performance Metrics
+│   ├── Mean Squared Error (MSE)
+│   ├── Root Mean Squared Error (RMSE)
+│   ├── Mean Absolute Error (MAE)
+│   ├── R² Score (Coefficient of Determination)
+│   └── Adjusted R²
+├── Diagnostic Plots
+│   ├── Residuals vs Fitted Values
+│   ├── Q-Q Plot (Normality Check)
+│   ├── Scale-Location Plot
+│   └── Residuals vs Leverage
+└── Validation Strategies
+    ├── Train/Test Split
+    └── k-Fold Cross-Validation
+
+<strong style="color: #d35400;">🔧 Part 4: Feature Engineering & Regularization</strong>
+├── Feature Engineering
+│   ├── Polynomial Features
+│   ├── Interaction Terms
+│   ├── Feature Correlations
+│   └── Domain-Specific Features
+└── Regularization Techniques
+    ├── Ridge Regression (L2 Penalty)
+    ├── Lasso Regression (L1 Penalty)
+    └── ElasticNet (L1 + L2)
+
+<strong style="color: #27ae60;">🎯 Part 5: Advanced Topics</strong>
+├── Uncertainty Quantification
+│   ├── Confidence Intervals
+│   └── Prediction Intervals
+└── Model Selection & Strategy
+    ├── When to Choose Linear Regression
+    └── Comparison with Other Methods
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Overview -->
+            <section>
+                <h2>Learning Objectives</h2>
+                <div class="info-box">
+                    <p><strong>By the end of this week, you will be able to:</strong></p>
+                </div>
+                <ul>
+                    <li>Understand the mathematical foundations of linear regression</li>
+                    <li>Implement simple and multiple linear regression in Python</li>
+                    <li>Evaluate model performance using appropriate metrics</li>
+                    <li>Detect and handle outliers effectively</li>
+                    <li>Apply feature engineering and regularization techniques</li>
+                    <li>Use linear regression for business applications</li>
+                    <li>Test assumptions and validate model reliability</li>
+                </ul>
+            </section>
+
+            <!-- Part 1: Mathematical Foundations -->
+            <section>
+                <section>
+                    <h2>Part 1: Mathematical Foundations</h2>
+                    <h3>Building the Theoretical Framework</h3>
+                    <div class="info-box">
+                        <strong>Foundation of Machine Learning:</strong><br>
+                        <em>"Linear regression is not just a model—it's the gateway to understanding how we can learn patterns from data mathematically."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Topics to Cover</h4>
+                            <ul>
+                                <li>Simple Linear Regression</li>
+                                <li>Multiple Linear Regression</li>
+                                <li>Matrix Formulation</li>
+                                <li>OLS Estimation</li>
+                                <li>Key Assumptions</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Learning Goals</h4>
+                            <ul>
+                                <li>Understand the mathematical basis</li>
+                                <li>Learn optimization approach</li>
+                                <li>Recognize geometric interpretation</li>
+                                <li>Identify when linear regression is appropriate</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Linear Model</h2>
+                    <h3>Simple Linear Regression</h3>
+                    
+                    <div class="info-box" style="margin-bottom: 30px;">
+                        <strong>For a single predictor:</strong><br>
+                        <div style="font-size: 1.2em; margin: 10px 0;">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                                <mi>y</mi><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mi>x</mi><mo>+</mo><mi>ε</mi>
+                            </math>
+                        </div>
+                    </div>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Parameters</h4>
+                            <ul>
+                                <li><strong>y</strong> = dependent variable (target)</li>
+                                <li><strong>x</strong> = independent variable (feature)</li>
+                                <li><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>β</mi><mn>0</mn></msub></math> = intercept</li>
+                                <li><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>β</mi><mn>1</mn></msub></math> = slope</li>
+                                <li><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>ε</mi></math> = error term</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Assumptions</h4>
+                            <ul>
+                                <li>Linear relationship</li>
+                                <li><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>ε</mi><mo>~</mo><mi>N</mi><mo>(</mo><mn>0</mn><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>)</mo></math></li>
+                                <li>Independence of errors</li>
+                                <li>Homoscedasticity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Multiple Linear Regression</h2>
+                    <h3>Extension to Multiple Predictors</h3>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <h4>For multiple predictors:</h4>
+                        <div class="info-box">
+                            <div style="font-size: 1.1em; margin: 10px 0;">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                                    <mi>y</mi><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><msub><mi>x</mi><mn>2</mn></msub><mo>+</mo><mo>...</mo><mo>+</mo><msub><mi>β</mi><mi>p</mi></msub><msub><mi>x</mi><mi>p</mi></msub><mo>+</mo><mi>ε</mi>
+                                </math>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Matrix Form</h4>
+                        <div class="info-box">
+                            <p><strong>More compactly:</strong></p>
+                            <div style="font-size: 1.2em; margin: 10px 0;">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                                    <mi mathvariant="bold">y</mi><mo>=</mo><mi mathvariant="bold">X</mi><mi mathvariant="bold">β</mi><mo>+</mo><mi mathvariant="bold">ε</mi>
+                                </math>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Example Matrix Representation</h4>
+                        <div class="columns">
+                            <div class="column-50">
+                                <p style="font-size: 0.8em; margin-bottom: 10px;">For n=4 samples, p=2 features:</p>
+                                <div style="font-size: 0.85em; text-align: center;">
+                                    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                                        <mrow>
+                                            <mo>[</mo>
+                                            <mtable>
+                                                <mtr><mtd><msub><mi>y</mi><mn>1</mn></msub></mtd></mtr>
+                                                <mtr><mtd><msub><mi>y</mi><mn>2</mn></msub></mtd></mtr>
+                                                <mtr><mtd><msub><mi>y</mi><mn>3</mn></msub></mtd></mtr>
+                                                <mtr><mtd><msub><mi>y</mi><mn>4</mn></msub></mtd></mtr>
+                                            </mtable>
+                                            <mo>]</mo>
+                                        </mrow>
+                                        <mo>=</mo>
+                                        <mrow>
+                                            <mo>[</mo>
+                                            <mtable>
+                                                <mtr>
+                                                    <mtd><mn>1</mn></mtd>
+                                                    <mtd><msub><mi>x</mi><mn>11</mn></msub></mtd>
+                                                    <mtd><msub><mi>x</mi><mn>12</mn></msub></mtd>
+                                                </mtr>
+                                                <mtr>
+                                                    <mtd><mn>1</mn></mtd>
+                                                    <mtd><msub><mi>x</mi><mn>21</mn></msub></mtd>
+                                                    <mtd><msub><mi>x</mi><mn>22</mn></msub></mtd>
+                                                </mtr>
+                                                <mtr>
+                                                    <mtd><mn>1</mn></mtd>
+                                                    <mtd><msub><mi>x</mi><mn>31</mn></msub></mtd>
+                                                    <mtd><msub><mi>x</mi><mn>32</mn></msub></mtd>
+                                                </mtr>
+                                                <mtr>
+                                                    <mtd><mn>1</mn></mtd>
+                                                    <mtd><msub><mi>x</mi><mn>41</mn></msub></mtd>
+                                                    <mtd><msub><mi>x</mi><mn>42</mn></msub></mtd>
+                                                </mtr>
+                                            </mtable>
+                                            <mo>]</mo>
+                                        </mrow>
+                                        <mrow>
+                                            <mo>[</mo>
+                                            <mtable>
+                                                <mtr><mtd><msub><mi>β</mi><mn>0</mn></msub></mtd></mtr>
+                                                <mtr><mtd><msub><mi>β</mi><mn>1</mn></msub></mtd></mtr>
+                                                <mtr><mtd><msub><mi>β</mi><mn>2</mn></msub></mtd></mtr>
+                                            </mtable>
+                                            <mo>]</mo>
+                                        </mrow>
+                                        <mo>+</mo>
+                                        <mrow>
+                                            <mo>[</mo>
+                                            <mtable>
+                                                <mtr><mtd><msub><mi>ε</mi><mn>1</mn></msub></mtd></mtr>
+                                                <mtr><mtd><msub><mi>ε</mi><mn>2</mn></msub></mtd></mtr>
+                                                <mtr><mtd><msub><mi>ε</mi><mn>3</mn></msub></mtd></mtr>
+                                                <mtr><mtd><msub><mi>ε</mi><mn>4</mn></msub></mtd></mtr>
+                                            </mtable>
+                                            <mo>]</mo>
+                                        </mrow>
+                                    </math>
+                                </div>
+                            </div>
+                            <div class="column-50">
+                                <p style="font-size: 0.8em; margin-bottom: 10px;">Dimensions:</p>
+                                <ul style="font-size: 0.85em;">
+                                    <li><strong>y</strong>: (n × 1) target vector</li>
+                                    <li><strong>X</strong>: (n × p+1) design matrix</li>
+                                    <li><strong>β</strong>: (p+1 × 1) coefficient vector</li>
+                                    <li><strong>ε</strong>: (n × 1) error vector</li>
+                                </ul>
+                                <div class="warning-box" style="margin-top: 15px;">
+                                    <p style="font-size: 0.8em;"><strong>Note:</strong> First column of X is all 1s for the intercept term</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Ordinary Least Squares (OLS)</h2>
+                    <h3>The Optimization Problem</h3>
+                    
+                    <div class="info-box" style="margin-bottom: 20px;">
+                        <p><strong>Find parameters that minimize squared errors:</strong></p>
+                        <div style="font-size: 1.1em; margin: 15px 0;">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                                <munder><mi>min</mi><mi>β</mi></munder>
+                                <munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
+                                <msup><mrow><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo>)</mo></mrow><mn>2</mn></msup>
+                            </math>
+                        </div>
+                        <p>Where <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mover><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>x</mi><mrow><mi>i</mi><mn>1</mn></mrow></msub><mo>+</mo><mo>...</mo><mo>+</mo><msub><mi>β</mi><mi>p</mi></msub><msub><mi>x</mi><mrow><mi>i</mi><mi>p</mi></mrow></msub></math></p>
+                    </div>
+                    
+                    <div class="columns" style="margin-top: 20px;">
+                        <div class="column-50">
+                            <h4>Why "Least Squares"?</h4>
+                            <ul style="font-size: 0.85em;">
+                                <li><strong>Squared errors</strong> penalize large deviations more heavily</li>
+                                <li>Makes the problem <strong>convex</strong> (single global minimum)</li>
+                                <li>Has a <strong>closed-form solution</strong> (no iterative optimization needed)</li>
+                                <li>Mathematically tractable with nice properties</li>
+                            </ul>
+                        </div>
+                        <div class="column-50">
+                            <h4>The Method</h4>
+                            <div class="success-box">
+                                <p style="font-size: 0.85em;"><strong>OLS minimizes the sum of squared residuals</strong> between observed values and predicted values.</p>
+                                <p style="font-size: 0.85em; margin-top: 10px;">This is equivalent to finding the Maximum Likelihood Estimate (MLE) under the assumption of normally distributed errors.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box" style="margin-top: 20px;">
+                        <p style="font-size: 0.85em;"><strong>Historical Note:</strong> Developed by Legendre (1805) and Gauss (1809), OLS remains the foundation of regression analysis and many machine learning algorithms.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>OLS Solution</h2>
+                    <h3>Closed-Form Solution</h3>
+                    
+                    <div class="info-box" style="margin-bottom: 20px;">
+                        <p><strong>The OLS solution (Normal Equation):</strong></p>
+                        <div style="font-size: 1.2em; margin: 15px 0;">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                                <mover><mi mathvariant="bold">β</mi><mo>^</mo></mover><mo>=</mo>
+                                <msup><mrow><mo>(</mo><msup><mi mathvariant="bold">X</mi><mi>T</mi></msup><mi mathvariant="bold">X</mi><mo>)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup>
+                                <msup><mi mathvariant="bold">X</mi><mi>T</mi></msup><mi mathvariant="bold">y</mi>
+                            </math>
+                        </div>
+                    </div>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>Derivation Steps</h4>
+                            <ol style="font-size: 0.85em;">
+                                <li>Define loss: <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>L</mi><mo>=</mo><msup><mrow><mo>(</mo><mi mathvariant="bold">y</mi><mo>−</mo><mi mathvariant="bold">X</mi><mi mathvariant="bold">β</mi><mo>)</mo></mrow><mi>T</mi></msup><mrow><mo>(</mo><mi mathvariant="bold">y</mi><mo>−</mo><mi mathvariant="bold">X</mi><mi mathvariant="bold">β</mi><mo>)</mo></mrow></math></li>
+                                <li>Take derivative w.r.t. <math xmlns="http://www.w3.org/1998/Math/MathML"><mi mathvariant="bold">β</mi></math></li>
+                                <li>Set derivative equal to zero</li>
+                                <li>Solve for <math xmlns="http://www.w3.org/1998/Math/MathML"><mi mathvariant="bold">β</mi></math></li>
+                            </ol>
+                            
+                            <div class="warning-box" style="margin-top: 15px;">
+                                <p style="font-size: 0.8em;"><strong>Requirement:</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi mathvariant="bold">X</mi><mi>T</mi></msup><mi mathvariant="bold">X</mi></math> must be invertible (full rank)</p>
+                            </div>
+                        </div>
+                        <div class="column-50">
+                            <h4>Computational Considerations</h4>
+                            <div class="success-box">
+                                <ul style="font-size: 0.85em;">
+                                    <li><strong>Time Complexity:</strong> O(np² + p³)</li>
+                                    <li><strong>Space Complexity:</strong> O(np + p²)</li>
+                                    <li><strong>For large p:</strong> Use gradient descent instead</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 style="margin-top: 15px;">Properties of OLS Estimator</h4>
+                            <ul style="font-size: 0.85em;">
+                                <li><strong>Unbiased:</strong> E[<math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi mathvariant="bold">β</mi><mo>^</mo></mover></math>] = <math xmlns="http://www.w3.org/1998/Math/MathML"><mi mathvariant="bold">β</mi></math></li>
+                                <li><strong>BLUE:</strong> Best Linear Unbiased Estimator (Gauss-Markov theorem)</li>
+                                <li><strong>Consistent:</strong> Converges to true value as n → ∞</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>OLS Assumptions</h2>
+                    <h3>Five Key Assumptions</h3>
+                    
+                    <div class="columns">
+                        <div class="column-60">
+                            <ol style="font-size: 0.9em;">
+                                <li><span class="highlight">Linearity:</span> Relationship is linear</li>
+                                <li><span class="highlight">Independence:</span> Observations are independent</li>
+                                <li><span class="highlight">Homoscedasticity:</span> Constant variance</li>
+                                <li><span class="highlight">Normality:</span> Errors are normally distributed</li>
+                                <li><span class="highlight">No multicollinearity:</span> Predictors aren't perfectly correlated</li>
+                            </ol>
+                        </div>
+                        <div class="column-40">
+                            <div class="warning-box">
+                                <h5>Violation Consequences:</h5>
+                                <ul>
+                                    <li>Biased estimates</li>
+                                    <li>Invalid p-values</li>
+                                    <li>Poor predictions</li>
+                                    <li>Unreliable confidence intervals</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Geometric Interpretation</h2>
+                    <h3>Two Perspectives: Data Fitting & Optimization</h3>
+                    
+                    <div class="columns" style="margin-top: 20px;">
+                        <div class="column-50">
+                            <h4 style="text-align: center; margin-bottom: 10px;">Data Fitting in 3D Space</h4>
+                            <img src="../images/week04-3d-linear-regression.svg" alt="3D linear regression plane visualization" style="width: 100%; margin: 0 auto; display: block;">
+                            <div class="info-box" style="margin-top: 10px;">
+                                <ul style="font-size: 0.8em;">
+                                    <li>Regression finds best-fitting hyperplane</li>
+                                    <li>Minimizes distances to all data points</li>
+                                    <li>Plane equation: <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><msub><mi>x</mi><mn>2</mn></msub></math></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column-50">
+                            <h4 style="text-align: center; margin-bottom: 10px;">Loss Function Optimization</h4>
+                            <img src="../images/week04-loss-function-3d.svg" alt="3D convex loss function visualization" style="width: 100%; margin: 0 auto; display: block;">
+                            <div class="success-box" style="margin-top: 10px;">
+                                <ul style="font-size: 0.8em;">
+                                    <li>Convex loss function (MSE)</li>
+                                    <li>Global minimum at optimal <math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi mathvariant="bold">β</mi><mo>^</mo></mover></math></li>
+                                    <li>Gradient descent converges to minimum</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box" style="margin-top: 20px;">
+                        <p style="font-size: 0.9em; text-align: center;"><strong>Key Insight:</strong> The left shows what we're fitting (a plane to data), the right shows how we find it (minimizing a convex loss function)</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Section Summary: Mathematical Foundations</h2>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Key Concepts Covered</h4>
+                            <ul>
+                                <li>✓ Simple & Multiple Linear Regression</li>
+                                <li>✓ Matrix formulation</li>
+                                <li>✓ OLS estimation method</li>
+                                <li>✓ Five critical assumptions</li>
+                                <li>✓ Geometric interpretation</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Remember</h4>
+                            <ul>
+                                <li>Linear regression minimizes squared errors</li>
+                                <li>Closed-form solution exists: <math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi mathvariant="bold">β</mi><mo>^</mo></mover><mo>=</mo><msup><mrow><mo>(</mo><msup><mi mathvariant="bold">X</mi><mi>T</mi></msup><mi mathvariant="bold">X</mi><mo>)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mi mathvariant="bold">X</mi><mi>T</mi></msup><mi mathvariant="bold">y</mi></math></li>
+                                <li>Assumptions must be validated</li>
+                                <li>Foundation for many ML methods</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 2: Implementation in Python -->
+            <section>
+                <section>
+                    <h2>Part 2: Implementation in Python</h2>
+                    <h3>From Theory to Practice</h3>
+                    <div class="info-box">
+                        <strong>Implementation Focus:</strong><br>
+                        <em>"Understanding the implementation helps us appreciate both the elegance of the mathematics and the practical challenges of real-world data."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>What We'll Build</h4>
+                            <ul>
+                                <li>Simple regression from scratch</li>
+                                <li>Multiple regression with sklearn</li>
+                                <li>Polynomial feature transformation</li>
+                                <li>Data preprocessing pipeline</li>
+                                <li>Visualization tools</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Tools & Libraries</h4>
+                            <ul>
+                                <li>NumPy for calculations</li>
+                                <li>Pandas for data handling</li>
+                                <li>Scikit-learn for models</li>
+                                <li>Matplotlib for visualization</li>
+                                <li>StandardScaler for normalization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Simple Linear Regression from Scratch</h2>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">def simple_linear_regression(X, y):
+    """
+    Implement simple linear regression from scratch.
+    
+    Parameters:
+    -----------
+    X : array-like, shape (n_samples,)
+        Training data (single feature)
+    y : array-like, shape (n_samples,)
+        Target values
+        
+    Returns:
+    --------
+    beta_0 : float
+        Intercept
+    beta_1 : float
+        Slope coefficient
+    """
+    n = len(X)
+    
+    # Calculate means
+    x_mean = np.mean(X)
+    y_mean = np.mean(y)
+    
+    # Calculate slope (beta_1)
+    numerator = np.sum((X - x_mean) * (y - y_mean))
+    denominator = np.sum((X - x_mean) ** 2)
+    beta_1 = numerator / denominator
+    
+    # Calculate intercept (beta_0)
+    beta_0 = y_mean - beta_1 * x_mean
+    
+    return beta_0, beta_1</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Visualization</h4>
+                            <img src="../images/week04-simple-linear-regression.svg" alt="Simple linear regression with residuals" style="width: 100%;">
+                            
+                            <div style="margin-top: 15px;">
+                                <strong>Results:</strong>
+                                <ul>
+                                    <li>Equation: y = -0.30 + 2.00x</li>
+                                    <li>Shows residuals (green dashed lines)</li>
+                                    <li>Demonstrates least squares fitting</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Multiple Linear Regression</h2>
+                    <h3>Data Preparation</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+
+# Load data
+df = pd.read_csv('housing_prices.csv')
+
+# IMPORTANT: Handle categorical variables first!
+# See Week 3 for detailed categorical encoding methods
+if 'neighborhood' in df.columns:
+    # One-hot encode categorical variables
+    df = pd.get_dummies(df, columns=['neighborhood'], 
+                       drop_first=True)  # Avoid dummy trap
+
+X = df[['sqft', 'bedrooms', 'bathrooms', 'age']]
+y = df['price']
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <div class="warning-box">
+                                <h5>⚠️ Categorical Variables</h5>
+                                <p>Linear regression requires numeric input!</p>
+                                <ul style="font-size: 0.8em;">
+                                    <li>Use one-hot encoding for nominal categories</li>
+                                    <li>Use ordinal encoding for ordered categories</li>
+                                    <li>Remember drop_first=True to avoid multicollinearity</li>
+                                    <li>See <strong>Week 3</strong> for detailed encoding methods</li>
+                                </ul>
+                            </div>
+                            <h4>Key Steps</h4>
+                            <ul>
+                                <li><strong>Load data:</strong> Housing dataset</li>
+                                <li><strong>Select features:</strong> Multiple predictors</li>
+                                <li><strong>Split data:</strong> 80/20 train/test</li>
+                                <li><strong>Set random_state:</strong> Reproducible results</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Feature Scaling & Training</h2>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Scale features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Train model
+model = LinearRegression()
+model.fit(X_train_scaled, y_train)
+
+# View coefficients
+print("Intercept:", model.intercept_)
+print("Coefficients:", model.coef_)</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Why Scale Features?</h4>
+                            <div class="warning-box">
+                                <ul>
+                                    <li><strong>Different units:</strong> sqft vs. bedrooms</li>
+                                    <li><strong>Different scales:</strong> 2000 sqft vs. 3 bedrooms</li>
+                                    <li><strong>Coefficient comparison:</strong> Fair comparison</li>
+                                    <li><strong>Algorithm stability:</strong> Better convergence</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Polynomial Regression</h2>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn.preprocessing import PolynomialFeatures
+
+# Create polynomial features
+poly = PolynomialFeatures(degree=2, include_bias=False)
+X_poly = poly.fit_transform(X)
+
+# Get feature names
+feature_names = poly.get_feature_names_out(X.columns)
+
+# Train model with polynomial features
+model_poly = LinearRegression()
+model_poly.fit(X_poly, y)
+
+# Example feature transformation:
+# [sqft, bedrooms] → [sqft, bedrooms, sqft², 
+#                      sqft×bedrooms, bedrooms²]</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Feature Transformation</h4>
+                            <ul>
+                                <li><strong>Degree 2:</strong> x → [x, <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>x</mi><mn>2</mn></msup></math>]</li>
+                                <li><strong>Two features:</strong> [<math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mn>2</mn></msub></math>] → [<math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mn>2</mn></msub><mo>,</mo><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><mo>,</mo><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><mo>,</mo><msubsup><mi>x</mi><mn>2</mn><mn>2</mn></msubsup></math>]</li>
+                            </ul>
+                            
+                            <h4>When to Use</h4>
+                            <div class="success-box">
+                                <ul>
+                                    <li>✅ Non-linear relationships</li>
+                                    <li>✅ Known polynomial pattern</li>
+                                </ul>
+                            </div>
+                            <div class="warning-box">
+                                <ul>
+                                    <li>❌ Risk of overfitting with high degree</li>
+                                    <li>❌ Interpretability decreases</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Interaction Terms: Capturing Feature Relationships</h2>
+                    
+                    <div class="columns">
+                        <div class="column-50">
+                            <h4>What Are Interaction Terms?</h4>
+                            <ul>
+                                <li>Products of two or more features</li>
+                                <li>Capture how features work together</li>
+                                <li>Essential when effect of one feature depends on another</li>
+                            </ul>
+                            
+                            <div class="info-box">
+                                <strong>Example: House Prices</strong><br>
+                                <em>sqft × bedrooms</em><br>
+                                • 3 bedrooms in 1,500 sqft = cramped (negative)<br>
+                                • 3 bedrooms in 3,000 sqft = spacious (positive)
+                            </div>
+                            
+                            <h4>Common Business Interactions</h4>
+                            <ul>
+                                <li><strong>Marketing:</strong> age × income</li>
+                                <li><strong>Finance:</strong> income × credit_score</li>
+                                <li><strong>Healthcare:</strong> drug_A × drug_B</li>
+                                <li><strong>E-commerce:</strong> price × quality_rating</li>
+                            </ul>
+                            
+                            <div class="warning-box">
+                                <strong>Caution:</strong> Too many interactions can lead to overfitting. Use domain knowledge to select meaningful ones.
+                            </div>
+                        </div>
+                        
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Creating interaction terms
+import pandas as pd
+from sklearn.preprocessing import PolynomialFeatures
+
+# Manual interaction
+X['sqft_bedrooms'] = X['sqft'] * X['bedrooms']
+X['age_income'] = X['age'] * X['income']
+
+# Using PolynomialFeatures (degree=2, interactions only)
+poly = PolynomialFeatures(degree=2, 
+                          interaction_only=True,
+                          include_bias=False)
+X_interactions = poly.fit_transform(X)
+
+# Example transformation:
+# [x₁, x₂] → [x₁, x₂, x₁×x₂]
+# [x₁, x₂, x₃] → [x₁, x₂, x₃, x₁×x₂, x₁×x₃, x₂×x₃]
+
+# Real example: XOR problem
+# Points: (0,0)→0, (0,1)→1, (1,0)→1, (1,1)→0
+# Can't separate with x₁, x₂ alone
+# Adding x₁×x₂ makes it linearly separable!
+
+# Interpretation example
+# Model: price = 100*sqft + 10000*bedrooms 
+#               - 5*sqft*bedrooms
+# The negative interaction suggests diminishing 
+# returns when both increase together</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>Connection to Week 7:</strong> While we manually create interaction terms here, SVMs use the "kernel trick" to implicitly compute these interactions (and higher-order terms) without explicitly creating them - achieving the same effect with much less computation!
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Section Summary: Implementation</h2>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>What We Implemented</h4>
+                            <ul>
+                                <li>✓ Simple linear regression from scratch</li>
+                                <li>✓ Multiple regression with sklearn</li>
+                                <li>✓ Polynomial feature engineering</li>
+                                <li>✓ Train-test splitting</li>
+                                <li>✓ Feature scaling with StandardScaler</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Key Takeaways</h4>
+                            <ul>
+                                <li>Start simple, add complexity gradually</li>
+                                <li>Always scale features for consistency</li>
+                                <li>Polynomial features capture non-linearity</li>
+                                <li>Visualization helps validate models</li>
+                                <li>sklearn provides efficient implementations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 3: Model Evaluation -->
+            <section>
+                <section>
+                    <h2>Part 3: Model Evaluation</h2>
+                    <h3>Assessing Model Performance</h3>
+                    <div class="info-box">
+                        <strong>Evaluation Philosophy:</strong><br>
+                        <em>"A model is only as good as its ability to generalize. Rigorous evaluation separates hope from reality."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Evaluation Topics</h4>
+                            <ul>
+                                <li>Performance metrics (MSE, RMSE, MAE, <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup></math>)</li>
+                                <li>Residual analysis</li>
+                                <li>Diagnostic plots</li>
+                                <li>Business metrics</li>
+                                <li>Model validation</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Key Questions</h4>
+                            <ul>
+                                <li>How accurate is our model?</li>
+                                <li>Are assumptions satisfied?</li>
+                                <li>Where does the model fail?</li>
+                                <li>How to interpret for stakeholders?</li>
+                                <li>Is the model reliable?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Diagnostic Plots</h2>
+                    <h3>Comprehensive Residual Analysis</h3>
+                    
+                    <img src="../images/week04-diagnostic-plots.svg" alt="Four-panel diagnostic plots" style="width: 90%; margin: 0 auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>What Each Plot Shows</h4>
+                            <ul>
+                                <li><strong>Residuals vs Fitted:</strong> Check for homoscedasticity</li>
+                                <li><strong>Q-Q Plot:</strong> Check for normality of residuals</li>
+                                <li><strong>Histogram:</strong> Distribution shape of residuals</li>
+                                <li><strong>Scale-Location:</strong> Check variance consistency</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>What to Look For</h4>
+                            <ul>
+                                <li><strong>Centered at zero:</strong> Unbiased predictions</li>
+                                <li><strong>Bell-shaped:</strong> Normal distribution</li>
+                                <li><strong>Symmetry:</strong> No skewness</li>
+                                <li><strong>No long tails:</strong> Few outliers</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Regression Metrics</h2>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Error Metrics</h4>
+                            <div class="info-box">
+                                <ul>
+                                    <li><strong>MSE</strong> = <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>1</mn><mi>n</mi></mfrac><mo>∑</mo><msup><mrow><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></math></li>
+                                    <li><strong>RMSE</strong> = <math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mi>MSE</mi></msqrt></math></li>
+                                    <li><strong>MAE</strong> = <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>1</mn><mi>n</mi></mfrac><mo>∑</mo><mo>|</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo>|</mo></math></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <h4>Performance Metric</h4>
+                            <div class="info-box">
+                                <p><strong>R-squared:</strong></p>
+                                <p><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msup><mi>R</mi><mn>2</mn></msup><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mi>S</mi><msub><mi>S</mi><mi>res</mi></msub></mrow><mrow><mi>S</mi><msub><mi>S</mi><mi>tot</mi></msub></mrow></mfrac></math></p>
+                                <ul>
+                                    <li><span class="success"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup><mo>=</mo><mn>1</mn></math>:</span> Perfect fit</li>
+                                    <li><span class="success"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup><mo>></mo><mn>0.7</mn></math>:</span> Good fit</li>
+                                    <li><span class="danger"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup><mo><</mo><mn>0.3</mn></math>:</span> Poor fit</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Python Implementation</h2>
+                    <h3>Computing Metrics</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import numpy as np
+
+# Make predictions
+y_pred = model.predict(X_test_scaled)
+
+# Calculate metrics
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# Display results
+print(f"MSE: ${mse:,.2f}")
+print(f"RMSE: ${rmse:,.2f}")
+print(f"MAE: ${mae:,.2f}")
+print(f"R²: {r2:.4f}")
+
+# Interpretation
+print(f"\nOn average, predictions are off by ${rmse:,.2f}")
+print(f"The model explains {r2*100:.1f}% of variance in price")</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Business Interpretation</h4>
+                            <div class="code-column">
+                                <pre><code class="python"># Calculate percentage errors
+mape = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
+
+# Business metrics
+within_5_percent = np.mean(np.abs((y_test - y_pred) / y_test) < 0.05) * 100
+within_10_percent = np.mean(np.abs((y_test - y_pred) / y_test) < 0.10) * 100
+
+print(f"MAPE: {mape:.1f}%")
+print(f"Predictions within 5% of actual: {within_5_percent:.1f}%")
+print(f"Predictions within 10% of actual: {within_10_percent:.1f}%")</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Residual Analysis</h2>
+                    <h3>Calculate Residuals</h3>
+                    
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python"># Make predictions
+y_pred = model.predict(X_test_scaled)
+residuals = y_test - y_pred
+
+# Basic residual statistics
+print("Residual Statistics:")
+print(f"Mean: {np.mean(residuals):.4f}")
+print(f"Std:  {np.std(residuals):.4f}")
+print(f"Min:  {np.min(residuals):.4f}")
+print(f"Max:  {np.max(residuals):.4f}")
+
+# Check for patterns
+print(f"\nResiduals should be:")
+print("- Centered around zero")
+print("- Normally distributed")
+print("- No obvious patterns")</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Residual Patterns</h4>
+                            <div class="warning-box">
+                                <h5>Warning Signs:</h5>
+                                <ul>
+                                    <li><strong>Curved patterns:</strong> Non-linearity</li>
+                                    <li><strong>Fanning out:</strong> Heteroscedasticity</li>
+                                    <li><strong>Outliers:</strong> Data quality issues</li>
+                                    <li><strong>Systematic bias:</strong> Missing features</li>
+                                </ul>
+                            </div>
+                            <div class="success-box">
+                                <h5>Good Signs:</h5>
+                                <ul>
+                                    <li><strong>Random scatter:</strong> Homoscedasticity</li>
+                                    <li><strong>Centered at zero:</strong> Unbiased</li>
+                                    <li><strong>Normal distribution:</strong> Valid inference</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Section Summary: Model Evaluation</h2>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Metrics Learned</h4>
+                            <ul>
+                                <li>✓ MSE, RMSE, MAE</li>
+                                <li>✓ <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup></math> interpretation</li>
+                                <li>✓ Business metrics (MAPE)</li>
+                                <li>✓ Residual analysis</li>
+                                <li>✓ Diagnostic plots (Q-Q, residuals vs fitted)</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Use multiple metrics for full picture</li>
+                                <li>RMSE in same units as target</li>
+                                <li><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup></math> shows explained variance</li>
+                                <li>Always check residual patterns</li>
+                                <li>Validate assumptions with plots</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 4: Feature Engineering -->
+            <section>
+                <section>
+                    <h2>Part 4: Feature Engineering & Regularization</h2>
+                    <h3>Creating Better Features and Preventing Overfitting</h3>
+                    <div class="info-box">
+                        <strong>Feature Engineering Principle:</strong><br>
+                        <em>"The features you use influence model performance more than the algorithm you choose. Good features make simple models powerful."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Engineering Techniques</h4>
+                            <ul>
+                                <li>Domain-based features</li>
+                                <li>Interaction terms</li>
+                                <li>Polynomial features</li>
+                                <li>Feature selection methods</li>
+                                <li>Regularization approaches</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Best Practices</h4>
+                            <ul>
+                                <li>Start with domain knowledge</li>
+                                <li>Test feature importance</li>
+                                <li>Avoid multicollinearity</li>
+                                <li>Use cross-validation</li>
+                                <li>Balance complexity vs interpretability</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Feature Correlations</h2>
+                    <h3>Understanding Feature Relationships</h3>
+                    
+                    <img src="../images/week04-feature-correlations.svg" alt="Feature correlation plot" style="width: 80%; margin: 0 auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>Correlation Analysis</h4>
+                            <ul>
+                                <li>Identifies which features are most predictive</li>
+                                <li>Helps detect multicollinearity issues</li>
+                                <li>Guides feature selection process</li>
+                                <li>Informs domain understanding</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Interpretation Tips</h4>
+                            <div class="info-box">
+                                <ul>
+                                    <li><strong>High correlation:</strong> Strong predictive power</li>
+                                    <li><strong>Similar correlations:</strong> May indicate redundancy</li>
+                                    <li><strong>Low correlation:</strong> May still be important in combination</li>
+                                    <li><strong>Non-linear relationships:</strong> Correlation may miss</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Regularization Comparison</h2>
+                    <h3>Regularization Impact on Feature Coefficients</h3>
+                    
+                    <img src="../images/week04-regularization-comparison.svg" alt="Regularization effect on coefficients" style="width: 85%; margin: 0 auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>Regularization Effects</h4>
+                            <table style="font-size: 0.8em; width: 100%;">
+                                <tr><th>Method</th><th>Effect on Coefficients</th></tr>
+                                <tr><td><strong>OLS</strong></td><td>No shrinkage</td></tr>
+                                <tr><td><strong>Ridge</strong></td><td>Shrinks all coefficients</td></tr>
+                                <tr><td><strong>Lasso</strong></td><td>Can zero out coefficients</td></tr>
+                                <tr><td><strong>ElasticNet</strong></td><td>Balanced shrinkage</td></tr>
+                            </table>
+                        </div>
+                        <div class="column">
+                            <h4>Selection Guide</h4>
+                            <ul>
+                                <li><strong>Many features:</strong> Use Lasso</li>
+                                <li><strong>Correlated features:</strong> Use Ridge</li>
+                                <li><strong>Feature selection needed:</strong> Use Lasso</li>
+                                <li><strong>Best of both:</strong> Use ElasticNet</li>
+                                <li>Choose <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>α</mi></math> via cross-validation</li>
+                                <li>Prevents overfitting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Part 5: Advanced Topics -->
+            <section>
+                <section>
+                    <h2>Part 5: Advanced Topics & Uncertainty</h2>
+                    <h3>Confidence Intervals and Model Validation</h3>
+                    <div class="info-box">
+                        <strong>Advanced Modeling:</strong><br>
+                        <em>"Understanding model limitations and quantifying uncertainty are as important as making predictions."</em>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Advanced Concepts</h4>
+                            <ul>
+                                <li>Assumption testing</li>
+                                <li>Multicollinearity (VIF)</li>
+                                <li>Heteroscedasticity</li>
+                                <li>Confidence intervals</li>
+                                <li>Prediction intervals</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Why It Matters</h4>
+                            <ul>
+                                <li>Ensure model validity</li>
+                                <li>Quantify uncertainty</li>
+                                <li>Identify model limitations</li>
+                                <li>Improve predictions</li>
+                                <li>Build stakeholder trust</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Visualizing Confidence Intervals</h2>
+                    <h3>Uncertainty Quantification in Predictions</h3>
+                    
+                    <img src="../images/week04-confidence-intervals.svg" alt="Confidence intervals visualization" style="width: 90%; margin: 0 auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>What the Plot Shows</h4>
+                            <ul>
+                                <li><strong>Blue points:</strong> Actual observed values</li>
+                                <li><strong>Red line:</strong> Model predictions</li>
+                                <li><strong>Shaded area:</strong> 95% confidence interval</li>
+                                <li>Shows uncertainty in predictions</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Interpretation</h4>
+                            <ul>
+                                <li><strong>Width indicates:</strong> Prediction uncertainty</li>
+                                <li><strong>Wider intervals:</strong> Less confident predictions</li>
+                                <li><strong>Consistent width:</strong> Homoscedastic errors</li>
+                                <li><strong>Important for:</strong> Business decision making</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Summary -->
+            <section>
+                <h2>Summary & Key Takeaways</h2>
+                <div class="columns">
+                    <div class="column">
+                        <h4>What We Learned</h4>
+                        <ul>
+                            <li>✓ Mathematical foundations of linear regression</li>
+                            <li>✓ ML perspective vs. statistical inference</li>
+                            <li>✓ Train/validate/test split methodology</li>
+                            <li>✓ Underfitting vs. overfitting detection</li>
+                            <li>✓ Implementation from scratch and with sklearn</li>
+                            <li>✓ Model evaluation and diagnostic techniques</li>
+                            <li>✓ Feature engineering and regularization</li>
+                            <li>✓ Confidence intervals and uncertainty quantification</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Best Practices Checklist</h4>
+                        <div class="info-box">
+                            <ul>
+                                <li>☐ Always use train/test splits for evaluation</li>
+                                <li>☐ Check both training and test performance</li>
+                                <li>☐ Start simple, add complexity gradually</li>
+                                <li>☐ Use cross-validation for model selection</li>
+                                <li>☐ Apply regularization to prevent overfitting</li>
+                                <li>☐ Validate assumptions with diagnostic plots</li>
+                                <li>☐ Engineer features based on domain knowledge</li>
+                                <li>☐ Quantify and communicate uncertainty</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="warning-box" style="margin-top: 30px;">
+                    <strong>Remember:</strong> Linear regression is the foundation of many advanced techniques. Master it well, as the concepts learned here apply throughout machine learning!
+                </div>
+            </section>
+
+            <!-- Next Week Preview -->
+            <section>
+                <h2>Next Week: Logistic Regression</h2>
+                <div class="columns">
+                    <div class="column">
+                        <div class="info-box">
+                            <h4>Topics to Cover</h4>
+                            <ul>
+                                <li>Binary classification</li>
+                                <li>Sigmoid function and odds ratios</li>
+                                <li>Maximum likelihood estimation</li>
+                                <li>ROC curves and AUC</li>
+                                <li>Multi-class classification</li>
+                                <li>Regularized logistic regression</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="success-box">
+                            <h4>Preparation</h4>
+                            <ul>
+                                <li>Review probability concepts</li>
+                                <li>Practice with categorical data</li>
+                                <li>Think about classification problems in your domain</li>
+                                <li>Review confusion matrices</li>
+                                <li>Understand the concepts from today's lecture</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 50px;">
+                    <h3>Questions?</h3>
+                    <p>Email: smith515@usf.edu | Office Hours: Wed 4:00-5:30 PM</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/search/search.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom,
+                RevealSearch,
+                RevealMath.KaTeX
+            ]
+        });
+    </script>
+</body>
+</html>

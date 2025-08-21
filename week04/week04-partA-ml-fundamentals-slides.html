@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 4 Part A: ML Fundamentals</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <!-- Common slide styles -->
+    <link rel="stylesheet" href="../common-slides.css">
+    
+    <!-- Week 4 specific styles -->
+    <style>
+        /* Center alignment helper */
+        .center {
+            text-align: center !important;
+        }
+        
+        /* Small text helper */
+        .small-text {
+            font-size: 0.7em;
+        }
+        
+        /* Highlight helper */
+        .highlight {
+            background-color: rgba(243, 156, 18, 0.3);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        /* Code blocks in code-column - optimized for dense code */
+        .reveal .columns .column-50.code-column pre {
+            max-height: 578px !important;
+            font-size: 0.46em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            white-space: pre !important;
+        }
+        
+        .reveal .columns .column-50.code-column pre code {
+            max-height: 558px !important;
+            overflow-x: visible !important;
+            overflow-y: visible !important;
+            white-space: pre !important;
+        }
+        
+        /* Code blocks in standard columns - slightly larger font */
+        .reveal .columns .column-50:not(.code-column) pre {
+            max-height: 550px !important;
+            font-size: 0.48em !important;
+            margin: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+        
+        /* When both columns have code - narrower with gap */
+        .reveal .columns .column-50.code-column {
+            flex: 0 0 47% !important;
+            max-width: 47% !important;
+            margin-right: 1.5% !important;
+        }
+        
+        /* Remove margin from last column to prevent overflow */
+        .reveal .columns .column-50.code-column:last-child {
+            margin-right: 0 !important;
+        }
+        
+        /* When only column-50 (no code-column) - slightly wider */
+        .reveal .columns .column-50:not(.code-column) {
+            flex: 0 0 48% !important;
+            max-width: 48% !important;
+            margin-right: 1% !important;
+        }
+        
+        /* Remove margin from last column */
+        .reveal .columns .column-50:not(.code-column):last-child {
+            margin-right: 0 !important;
+        }
+        
+        /* Ensure slide numbers are visible */
+        .reveal .slide-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.6em;
+        }
+        
+        /* Success and danger text colors for metrics */
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .danger {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section>
+                <h1>Machine Learning Fundamentals</h1>
+                <h3 style="border: none; text-align: center; color: #666;">Week 4 Part A: Core Concepts</h3>
+                <p style="text-align: center; font-style: italic; color: #888;">Bias-Variance Tradeoff • Overfitting • Train/Test Split</p>
+                <p style="text-align: center; margin-top: 50px;">
+                    <strong>ISM6251 | Week 4</strong><br>
+                    Understanding the Foundations of Predictive Modeling
+                </p>
+            </section>
+
+            <!-- Introduction Section -->
+            <section>
+                <section>
+                    <h2>Introduction: Machine Learning Fundamentals</h2>
+                    <h3>Setting the Context and Expectations</h3>
+                    <div class="info-box">
+                        <strong>Focus Today:</strong><br>
+                        <em>"We'll explore the fundamental concepts that underpin all machine learning algorithms, not just linear regression."</em>
+                    </div>
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>What We'll Cover</h4>
+                            <ul>
+                                <li>Prerequisites and expectations</li>
+                                <li>ML vs. statistical perspective</li>
+                                <li>When to use different models</li>
+                                <li>Train/test split fundamentals</li>
+                                <li>Overfitting and underfitting</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Learning Outcomes</h4>
+                            <ul>
+                                <li>Understand pragmatic ML approach</li>
+                                <li>Recognize model selection trade-offs</li>
+                                <li>Apply systematic validation methods</li>
+                                <li>Make data-driven decisions</li>
+                                <li>Connect theory to practice</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Prerequisites & Context</h2>
+                    <h3>Setting Expectations for Machine Learning</h3>
+                    <div class="warning-box">
+                        <strong>Important:</strong> This lecture assumes you are already familiar with basic statistics, including linear regression from your statistics courses.
+                    </div>
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>What You Should Already Know</h4>
+                            <ul>
+                                <li>Basic statistics (mean, variance, correlation)</li>
+                                <li>Hypothesis testing concepts</li>
+                                <li>Simple linear regression basics</li>
+                                <li>Interpretation of coefficients</li>
+                                <li><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup></math> and p-values</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>What We'll Focus On Today</h4>
+                            <ul>
+                                <li>Machine learning perspective</li>
+                                <li>Implementation in Python</li>
+                                <li>Predictive performance evaluation</li>
+                                <li>Feature engineering techniques</li>
+                                <li>Practical business applications</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Machine Learning Perspective</h2>
+                    <h3>A Pragmatic Approach to Modeling</h3>
+                    
+                    <div class="info-box">
+                        <strong>Key Insight:</strong> Machine learning requires you to "bring a theory" to the analysis
+                    </div>
+                    
+                    <div class="columns" style="margin-top: 20px;">
+                        <div class="column">
+                            <h4>Traditional Statistics View</h4>
+                            <ul>
+                                <li>Focus on inference and hypothesis testing</li>
+                                <li>Emphasis on p-values and significance</li>
+                                <li>Assumptions must be strictly met</li>
+                                <li>Goal: Understand relationships</li>
+                                <li>Question: "Is X significantly related to Y?"</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Machine Learning View</h4>
+                            <ul>
+                                <li>Focus on prediction accuracy</li>
+                                <li>Emphasis on generalization to new data</li>
+                                <li>Pragmatic about assumptions</li>
+                                <li>Goal: Predict unseen values</li>
+                                <li>Question: "How well will this predict future data?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box" style="margin-top: 30px;">
+                        <strong>Remember:</strong> Machine learning only tunes the parameters of your theory—it doesn't tell you what a good theory would be!
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Model Selection in the ML Toolkit</h2>
+                    <h3>When to Use Different Approaches</h3>
+                    
+                    <div class="columns">
+                        <div class="column">
+                            <h4>Linear Models (Week 4-5)</h4>
+                            <div class="success-box">
+                                <ul>
+                                    <li><strong>Interpretability:</strong> Clear coefficient meanings</li>
+                                    <li><strong>Speed:</strong> Fast training and prediction</li>
+                                    <li><strong>Theory-driven:</strong> When you have domain knowledge</li>
+                                    <li><strong>Baseline:</strong> Good first model to try</li>
+                                    <li><strong>Small data:</strong> Works with fewer samples</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <h4>When to Consider Alternatives</h4>
+                            <div class="warning-box">
+                                <ul>
+                                    <li><strong>Complex patterns:</strong> → Neural Networks (Week 10)</li>
+                                    <li><strong>Non-linear relationships:</strong> → KNN, SVM (Week 6-7)</li>
+                                    <li><strong>High dimensions:</strong> → Regularization, PCA</li>
+                                    <li><strong>Interactions:</strong> → Tree-based models (Week 8-9)</li>
+                                    <li><strong>No theory:</strong> → Ensemble methods (Week 9)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 30px;">
+                        <strong>The Pragmatic ML Approach:</strong><br>
+                        • Try multiple models and compare performance<br>
+                        • Use train/validate/test splits to avoid overfitting<br>
+                        • Let the data tell you which model works best<br>
+                        • Focus on generalization, not just training accuracy
+                    </div>
+                    
+                    <p style="text-align: center; margin-top: 30px; font-style: italic; color: #666;">
+                        "In machine learning, we care less about whether assumptions are perfectly met and more about whether the model predicts well on unseen data."
+                    </p>
+                </section>
+
+                <section>
+                    <h2>The Fundamental ML Challenge</h2>
+                    <h3>Underfitting vs Overfitting</h3>
+                    <div class="columns">
+                        <div class="column">
+                            <h4>The Problem</h4>
+                            <ul>
+                                <li><strong>Underfitting:</strong> Model is too simple to capture patterns</li>
+                                <li><strong>Overfitting:</strong> Model memorizes training data, fails on new data</li>
+                                <li><strong>Goal:</strong> Find the sweet spot - good generalization</li>
+                            </ul>
+                            <h4>Why This Happens</h4>
+                            <ul>
+                                <li>More complex models can fit training data better</li>
+                                <li>But they may learn noise, not true patterns</li>
+                                <li>Need systematic way to detect and prevent this</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <img src="../images/week04-polynomial-degrees.svg" alt="Polynomial regression degrees showing underfitting and overfitting" style="width: 100%;">
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Model Complexity and Error</h2>
+                    <h3>The Bias-Variance Tradeoff</h3>
+                    
+                    <img src="../images/week04-bias-variance-tradeoff.svg" alt="Bias-variance tradeoff curve" style="width: 80%; margin: 0 auto; display: block;">
+                    
+                    <div class="info-box" style="margin-top: 30px;">
+                        <strong>Key Insights:</strong><br>
+                        • Training error always decreases with complexity<br>
+                        • Test error first decreases, then increases (U-shape)<br>
+                        • Optimal complexity minimizes test error, not training error<br>
+                        • This is why we need separate test data!
+                    </div>
+                    
+                    <img src="images/week04-biasvariance.png" alt="Bias-Variance Tradeoff Visualization" style="width: 52.5%; margin: 20px auto 0; display: block;">
+                </section>
+
+                <section>
+                    <h2>Train/Validate/Test Split</h2>
+                    <h3>The Foundation of ML Model Development</h3>
+                    
+                    <img src="../images/week04-train-val-test-split.svg" alt="Train/validation/test split visualization" style="width: 90%; margin: 0 auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>Purpose of Each Set</h4>
+                            <ul>
+                                <li><strong>Training (60%):</strong> Fit model parameters</li>
+                                <li><strong>Validation (20%):</strong> Tune hyperparameters, select model</li>
+                                <li><strong>Test (20%):</strong> Final unbiased performance estimate</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Critical Rules</h4>
+                            <div class="warning-box">
+                                <ul>
+                                    <li><strong>Never</strong> use test data for model selection</li>
+                                    <li>Test set is used <strong>once</strong> at the very end</li>
+                                    <li>Validation helps prevent overfitting to training data</li>
+                                    <li>Keep test set "locked away" until final evaluation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <h5>Important Note:</h5>
+                        <p>The suggested 60/20/20 split is <strong>not a hard rule</strong>. It should be adjusted based on your data size and context. We will discuss different splitting strategies and their trade-offs in later lectures.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Cross-Validation</h2>
+                    <h3>When Data is Limited</h3>
+                    
+                    <img src="../images/week04-cross-validation.svg" alt="5-fold cross-validation visualization" style="width: 80%; margin: 0 auto; display: block;">
+                    
+                    <div class="columns" style="margin-top: 30px;">
+                        <div class="column">
+                            <h4>How It Works</h4>
+                            <ul>
+                                <li>Split data into k folds (typically 5 or 10)</li>
+                                <li>Train on k-1 folds, validate on 1 fold</li>
+                                <li>Repeat k times, each fold as validation once</li>
+                                <li>Average results across all folds</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Benefits</h4>
+                            <div class="success-box">
+                                <ul>
+                                    <li>Uses all data for both training and validation</li>
+                                    <li>More robust performance estimate</li>
+                                    <li>Reduces variance in model evaluation</li>
+                                    <li>Essential for small datasets</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Practical Implementation</h2>
+                    <h3>Train/Test Split in Python</h3>
+                    <div class="columns">
+                        <div class="column-50 code-column">
+                            <pre><code class="python">from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# Generate sample data
+np.random.seed(42)
+X = np.random.uniform(-3, 3, 100).reshape(-1, 1)
+y = 0.5 * X.ravel()**2 - X.ravel() + 2 + \
+    np.random.normal(0, 0.5, 100)
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# Try different polynomial degrees
+degrees = [1, 2, 3, 20]
+for degree in degrees:
+    # Create polynomial features
+    poly = PolynomialFeatures(degree=degree)
+    X_train_poly = poly.fit_transform(X_train)
+    X_test_poly = poly.transform(X_test)
+    
+    # Fit model
+    model = LinearRegression()
+    model.fit(X_train_poly, y_train)
+    
+    # Evaluate
+    train_score = model.score(X_train_poly, y_train)
+    test_score = model.score(X_test_poly, y_test)
+    
+    print(f"Degree {degree}:")
+    print(f"  Train R²: {train_score:.3f}")
+    print(f"  Test R²: {test_score:.3f}")</code></pre>
+                        </div>
+                        <div class="column-50">
+                            <h4>Output Interpretation</h4>
+                            <pre style="background-color: #f8f8f8; padding: 15px; font-size: 0.75em;">
+Degree 1:
+  Train R²: 0.412
+  Test R²: 0.385   ← Underfitting
+
+Degree 2:
+  Train R²: 0.892
+  Test R²: 0.871   ← Good fit!
+
+Degree 3:
+  Train R²: 0.895
+  Test R²: 0.869   ← Still good
+
+Degree 20:
+  Train R²: 0.998
+  Test R²: -2.451  ← Severe overfitting!</pre>
+
+                            <div class="warning-box" style="margin-top: 20px;">
+                                <h5>Warning Signs of Overfitting:</h5>
+                                <ul>
+                                    <li>Train score much higher than test score</li>
+                                    <li>Negative test <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>R</mi><mn>2</mn></msup></math> (worse than predicting mean)</li>
+                                    <li>Test error increases with model complexity</li>
+                                </ul>
+                            </div>
+
+                            <div class="success-box" style="margin-top: 15px;">
+                                <h5>Best Practices:</h5>
+                                <ul>
+                                    <li>Always check both train AND test performance</li>
+                                    <li>Use validation set for model selection</li>
+                                    <li>Simple models often generalize better</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Summary -->
+            <section>
+                <h2>Summary: ML Fundamentals</h2>
+                <div class="columns">
+                    <div class="column">
+                        <h4>Key Concepts</h4>
+                        <ul>
+                            <li>ML focuses on prediction over inference</li>
+                            <li>Bias-variance tradeoff is fundamental</li>
+                            <li>Overfitting is the enemy of generalization</li>
+                            <li>Train/validate/test split is essential</li>
+                            <li>Cross-validation for robust evaluation</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Best Practices</h4>
+                        <ul>
+                            <li>Always use separate test data</li>
+                            <li>Start with simple models</li>
+                            <li>Monitor both training and test error</li>
+                            <li>Use validation for model selection</li>
+                            <li>Be pragmatic about assumptions</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="info-box" style="margin-top: 30px;">
+                    <strong>Next: Part B - Linear Regression Deep Dive</strong><br>
+                    We'll apply these fundamental concepts to linear regression, exploring mathematical foundations, implementation, and evaluation.
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/math/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom/zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/search/search.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom,
+                RevealSearch,
+                RevealMath.KaTeX
+            ]
+        });
+    </script>
+</body>
+</html>

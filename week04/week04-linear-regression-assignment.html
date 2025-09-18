@@ -103,7 +103,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#task-3.1-prepare-data-for-modeling-2-points" id="toc-task-3.1-prepare-data-for-modeling-2-points" class="nav-link" data-scroll-target="#task-3.1-prepare-data-for-modeling-2-points"><span class="header-section-number">4.1</span> Task 3.1: Prepare Data for Modeling (2 points)</a></li>
   <li><a href="#task-3.2-build-baseline-model-3-points" id="toc-task-3.2-build-baseline-model-3-points" class="nav-link" data-scroll-target="#task-3.2-build-baseline-model-3-points"><span class="header-section-number">4.2</span> Task 3.2: Build Baseline Model (3 points)</a></li>
-  <li><a href="#task-3.3-improve-model-with-regularization-3-points" id="toc-task-3.3-improve-model-with-regularization-3-points" class="nav-link" data-scroll-target="#task-3.3-improve-model-with-regularization-3-points"><span class="header-section-number">4.3</span> Task 3.3: Improve Model with Regularization (3 points)</a></li>
+  <li><a href="#task-3.3-improve-model-with-lasso-regularization-3-points" id="toc-task-3.3-improve-model-with-lasso-regularization-3-points" class="nav-link" data-scroll-target="#task-3.3-improve-model-with-lasso-regularization-3-points"><span class="header-section-number">4.3</span> Task 3.3: Improve Model with Lasso Regularization (3 points)</a></li>
   <li><a href="#task-3.4-polynomial-features-2-points" id="toc-task-3.4-polynomial-features-2-points" class="nav-link" data-scroll-target="#task-3.4-polynomial-features-2-points"><span class="header-section-number">4.4</span> Task 3.4: Polynomial Features (2 points)</a></li>
   </ul></li>
   <li><a href="#part-4-model-evaluation-diagnostics-6-points" id="toc-part-4-model-evaluation-diagnostics-6-points" class="nav-link" data-scroll-target="#part-4-model-evaluation-diagnostics-6-points"><span class="header-section-number">5</span> Part 4: Model Evaluation &amp; Diagnostics (6 points)</a>
@@ -226,7 +226,7 @@ Data Generation
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, Ridge, Lasso</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, Lasso</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, PolynomialFeatures</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, r2_score, mean_absolute_error</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
@@ -314,10 +314,27 @@ Data Generation
 <div id="20ad10c9" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Separate features and target</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Handle categorical variables (one-hot encoding)</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Split into training and test sets (80/20)</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Scale features if necessary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample implementation for Task 3.1</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate features and target</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># X = properties.drop(['price'], axis=1)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># y = properties['price']</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle categorical variables using one-hot encoding</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># categorical_columns = X.select_dtypes(include=['object']).columns</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># X_encoded = pd.get_dummies(X, columns=categorical_columns, drop_first=True)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Split into training and test sets</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># X_train, X_test, y_train, y_test = train_test_split(</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     X_encoded, y, test_size=0.2, random_state=42</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale features for regularized models</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># scaler = StandardScaler()</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># X_train_scaled = scaler.fit_transform(X_train)</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># X_test_scaled = scaler.transform(X_test)</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Complete the implementation above with your data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -333,16 +350,22 @@ Data Generation
 </details>
 </div>
 </section>
-<section id="task-3.3-improve-model-with-regularization-3-points" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="task-3.3-improve-model-with-regularization-3-points"><span class="header-section-number">4.3</span> Task 3.3: Improve Model with Regularization (3 points)</h2>
-<p>Apply regularization techniques:</p>
+<section id="task-3.3-improve-model-with-lasso-regularization-3-points" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="task-3.3-improve-model-with-lasso-regularization-3-points"><span class="header-section-number">4.3</span> Task 3.3: Improve Model with Lasso Regularization (3 points)</h2>
+<p>Apply Lasso regularization for feature selection and to prevent overfitting:</p>
 <div id="551c446d" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Implement Ridge regression</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Implement Lasso regression</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Use cross-validation to find optimal alpha values</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Compare performance of all models</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Implement Lasso regression with cross-validation</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use LassoCV to automatically find the best alpha parameter</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.linear_model import LassoCV</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># lasso_cv = LassoCV(cv=5, random_state=42, max_iter=10000)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># lasso_cv.fit(X_train_scaled, y_train)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Display the optimal alpha value</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Identify which features were selected (non-zero coefficients)</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Compare performance with baseline model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -521,9 +544,9 @@ Deliverables
 <td>Correct implementation, metrics calculated</td>
 </tr>
 <tr class="odd">
-<td>- Regularization</td>
+<td>- Lasso Regularization</td>
 <td>3</td>
-<td>Both Ridge and Lasso with CV</td>
+<td>Lasso with CV, feature selection analysis</td>
 </tr>
 <tr class="even">
 <td>- Polynomial Features</td>
